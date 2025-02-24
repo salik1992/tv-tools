@@ -1,3 +1,7 @@
+import { ns } from '../logger';
+
+const logger = ns('EventListener');
+
 export interface IEventListener<
 	Events extends { [key: string]: Events[keyof Events] },
 > {
@@ -92,7 +96,7 @@ export class EventListener<
 				try {
 					listener(payload);
 				} catch (e) {
-					console.error(e);
+					logger.error(e);
 				}
 			}, 0);
 		});
