@@ -1,0 +1,29 @@
+{
+  "name": "@salik1992/tv-tools-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepository for TV Tools",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "DNA.inc",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.4",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.15.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "prettier": "^3.5.1",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
+  }
+}

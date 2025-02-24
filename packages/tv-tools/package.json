@@ -1,0 +1,17 @@
+{
+    "name": "@salik1992/tv-tools",
+    "private": true,
+    "version": "0.0.0",
+    "exports": {
+        "./*": "./dist/*/index.js",
+        "./utils/*": "./dist/utils/*.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "test": "jest"
+    },
+    "author": "DNA.inc",
+    "license": "ISC",
+    "description": "Main core TV Tools"
+}

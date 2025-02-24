@@ -1,0 +1,26 @@
+{
+    "name": "@salik1992/tv-tools-react",
+    "private": true,
+    "version": "0.0.0",
+    "exports": {
+        "/*": "dist/*"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "test": "jest"
+    },
+    "dependencies": {
+        "@salik1992/tv-tools": "*"
+    },
+    "devDependencies": {
+        "@types/react": "^18.3.12",
+        "react": "^18.3.1"
+    },
+    "peerDependencies": {
+        "react": "^18.3.1"
+    },
+    "author": "DNA.inc",
+    "license": "ISC",
+    "description": "Main core TV Tools"
+}
