@@ -2,6 +2,8 @@
     "compilerOptions": {
         "target": "ES2016",
         "jsx": "react-jsx",
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "useDefineForClassFields": true,
         "module": "esnext",
         "moduleResolution": "bundler",
         "resolveJsonModule": true,
@@ -12,6 +14,10 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true,
         "skipLibCheck": true,
     },
 }
