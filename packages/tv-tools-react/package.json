@@ -1,9 +1,8 @@
 {
     "name": "@salik1992/tv-tools-react",
-    "private": true,
     "version": "0.0.0",
     "exports": {
-        "/*": "dist/*"
+        "./*":  "dist/*/index.js"
     },
     "scripts": {
         "build": "tsc",

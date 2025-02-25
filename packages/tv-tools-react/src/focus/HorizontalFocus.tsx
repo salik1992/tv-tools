@@ -1,4 +1,4 @@
-import { type PropsWithChildren } from 'react';
+import type { KeyboardEvent, PropsWithChildren } from 'react';
 import { useFocusContainer } from './useFocusContainer';
 
 /**
@@ -40,7 +40,8 @@ export const HorizontalFocus = ({
 		useFocusContainer(id);
 
 	useOnLeft(
-		(event) => {
+		// @ts-ignore: TODO reversed limitation
+		(event: KeyboardEvent<HTMLElement>) => {
 			return container.moveFocus(-1, (event.target as HTMLElement).id);
 		},
 		[container],
@@ -48,7 +49,8 @@ export const HorizontalFocus = ({
 	);
 
 	useOnRight(
-		(event) => {
+		// @ts-ignore: TODO reversed limitation
+		(event: KeyboardEvent<HTMLElement>) => {
 			return container.moveFocus(1, (event.target as HTMLElement).id);
 		},
 		[container],
