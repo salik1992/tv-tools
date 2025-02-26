@@ -1,4 +1,5 @@
 import {
+	useContext,
 	useEffect,
 	useMemo,
 	useRef,
@@ -6,6 +7,7 @@ import {
 	type HTMLAttributes,
 } from 'react';
 import { Interactable as InteractableBase } from '@salik1992/tv-tools/focus';
+import { FocusContext } from './context';
 
 /**
  * The main component for rendering focusable elements. It renders a div and you
@@ -47,7 +49,13 @@ export const Interactable = ({
 		() => new InteractableBase(onPress, id, tabIndex),
 		[onPress, id],
 	);
+	const { addChild } = useContext(FocusContext);
 	const ref = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		// Needs to run every time to maintain children order.
+		addChild(interactable.id);
+	});
 
 	useEffect(() => {
 		interactable.setElement(ref.current);

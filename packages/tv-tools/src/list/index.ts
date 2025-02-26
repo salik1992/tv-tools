@@ -1,2 +1,8 @@
-export type { RenderData, ListBehavior, ListSetup } from './types';
-export { ListBase, type ListImplementation } from './ListBase';
+export type {
+	RenderDataElement,
+	RenderData,
+	ListBehavior,
+	ListSetup,
+	ListImplementation,
+} from './types';
+export { ListBase } from './ListBase';

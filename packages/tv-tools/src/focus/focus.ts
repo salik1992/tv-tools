@@ -108,7 +108,7 @@ class FocusManager {
 	 * @param childId - id of the child
 	 */
 	public addParentChild(parentId: string, childId: string) {
-		const children = this.children.get(parentId) ?? [];
+		const children = this.getChildren(parentId);
 		children.push(childId);
 		this.children.set(parentId, children);
 		this.parents.set(childId, parentId);

@@ -27,11 +27,18 @@ export abstract class ListBase<
 			c.dataLength > c.visibleElements ? c.visibleElements : c.dataLength;
 		this.renderData = {
 			listOffset: 0,
-			elements: new Array(elementsLength).map((_, i) => ({
-				id: `${c.id}-${i}`,
-				dataIndex: i,
-				offset: 0,
-			})),
+			elements: (() => {
+				const array = [];
+				for (let i = 0; i < elementsLength; i++) {
+					array.push({
+						id: `${c.id}-${i}`,
+						dataIndex: i,
+						offset: 0,
+						visible: true,
+					});
+				}
+				return array;
+			})(),
 		};
 		if (typeof c.initialIndex === 'number' && c.initialIndex > 0) {
 			this.moveTo(c.initialIndex);
@@ -50,7 +57,13 @@ export abstract class ListBase<
 		throw new Error('Not implemented');
 	}
 
-	public moveBy(diff: number): RenderData {
+	public moveBy(diff: number, fromId?: string): RenderData {
+		const fromDataIndexElement = this.renderData.elements.find(
+			({ id }) => id === fromId,
+		);
+		if (fromDataIndexElement) {
+			this.dataIndex = fromDataIndexElement.dataIndex;
+		}
 		return this.moveTo(this.dataIndex + diff);
 	}
 
@@ -59,6 +72,8 @@ export abstract class ListBase<
 		if (newIndex !== this.dataIndex) {
 			this.renderData = this.move(newIndex);
 			this.events.triggerEvent('dataIndex', this.dataIndex);
+			this.dataIndex = newIndex;
+			this.focusChildOfDataIndex(newIndex);
 		}
 		return this.renderData;
 	}
@@ -68,6 +83,13 @@ export abstract class ListBase<
 	protected isAnimated() {
 		return this.c.performance === Performance.ANIMATED;
 	}
-}
 
-export type ListImplementation = typeof ListBase;
+	private focusChildOfDataIndex(dataIndexToFocus: number) {
+		const element = this.renderData.elements.find(
+			({ dataIndex }) => dataIndex === dataIndexToFocus,
+		);
+		if (element) {
+			this.focus.focusChild(element.id);
+		}
+	}
+}

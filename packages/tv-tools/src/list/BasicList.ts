@@ -4,6 +4,7 @@ import type { RenderData } from './types';
 type MoveParams = {
 	newIndex: number;
 	dataOffset: number;
+	listOffset: number;
 	firstScroll: number;
 	scroll: number;
 	navigatableCount: number;
@@ -11,7 +12,6 @@ type MoveParams = {
 
 type MoveResult = {
 	listOffset: number;
-	focusIndex: number;
 	dataOffset: number;
 };
 
@@ -23,12 +23,13 @@ function baseForward({
 }: MoveParams): MoveResult {
 	const newDataOffset =
 		newIndex - dataOffset >= navigatableCount
-			? dataOffset + (newIndex - dataOffset + 1)
+			? dataOffset + (newIndex - navigatableCount - dataOffset + 1)
 			: dataOffset;
 	return {
 		listOffset:
-			dataOffset > 0 || newIndex === navigatableCount ? firstScroll : 0,
-		focusIndex: newIndex - dataOffset,
+			dataOffset > 0 || newIndex >= navigatableCount - 1
+				? firstScroll
+				: 0,
 		dataOffset: newDataOffset,
 	};
 }
@@ -37,15 +38,15 @@ function baseBackward({
 	newIndex,
 	dataOffset,
 	firstScroll,
+	listOffset,
 }: MoveParams): MoveResult {
 	const newDataOffset =
 		newIndex <= dataOffset
 			? dataOffset - (dataOffset - newIndex + 1)
 			: dataOffset;
 	return {
-		listOffset: newIndex === 0 ? 0 : firstScroll,
-		focusIndex: newIndex - newDataOffset,
-		dataOffset: newDataOffset,
+		listOffset: newIndex === 0 || listOffset === 0 ? 0 : firstScroll,
+		dataOffset: Math.max(newDataOffset, 0),
 	};
 }
 
@@ -65,6 +66,7 @@ export class BasicList extends ListBase<{
 			dataOffset: Math.min(
 				...this.renderData.elements.map(({ dataIndex }) => dataIndex),
 			),
+			listOffset: this.renderData.listOffset,
 			firstScroll: this.c.config.scrolling.first,
 			scroll: this.c.config.scrolling.other,
 			navigatableCount: this.c.navigatableElements,
@@ -74,6 +76,7 @@ export class BasicList extends ListBase<{
 				id: element.id,
 				dataIndex: i + moveResult.dataOffset,
 				offset: 0,
+				visible: i + moveResult.dataOffset < this.c.dataLength,
 			})),
 			listOffset: moveResult.listOffset,
 		};

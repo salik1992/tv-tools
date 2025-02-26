@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
 import styled from 'styled-components';
+import type { RenderDataElement } from '@salik1992/tv-tools/list';
+import { BasicList } from '@salik1992/tv-tools/list/BasicList';
+import { Performance } from '@salik1992/tv-tools/utils/Performance';
+import { List } from '@salik1992/tv-tools-react/list';
 import type { DiscoverTypes } from '../data/tmdbTypes';
 import { tmdb } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
@@ -7,6 +11,10 @@ import { Tile } from './Tile';
 
 const Wrap = styled.div`
 	margin-top: 15px;
+	.list {
+		white-space: nowrap;
+		overflow: hideen;
+	}
 `;
 
 const P = styled.p`
@@ -39,11 +47,38 @@ export const AssetsRow = ({
 				<P>Nothing was found.</P>
 			)}
 			{data[1]?.length > 0 && (
-				<ul>
-					{data[1].map((asset) => (
-						<Tile asset={asset} key={asset.id} />
-					))}
-				</ul>
+				<List
+					Implementation={BasicList}
+					configuration={{
+						performance: Performance.BASIC,
+						dataLength: data[1].length,
+						visibleElements: 9,
+						navigatableElements: 7,
+						config: {
+							scrolling: {
+								first: 130,
+								other: 260,
+							},
+						},
+					}}
+					renderItem={({
+						id,
+						dataIndex,
+						offset,
+						visible,
+					}: RenderDataElement) =>
+						visible ? (
+							<Tile
+								id={id}
+								key={id}
+								asset={data[1][dataIndex]}
+								style={{
+									transform: `translateX(${offset}px)`,
+								}}
+							/>
+						) : null
+					}
+				/>
 			)}
 		</Wrap>
 	);

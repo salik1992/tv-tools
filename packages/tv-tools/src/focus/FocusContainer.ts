@@ -159,7 +159,7 @@ export class FocusContainer {
 	 * @param id - id of the child
 	 * @param options - optional FocusOptions
 	 */
-	private focusChild(id: string, options?: FocusOptions) {
+	public focusChild(id: string, options?: FocusOptions) {
 		this.lastFocusedId = id;
 		focus.focus(id, options);
 	}
