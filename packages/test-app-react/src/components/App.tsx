@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import { FocusRoot } from '@salik1992/tv-tools-react/focus';
+import { Disclaimer } from './Disclaimer';
 import { Home } from './Home';
 
 const GlobalStyles = createGlobalStyle`
@@ -21,6 +22,7 @@ export const App = () => {
 			<FocusRoot>
 				<Home />
 			</FocusRoot>
+			<Disclaimer />
 		</>
 	);
 };

@@ -8,12 +8,12 @@ export const Home = () => {
 			<VerticalFocus>
 				<AssetsRow
 					list={{ from: 'discover', type: 'movie' }}
-					header="TMDB Discover Movies"
+					header="Discover Movies"
 					focusOnMount
 				/>
 				<AssetsRow
 					list={{ from: 'discover', type: 'tv' }}
-					header="TMDB Discover TV"
+					header="Discover TV"
 				/>
 			</VerticalFocus>
 		</Screen>
