@@ -6,7 +6,6 @@ export interface RenderDataElement {
 	id: string;
 	dataIndex: number;
 	offset: number;
-	visible: boolean;
 }
 
 export interface RenderData {

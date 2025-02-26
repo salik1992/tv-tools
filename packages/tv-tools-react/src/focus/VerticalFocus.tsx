@@ -1,5 +1,6 @@
 import { type PropsWithChildren } from 'react';
 import { useFocusContainer } from './useFocusContainer';
+import { FocusContext } from './context';
 
 /**
  * Component for markup of where the focus should navigate vertically.
@@ -33,7 +34,7 @@ export const VerticalFocus = ({
 	id,
 	children,
 }: PropsWithChildren<{ id?: string }>) => {
-	const { FocusContextProvider, container, useOnUp, useOnDown } =
+	const { focusContextValue, container, useOnUp, useOnDown } =
 		useFocusContainer(id);
 
 	useOnUp(
@@ -50,5 +51,9 @@ export const VerticalFocus = ({
 		[container],
 	);
 
-	return <FocusContextProvider>{children}</FocusContextProvider>;
+	return (
+		<FocusContext.Provider value={focusContextValue}>
+			{children}
+		</FocusContext.Provider>
+	);
 };

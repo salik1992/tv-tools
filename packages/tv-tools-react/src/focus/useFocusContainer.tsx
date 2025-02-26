@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { FocusContainer, RenderProgress } from '@salik1992/tv-tools/focus';
+import { useRefresh } from './useRefresh';
 import { FocusContext } from './context';
 import type { Focus } from './types';
 import {
@@ -28,7 +29,7 @@ import {
  * // SIMPLIFIED
  * const Grid = ({ columns, data, renderItem }) => {
  *     const {
- *         FocusContextProvider, container,
+ *         focusContextValue, container,
  *         useOnLeft, useOnRight, useOnUp, useOnDown,
  *     } = useFocusContainer();
  *
@@ -51,9 +52,9 @@ import {
  *
  *     return (
  *         <div className="grid">
- *             <FocusContextProvider>
+ *             <FocusContext.Provider value={focusContextValue}>
  *                 {data.map(renderItem)}
- *              </FocusContextProvider>
+ *              </FocusContext.Provider>
  *          </div>
  *     )
  * }
@@ -62,6 +63,7 @@ import {
 export function useFocusContainer(id?: string) {
 	const container = useMemo(() => new FocusContainer(id), [id]);
 	const context = useContext(FocusContext);
+	const refresh = useRefresh();
 
 	container.setRenderProgress(RenderProgress.STARTED);
 
@@ -72,9 +74,18 @@ export function useFocusContainer(id?: string) {
 		};
 	}, [container]);
 
+	useEffect(() => {
+		// Needs to run every time to maintain children order.
+		context.addChild(container.id);
+	});
+
 	const addChild = useCallback(
 		(childId: string) => {
-			container.addChild(childId);
+			if (container.getRenderProgress() === RenderProgress.FINISHED) {
+				refresh();
+			} else {
+				container.addChild(childId);
+			}
 		},
 		[container],
 	);
@@ -83,17 +94,9 @@ export function useFocusContainer(id?: string) {
 		container.setRenderProgress(RenderProgress.FINISHED);
 	});
 
-	const contextValue = useMemo((): Focus => ({ addChild }), [addChild]);
-
-	const FocusContextProvider = useCallback(
-		({ children }: PropsWithChildren) => {
-			return (
-				<FocusContext.Provider value={contextValue}>
-					{children}
-				</FocusContext.Provider>
-			);
-		},
-		[contextValue],
+	const focusContextValue = useMemo(
+		(): Focus => ({ addChild }),
+		[refresh, addChild],
 	);
 
 	const useOnKeyDown = useCallback(getUseOnKey(container.id), [container.id]);
@@ -107,7 +110,7 @@ export function useFocusContainer(id?: string) {
 	return useMemo(
 		() => ({
 			container,
-			FocusContextProvider,
+			focusContextValue,
 			useOnKeyDown,
 			useOnEnter,
 			useOnBack,
@@ -118,7 +121,7 @@ export function useFocusContainer(id?: string) {
 		}),
 		[
 			container,
-			FocusContextProvider,
+			focusContextValue,
 			useOnKeyDown,
 			useOnEnter,
 			useOnBack,

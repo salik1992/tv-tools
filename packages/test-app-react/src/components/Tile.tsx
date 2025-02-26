@@ -59,7 +59,7 @@ export const Tile = ({
 	size = 'landscape',
 	style,
 }: {
-	asset: Asset;
+	asset?: Asset;
 	id?: string;
 	size?: 'landscape' | 'portrait';
 	style?: DetailedHTMLProps<
@@ -70,17 +70,28 @@ export const Tile = ({
 	const onPress = useCallback(() => {}, []);
 
 	return (
-		<Wrap id={id} style={style} size={size} onPress={onPress}>
+		<Wrap
+			id={id}
+			style={{ ...style, visibility: asset ? 'visible' : 'hidden' }}
+			size={size}
+			onPress={onPress}
+		>
 			<InnerWrap>
 				<Image
-					src={tmdb.getImage(
-						asset,
-						size === 'landscape' ? 'backdrop' : 'poster',
-						WIDTH[size],
-					)}
+					src={
+						asset
+							? tmdb.getImage(
+									asset,
+									size === 'landscape'
+										? 'backdrop'
+										: 'poster',
+									WIDTH[size],
+								)
+							: ''
+					}
 					size={size}
 				/>
-				<Title>{asset.title}</Title>
+				<Title>{asset?.title}</Title>
 			</InnerWrap>
 		</Wrap>
 	);

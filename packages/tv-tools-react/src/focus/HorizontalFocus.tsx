@@ -1,5 +1,6 @@
 import type { KeyboardEvent, PropsWithChildren } from 'react';
 import { useFocusContainer } from './useFocusContainer';
+import { FocusContext } from './context';
 
 /**
  * Component for markup of where the focus should navigate horizontally.
@@ -36,7 +37,7 @@ export const HorizontalFocus = ({
 	ignoreRtl,
 	children,
 }: PropsWithChildren<{ id?: string; ignoreRtl?: boolean }>) => {
-	const { FocusContextProvider, container, useOnLeft, useOnRight } =
+	const { focusContextValue, container, useOnLeft, useOnRight } =
 		useFocusContainer(id);
 
 	useOnLeft(
@@ -57,5 +58,9 @@ export const HorizontalFocus = ({
 		{ ignoreRtl },
 	);
 
-	return <FocusContextProvider>{children}</FocusContextProvider>;
+	return (
+		<FocusContext.Provider value={focusContextValue}>
+			{children}
+		</FocusContext.Provider>
+	);
 };

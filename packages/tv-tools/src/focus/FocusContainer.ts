@@ -87,6 +87,14 @@ export class FocusContainer {
 	}
 
 	/**
+	 * Returns current render progress.
+	 * @returns current render progress
+	 */
+	public getRenderProgress(): RenderProgress {
+		return this.renderProgress;
+	}
+
+	/**
 	 * Updates the phase of the render loop.
 	 * If the phase is FINISHED we commit the work-in-progress children to full
 	 * children. If the focus still belongs to the container it will attempt to

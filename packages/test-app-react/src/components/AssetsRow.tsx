@@ -15,6 +15,9 @@ const Wrap = styled.div`
 		white-space: nowrap;
 		overflow: hideen;
 	}
+	.list-inner-wrap {
+		transition: transform 300ms;
+	}
 `;
 
 const P = styled.p`
@@ -24,9 +27,11 @@ const P = styled.p`
 export const AssetsRow = ({
 	list,
 	header,
+	focusOnMount = false,
 }: {
 	list: { from: 'discover'; type: DiscoverTypes };
 	header: string;
+	focusOnMount?: boolean;
 }) => {
 	const fetchFunction = useMemo(() => {
 		return list.type === 'movie'
@@ -50,14 +55,14 @@ export const AssetsRow = ({
 				<List
 					Implementation={BasicList}
 					configuration={{
-						performance: Performance.BASIC,
+						performance: Performance.ANIMATED,
 						dataLength: data[1].length,
 						visibleElements: 9,
 						navigatableElements: 7,
 						config: {
 							scrolling: {
-								first: 130,
-								other: 260,
+								first: 135,
+								other: 270,
 							},
 						},
 					}}
@@ -65,19 +70,17 @@ export const AssetsRow = ({
 						id,
 						dataIndex,
 						offset,
-						visible,
-					}: RenderDataElement) =>
-						visible ? (
-							<Tile
-								id={id}
-								key={id}
-								asset={data[1][dataIndex]}
-								style={{
-									transform: `translateX(${offset}px)`,
-								}}
-							/>
-						) : null
-					}
+					}: RenderDataElement) => (
+						<Tile
+							id={id}
+							key={id}
+							asset={data[1][dataIndex]}
+							style={{
+								transform: `translateX(${offset}px)`,
+							}}
+						/>
+					)}
+					focusOnMount={focusOnMount}
 				/>
 			)}
 		</Wrap>

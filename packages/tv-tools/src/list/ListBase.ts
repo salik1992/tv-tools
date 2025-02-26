@@ -34,7 +34,6 @@ export abstract class ListBase<
 						id: `${c.id}-${i}`,
 						dataIndex: i,
 						offset: 0,
-						visible: true,
 					});
 				}
 				return array;
@@ -89,7 +88,7 @@ export abstract class ListBase<
 			({ dataIndex }) => dataIndex === dataIndexToFocus,
 		);
 		if (element) {
-			this.focus.focusChild(element.id);
+			this.focus.focusChild(element.id, { preventScroll: true });
 		}
 	}
 }

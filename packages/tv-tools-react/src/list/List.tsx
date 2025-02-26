@@ -2,17 +2,16 @@ import {
 	type KeyboardEvent,
 	type WheelEvent,
 	type ReactNode,
-	useCallback,
-	useEffect,
 	useMemo,
-	useRef,
 	useState,
+	useEffect,
 } from 'react';
 import type {
 	ListImplementation,
 	RenderDataElement,
 } from '@salik1992/tv-tools/list';
-import { useFocusContainer } from '../focus';
+import { FocusContext, useFocusContainer } from '../focus';
+import { useThrottledCallback } from '../utils/useThrottledCallback';
 
 export const List = <
 	Implementation extends ListImplementation,
@@ -24,16 +23,20 @@ export const List = <
 	configuration,
 	renderItem,
 	orientation = 'horizontal',
+	focusOnMount = false,
+	throttleMs = 300,
 }: {
 	id?: string;
 	Implementation: Implementation;
 	configuration: Omit<Configuration, 'id'>;
 	renderItem: (element: RenderDataElement) => ReactNode;
-	orientation: 'vertical' | 'horizontal';
+	orientation?: 'vertical' | 'horizontal';
+	focusOnMount?: boolean;
+	throttleMs?: number;
 }) => {
 	const {
 		container,
-		FocusContextProvider,
+		focusContextValue,
 		useOnUp,
 		useOnDown,
 		useOnLeft,
@@ -49,7 +52,13 @@ export const List = <
 	);
 	const [renderData, setRenderData] = useState(list.getRenderData());
 
-	const backward = useCallback(
+	useEffect(() => {
+		if (focusOnMount) {
+			container.focus({ preventScroll: true });
+		}
+	}, [focusOnMount]);
+
+	const backward = useThrottledCallback(
 		(e: KeyboardEvent<HTMLElement>) => {
 			const newRenderData = list.moveBy(-1, (e.target as HTMLElement).id);
 			if (newRenderData === renderData) {
@@ -59,9 +68,10 @@ export const List = <
 			return true;
 		},
 		[list, renderData],
+		{ throttledReturn: false, limitMs: throttleMs },
 	);
 
-	const forward = useCallback(
+	const forward = useThrottledCallback(
 		(e: KeyboardEvent<HTMLElement>) => {
 			const newRenderData = list.moveBy(1, (e.target as HTMLElement).id);
 			if (newRenderData === renderData) {
@@ -71,6 +81,7 @@ export const List = <
 			return true;
 		},
 		[list, renderData],
+		{ throttledReturn: false, limitMs: throttleMs },
 	);
 
 	if (orientation === 'horizontal') {
@@ -85,12 +96,8 @@ export const List = <
 		useOnDown(forward, [forward]);
 	}
 
-	const lastWheelEvent = useRef(0);
-	const onWheel = useCallback(
+	const onWheel = useThrottledCallback(
 		(e: WheelEvent<HTMLElement>) => {
-			if (lastWheelEvent.current + 500 > Date.now()) {
-				return;
-			}
 			const delta = e.deltaX || e.deltaY;
 			const targetId = (e.target as HTMLElement).id;
 			let newRenderData = renderData;
@@ -101,16 +108,16 @@ export const List = <
 			}
 			if (newRenderData !== renderData) {
 				setRenderData(newRenderData);
-				lastWheelEvent.current = Date.now();
 				e.preventDefault();
 				e.stopPropagation();
 			}
 		},
 		[list, renderData],
+		{ throttledReturn: undefined, limitMs: throttleMs },
 	);
 
 	return (
-		<FocusContextProvider>
+		<FocusContext.Provider value={focusContextValue}>
 			<div className="list" onWheel={onWheel}>
 				<div
 					className="list-inner-wrap"
@@ -121,6 +128,6 @@ export const List = <
 					{renderData.elements.map(renderItem)}
 				</div>
 			</div>
-		</FocusContextProvider>
+		</FocusContext.Provider>
 	);
 };
