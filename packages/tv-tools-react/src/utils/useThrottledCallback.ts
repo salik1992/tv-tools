@@ -1,5 +1,23 @@
 import { useCallback, useRef } from 'react';
 
+/**
+ * Throttle the callback not to be called too many times.
+ * @param callback - the callback to be throttled
+ * @param dependencies - the dependency list for the callback
+ * @param configuration - the value that should be returned when
+ * the callback is throttled and not called directly
+ * @returns function that is a throttled callback
+ * @example
+ * ```typescript
+ * const forward = useThrottledCallback(() => {
+ *     const newRenderData = list.moveBy(1);
+ *     if (newRenderData !== renderData) {
+ *         setRenderData(renderData);
+ *         return true;
+ *     }
+ *     return false;
+ * }, [list, renderData], { throttledReturn: true, limitMs: 300 });
+ */
 export function useThrottledCallback<T extends (...args: any) => any>(
 	callback: T,
 	dependencies: unknown[],

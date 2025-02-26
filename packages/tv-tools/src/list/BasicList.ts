@@ -1,6 +1,10 @@
 import { ListBase } from './ListBase';
 import type { RenderData } from './types';
 
+/**
+ * Parameters required to calculate the new data window
+ * and the positions of elements.
+ */
 type MoveParams = {
 	newIndex: number;
 	dataOffset: number;
@@ -10,11 +14,18 @@ type MoveParams = {
 	navigatableCount: number;
 };
 
+/**
+ * The data for rendering and for calculation which element
+ * should render which data.
+ */
 type MoveResult = {
 	listOffset: number;
 	dataOffset: number;
 };
 
+/**
+ * Moving in the list forward (right/down).
+ */
 function baseForward({
 	newIndex,
 	dataOffset,
@@ -22,18 +33,27 @@ function baseForward({
 	navigatableCount,
 }: MoveParams): MoveResult {
 	const newDataOffset =
+		// Are we at the edge of movement?
 		newIndex - dataOffset >= navigatableCount
-			? dataOffset + (newIndex - navigatableCount - dataOffset + 1)
-			: dataOffset;
+			? // Then we need to calculate new data offset
+				dataOffset + (newIndex - navigatableCount - dataOffset + 1)
+			: // Otherwise we do not move data, only change focused element
+				dataOffset;
 	return {
 		listOffset:
+			// If data offset is greater than 0 we always want to scroll
+			// or when newIndex is greater than navigatable elements count.
 			dataOffset > 0 || newIndex >= navigatableCount - 1
-				? firstScroll
+				? // Without animation we only the first scroll and then rotate data
+					firstScroll
 				: 0,
 		dataOffset: newDataOffset,
 	};
 }
 
+/**
+ * Moving in the list backward (left/up).
+ */
 function baseBackward({
 	newIndex,
 	dataOffset,
@@ -41,22 +61,32 @@ function baseBackward({
 	listOffset,
 }: MoveParams): MoveResult {
 	const newDataOffset =
+		// Are we at the edge of movement?
 		newIndex <= dataOffset
-			? dataOffset - (dataOffset - newIndex + 1)
-			: dataOffset;
+			? // Then we need to calculate new data offset
+				dataOffset - (dataOffset - newIndex + 1)
+			: // Otherwise we do not move data, only change focused element
+				dataOffset;
 	return {
+		// We remove the scroll when we return to 1 or we keep it at 0 if
+		// it is 0 (e.g. partial scroll down the list not scrolling and returning)
 		listOffset: newIndex === 0 || listOffset === 0 ? 0 : firstScroll,
 		dataOffset: Math.max(newDataOffset, 0),
 	};
 }
 
+/**
+ * Adjustment of list offset when the list is animated.
+ */
 function animate(baseMove: (move: MoveParams) => MoveResult) {
 	return function (move: MoveParams) {
 		const base = baseMove(move);
 		return {
 			listOffset:
+				// We scroll if the base scrolls
 				base.listOffset > 0
-					? move.firstScroll + base.dataOffset * move.scroll
+					? // And the scroll is always first and by amount of data offset
+						move.firstScroll + base.dataOffset * move.scroll
 					: 0,
 			dataOffset: base.dataOffset,
 		};
@@ -72,8 +102,13 @@ export class BasicList extends ListBase<{
 		other: number;
 	};
 }> {
+	/**
+	 * Calculates the new render data for the new data index.
+	 */
 	public override move(newIndex: number): RenderData {
+		// Get the function that should do the calculation
 		const moveFunction = this.getMoveFunction(newIndex);
+		// Calculate data offset and list scroll
 		const moveResult = moveFunction({
 			newIndex: newIndex,
 			dataOffset: Math.min(
@@ -86,11 +121,17 @@ export class BasicList extends ListBase<{
 		});
 		const isAnimated = this.isAnimated();
 		const { length } = this.renderData.elements;
+		// Base page is the smallest page of data, the page means rotating
+		// the elements to the next data.
 		const basePage = Math.floor(moveResult.dataOffset / length);
+		// How many elements at the start will be one page higher then
+		// the rest
 		const newPageUpTo = (moveResult.dataOffset % length) - 1;
 		return {
 			elements: this.renderData.elements.map((element, i) => {
+				// DataIndex for basic behavior
 				const dataIndex = i + moveResult.dataOffset;
+				// Page for the element for animated
 				const page = newPageUpTo >= i ? basePage + 1 : basePage;
 				return {
 					id: element.id,
@@ -106,6 +147,10 @@ export class BasicList extends ListBase<{
 		};
 	}
 
+	/**
+	 * Returns a function to use for calculation based on the list configuration
+	 * and the direction of movement.
+	 */
 	private getMoveFunction(index: number) {
 		if (this.isAnimated()) {
 			return index > this.dataIndex ? animateForward : animateBackward;

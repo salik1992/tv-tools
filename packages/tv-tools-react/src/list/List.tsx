@@ -13,6 +13,9 @@ import type {
 import { FocusContext, useFocusContainer } from '../focus';
 import { useThrottledCallback } from '../utils/useThrottledCallback';
 
+/**
+ * List component.
+ */
 export const List = <
 	Implementation extends ListImplementation,
 	Configuration extends
@@ -25,13 +28,23 @@ export const List = <
 	orientation = 'horizontal',
 	focusOnMount = false,
 	throttleMs = 300,
+	ignoreRtl,
 }: {
+	/* The optional ID to use for focus and the list. */
 	id?: string;
+	/* The behavior of the list. */
 	Implementation: Implementation;
+	/* The configuration of the list. */
 	configuration: Omit<Configuration, 'id'>;
+	/* The function that renders each element. */
 	renderItem: (element: RenderDataElement) => ReactNode;
+	/* Orientation of the list that will change control keys. */
 	orientation?: 'vertical' | 'horizontal';
+	/* Whether the horizontal list should render ltr even in rtl. */
+	ignoreRtl?: boolean;
+	/* Whether the list should auto focus when mounted. */
 	focusOnMount?: boolean;
+	/* The time used for throttling the movement. */
 	throttleMs?: number;
 }) => {
 	const {
@@ -42,6 +55,8 @@ export const List = <
 		useOnLeft,
 		useOnRight,
 	} = useFocusContainer(id);
+
+	// List instance
 	const list = useMemo(
 		() =>
 			new Implementation(container, {
@@ -50,14 +65,18 @@ export const List = <
 			}),
 		[Implementation, configuration, container],
 	);
+
+	// Render data from the list
 	const [renderData, setRenderData] = useState(list.getRenderData());
 
+	// Focusing on mount
 	useEffect(() => {
 		if (focusOnMount) {
 			container.focus({ preventScroll: true });
 		}
 	}, [focusOnMount]);
 
+	// Backwards movement from keys
 	const backward = useThrottledCallback(
 		(e: KeyboardEvent<HTMLElement>) => {
 			const newRenderData = list.moveBy(-1, (e.target as HTMLElement).id);
@@ -68,9 +87,10 @@ export const List = <
 			return true;
 		},
 		[list, renderData],
-		{ throttledReturn: false, limitMs: throttleMs },
+		{ throttledReturn: true, limitMs: throttleMs },
 	);
 
+	// Forwards movement from keys
 	const forward = useThrottledCallback(
 		(e: KeyboardEvent<HTMLElement>) => {
 			const newRenderData = list.moveBy(1, (e.target as HTMLElement).id);
@@ -81,14 +101,15 @@ export const List = <
 			return true;
 		},
 		[list, renderData],
-		{ throttledReturn: false, limitMs: throttleMs },
+		{ throttledReturn: true, limitMs: throttleMs },
 	);
 
+	// Attaching movement functions to key listeners
 	if (orientation === 'horizontal') {
 		// @ts-ignore: TODO reversed limitation
-		useOnLeft(backward, [backward]);
+		useOnLeft(backward, [backward], { ignoreRtl });
 		// @ts-ignore: TODO reversed limitation
-		useOnRight(forward, [forward]);
+		useOnRight(forward, [forward], { ignoreRtl });
 	} else {
 		// @ts-ignore: TODO reversed limitation
 		useOnUp(backward, [backward]);
@@ -96,6 +117,7 @@ export const List = <
 		useOnDown(forward, [forward]);
 	}
 
+	// Scrolling the wheel with pointer wheel.
 	const onWheel = useThrottledCallback(
 		(e: WheelEvent<HTMLElement>) => {
 			const delta = e.deltaX || e.deltaY;
