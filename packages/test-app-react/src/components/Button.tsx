@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
 
