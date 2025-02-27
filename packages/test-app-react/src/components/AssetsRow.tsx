@@ -1,4 +1,4 @@
-import { useRef, useCallback, useMemo, useState } from 'react';
+import { useRef, useCallback, useMemo, useState, type FocusEvent } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
@@ -34,6 +34,7 @@ export const AssetsRow = ({
 	list,
 	header,
 	focusOnMount = false,
+	onFocus: onOuterFocus,
 }: {
 	list:
 		| { from: 'discover'; type: DiscoverTypes }
@@ -44,6 +45,7 @@ export const AssetsRow = ({
 		  };
 	header: string;
 	focusOnMount?: boolean;
+	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const fetchFunction = useMemo(() => {
 		return list.type === 'movie'
@@ -57,13 +59,19 @@ export const AssetsRow = ({
 
 	const { data, loading, error } = usePagedData(fetchFunction, [list]);
 
-	const onFocus = useCallback(() => {
-		setIsFocused(true);
-		if (isFocusDelay.current) {
-			window.clearTimeout(isFocusDelay.current);
-			isFocusDelay.current = null;
-		}
-	}, [setIsFocused]);
+	const onFocus = useCallback(
+		(event: FocusEvent) => {
+			setIsFocused(true);
+			if (isFocusDelay.current) {
+				window.clearTimeout(isFocusDelay.current);
+				isFocusDelay.current = null;
+			}
+			if (typeof onOuterFocus === 'function') {
+				onOuterFocus(event);
+			}
+		},
+		[setIsFocused],
+	);
 
 	const onBlur = useCallback(() => {
 		isFocusDelay.current = window.setTimeout(() => {

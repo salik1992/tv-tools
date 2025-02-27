@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, type FocusEvent } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
@@ -16,6 +16,7 @@ import { H3 } from './Typography';
 
 const Wrap = styled.div`
 	margin-top: 15px;
+	margin-left: 50px;
 	.list {
 		white-space: nowrap;
 		padding: 50px 0;
@@ -33,6 +34,7 @@ const P = styled(H3)`
 export const HeroRow = ({
 	list,
 	focusOnMount = false,
+	onFocus,
 }: {
 	list:
 		| { from: 'discover'; type: DiscoverTypes }
@@ -41,8 +43,8 @@ export const HeroRow = ({
 				type: TrendingTypes;
 				timeWindow: TrendingTimeWindow;
 		  };
-	header: string;
 	focusOnMount?: boolean;
+	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const fetchFunction = useMemo(() => {
 		return list.type === 'movie'
@@ -86,7 +88,7 @@ export const HeroRow = ({
 	);
 
 	return (
-		<Wrap>
+		<Wrap onFocus={onFocus}>
 			{loading && <P>Loading...</P>}
 			{error !== null && data.pages === 0 && (
 				<P>There was an error loading the data</P>
