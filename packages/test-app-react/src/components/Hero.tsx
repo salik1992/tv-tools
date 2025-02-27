@@ -3,6 +3,7 @@ import {
 	type DetailedHTMLProps,
 	type HTMLAttributes,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
 import { tmdb } from '../data';
@@ -98,7 +99,10 @@ export const Hero = ({
 	>['style'];
 	onFocus?: (event: FocusEvent) => void;
 }) => {
-	const onPress = useCallback(() => {}, []);
+	const navigate = useNavigate();
+	const onPress = useCallback(() => {
+		navigate(`detail/movie/${asset?.id}`);
+	}, [navigate]);
 
 	return (
 		<Wrap
