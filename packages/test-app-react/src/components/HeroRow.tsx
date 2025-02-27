@@ -1,4 +1,4 @@
-import { useRef, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
@@ -11,15 +11,15 @@ import type {
 } from '../data/tmdbTypes';
 import { tmdb } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
-import { AssetsRowDetail } from './AssetsRowDetail';
-import { Tile } from './Tile';
-import { H2, H3 } from './Typography';
+import { Hero } from './Hero';
+import { H3 } from './Typography';
 
 const Wrap = styled.div`
 	margin-top: 15px;
 	.list {
 		white-space: nowrap;
-		overflow: hideen;
+		padding: 50px 0;
+		box-sizing: border-box;
 	}
 	.list-inner-wrap {
 		transition: transform 300ms;
@@ -30,9 +30,8 @@ const P = styled(H3)`
 	text-align: center;
 `;
 
-export const AssetsRow = ({
+export const HeroRow = ({
 	list,
-	header,
 	focusOnMount = false,
 }: {
 	list:
@@ -51,32 +50,7 @@ export const AssetsRow = ({
 			: (page: number) => tmdb.getDiscover('tv', page);
 	}, [list]);
 
-	const [focusedIndex, setFocusedIndex] = useState(0);
-	const [isFocused, setIsFocused] = useState(false);
-	const isFocusDelay = useRef<number | null>(null);
-
 	const { data, loading, error } = usePagedData(fetchFunction, [list]);
-
-	const onFocus = useCallback(() => {
-		setIsFocused(true);
-		if (isFocusDelay.current) {
-			window.clearTimeout(isFocusDelay.current);
-			isFocusDelay.current = null;
-		}
-	}, [setIsFocused]);
-
-	const onBlur = useCallback(() => {
-		isFocusDelay.current = window.setTimeout(() => {
-			setIsFocused(false);
-		}, 50);
-	}, [setIsFocused]);
-
-	const onDataIndex = useCallback(
-		(index: number) => {
-			setFocusedIndex(index);
-		},
-		[setFocusedIndex],
-	);
 
 	const hasData = useMemo(() => (data[1]?.length ?? 0) > 0, [data[1]]);
 
@@ -84,12 +58,12 @@ export const AssetsRow = ({
 		() => ({
 			performance: Performance.ANIMATED,
 			dataLength: data[1]?.length,
-			visibleElements: 9,
-			navigatableElements: 7,
+			visibleElements: 5,
+			navigatableElements: 2,
 			config: {
 				scrolling: {
-					first: 195,
-					other: 270,
+					first: Hero.width,
+					other: Hero.width,
 				},
 			},
 		}),
@@ -98,7 +72,7 @@ export const AssetsRow = ({
 
 	const renderElement = useCallback(
 		({ id, dataIndex, offset, onFocus }: RenderDataElement) => (
-			<Tile
+			<Hero
 				id={id}
 				key={id}
 				asset={data[1][dataIndex]}
@@ -112,8 +86,7 @@ export const AssetsRow = ({
 	);
 
 	return (
-		<Wrap onFocus={onFocus} onBlur={onBlur}>
-			<H2>{header}</H2>
+		<Wrap>
 			{loading && <P>Loading...</P>}
 			{error !== null && data.pages === 0 && (
 				<P>There was an error loading the data</P>
@@ -126,11 +99,6 @@ export const AssetsRow = ({
 						configuration={listConfiguration}
 						renderItem={renderElement}
 						focusOnMount={focusOnMount}
-						onDataIndex={onDataIndex}
-					/>
-					<AssetsRowDetail
-						visible={isFocused}
-						asset={data[1][focusedIndex]}
 					/>
 				</>
 			)}

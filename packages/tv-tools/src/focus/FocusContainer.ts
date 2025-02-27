@@ -151,7 +151,9 @@ export class FocusContainer {
 			originalChildIndex + diff,
 			this.focusChildren.length - 1,
 		);
-		this.focusChild(this.focusChildren[targetChildIndex]);
+		this.focusChild(this.focusChildren[targetChildIndex], {
+			preventScroll: true,
+		});
 		return true;
 	}
 
