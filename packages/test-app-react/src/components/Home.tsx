@@ -4,7 +4,7 @@ import { Screen } from './Screen';
 
 export const Home = () => {
 	return (
-		<Screen>
+		<Screen withMenu>
 			<VerticalFocus>
 				<AssetsRow
 					list={{ from: 'discover', type: 'movie' }}

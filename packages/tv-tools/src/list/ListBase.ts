@@ -14,7 +14,15 @@ export abstract class ListBase<
 	/**
 	 * Handles listeners to events and their management.
 	 */
-	private events = new EventListener<{ dataIndex: number }>();
+	private events = new EventListener<{
+		dataIndex: number;
+		renderData: RenderData;
+	}>();
+
+	/**
+	 * Stores focus listeners for the elements.
+	 */
+	private focusListeners = new Map<string, (event: FocusEvent) => void>();
 
 	/**
 	 * Render data that contain the information of what should be rendered.
@@ -50,10 +58,12 @@ export abstract class ListBase<
 			elements: (() => {
 				const array = [];
 				for (let i = 0; i < elementsLength; i++) {
+					const id = `${c.id}-${i}`;
 					array.push({
-						id: `${c.id}-${i}`,
+						id,
 						dataIndex: i,
 						offset: 0,
+						onFocus: this.getOnFocusForElement(id),
 					});
 				}
 				return array;
@@ -99,7 +109,7 @@ export abstract class ListBase<
 	 * @param diff - the difference by which it should move
 	 * @returns RenderData data for rendering after the move has been calculated
 	 */
-	public moveBy(diff: number, fromId?: string): RenderData {
+	public moveBy(diff: number, fromId?: string) {
 		const fromDataIndexElement = this.renderData.elements.find(
 			({ id }) => id === fromId,
 		);
@@ -115,15 +125,17 @@ export abstract class ListBase<
 	 * @param index - the index to move to
 	 * @returns RenderData data for rendering after the move has been calculated
 	 */
-	public moveTo(index: number): RenderData {
+	public moveTo(index: number) {
 		const newIndex = clamp(0, index, this.c.dataLength - 1);
 		if (newIndex !== this.dataIndex) {
 			this.renderData = this.move(newIndex);
-			this.events.triggerEvent('dataIndex', this.dataIndex);
+			this.events.triggerEvent('renderData', this.renderData);
 			this.dataIndex = newIndex;
+			this.events.triggerEvent('dataIndex', this.dataIndex);
 			this.focusChildOfDataIndex(newIndex);
+			return true;
 		}
-		return this.renderData;
+		return false;
 	}
 
 	/**
@@ -139,6 +151,30 @@ export abstract class ListBase<
 	 */
 	protected isAnimated() {
 		return this.c.performance === Performance.ANIMATED;
+	}
+
+	/**
+	 * Returns an onFocus listener for element of certain id.
+	 * @param id - id of the element
+	 * @returns focus listener
+	 */
+	protected getOnFocusForElement(id: string) {
+		const listener =
+			this.focusListeners.get(id) ??
+			((event: FocusEvent) => {
+				if ((event.target as HTMLElement).id === id) {
+					const element = this.renderData.elements.find(
+						(e) => e.id === id,
+					);
+					if (element) {
+						this.moveTo(element.dataIndex);
+					}
+				}
+			});
+		if (!this.focusListeners.has(id)) {
+			this.focusListeners.set(id, listener);
+		}
+		return listener;
 	}
 
 	/**

@@ -1,14 +1,15 @@
 import {
-	type KeyboardEvent,
 	type WheelEvent,
 	type ReactNode,
 	useMemo,
 	useState,
 	useEffect,
+	useCallback,
 } from 'react';
 import type { ControlEvent } from '@salik1992/tv-tools/focus';
 import type {
 	ListImplementation,
+	RenderData,
 	RenderDataElement,
 } from '@salik1992/tv-tools/list';
 import { FocusContext, useFocusContainer } from '../focus';
@@ -30,6 +31,7 @@ export const List = <
 	focusOnMount = false,
 	throttleMs = 300,
 	ignoreRtl,
+	onDataIndex,
 }: {
 	/* The optional ID to use for focus and the list. */
 	id?: string;
@@ -47,6 +49,8 @@ export const List = <
 	focusOnMount?: boolean;
 	/* The time used for throttling the movement. */
 	throttleMs?: number;
+	/* The listener for changes in data index. */
+	onDataIndex?: (index: number) => void;
 }) => {
 	const {
 		container,
@@ -77,15 +81,17 @@ export const List = <
 		}
 	}, [focusOnMount]);
 
+	const onRenderData = useCallback(
+		(newRenderData: RenderData) => {
+			setRenderData(newRenderData);
+		},
+		[setRenderData],
+	);
+
 	// Backwards movement from keys
 	const backward = useThrottledCallback(
 		(e: ControlEvent) => {
-			const newRenderData = list.moveBy(-1, (e.target as HTMLElement).id);
-			if (newRenderData === renderData) {
-				return false;
-			}
-			setRenderData(newRenderData);
-			return true;
+			return list.moveBy(-1, (e.target as HTMLElement).id);
 		},
 		[list, renderData],
 		{ throttledReturn: true, limitMs: throttleMs },
@@ -94,12 +100,7 @@ export const List = <
 	// Forwards movement from keys
 	const forward = useThrottledCallback(
 		(e: ControlEvent) => {
-			const newRenderData = list.moveBy(1, (e.target as HTMLElement).id);
-			if (newRenderData === renderData) {
-				return false;
-			}
-			setRenderData(newRenderData);
-			return true;
+			return list.moveBy(1, (e.target as HTMLElement).id);
 		},
 		[list, renderData],
 		{ throttledReturn: true, limitMs: throttleMs },
@@ -107,15 +108,11 @@ export const List = <
 
 	// Attaching movement functions to key listeners
 	if (orientation === 'horizontal') {
-		// @ts-ignore: TODO reversed limitation
 		useOnLeft(backward, [backward], { ignoreRtl });
-		// @ts-ignore: TODO reversed limitation
 		useOnRight(forward, [forward], { ignoreRtl });
 	} else {
-		// @ts-ignore: TODO reversed limitation
-		useOnUp(backward, [backward]);
-		// @ts-ignore: TODO reversed limitation
-		useOnDown(forward, [forward]);
+		useOnUp(backward);
+		useOnDown(forward);
 	}
 
 	// Scrolling the wheel with pointer wheel.
@@ -123,14 +120,13 @@ export const List = <
 		(e: WheelEvent<HTMLElement>) => {
 			const delta = e.deltaX || e.deltaY;
 			const targetId = (e.target as HTMLElement).id;
-			let newRenderData = renderData;
+			let processed = false;
 			if (delta < 0) {
-				newRenderData = list.moveBy(-1, targetId);
+				processed = list.moveBy(-1, targetId);
 			} else if (delta > 0) {
-				newRenderData = list.moveBy(1, targetId);
+				processed = list.moveBy(1, targetId);
 			}
-			if (newRenderData !== renderData) {
-				setRenderData(newRenderData);
+			if (processed) {
 				e.preventDefault();
 				e.stopPropagation();
 			}
@@ -138,6 +134,18 @@ export const List = <
 		[list, renderData],
 		{ throttledReturn: undefined, limitMs: throttleMs },
 	);
+
+	useEffect(() => {
+		list.addEventListener('renderData', onRenderData);
+		return () => list.removeEventListener('renderData', onRenderData);
+	}, [list, onRenderData]);
+
+	useEffect(() => {
+		if (typeof onDataIndex === 'function') {
+			list.addEventListener('dataIndex', onDataIndex);
+			return () => list.removeEventListener('dataIndex', onDataIndex);
+		}
+	}, [list, onDataIndex]);
 
 	return (
 		<FocusContext.Provider value={focusContextValue}>

@@ -5,9 +5,10 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
+import { tmdb } from '../data';
 import type { Asset } from '../data/types';
 import { ImageWithFallback } from './Image';
-import { tmdb } from '../data';
+import { H5, oneLineEllipsis } from './Typography';
 
 const WIDTH = {
 	landscape: 240,
@@ -44,13 +45,11 @@ const Wrap = styled(Interactable)<Pick<Parameters<typeof Tile>[0], 'size'>>`
 	}
 `;
 
-const Title = styled.h3`
+const Title = styled(H5)`
 	margin: 0;
 	line-height: 30px;
 	text-align: center;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
+	${oneLineEllipsis}
 `;
 
 export const Tile = ({
@@ -58,6 +57,7 @@ export const Tile = ({
 	id,
 	size = 'landscape',
 	style,
+	onFocus,
 }: {
 	asset?: Asset;
 	id?: string;
@@ -66,6 +66,7 @@ export const Tile = ({
 		HTMLAttributes<HTMLDivElement>,
 		HTMLDivElement
 	>['style'];
+	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const onPress = useCallback(() => {}, []);
 
@@ -75,6 +76,7 @@ export const Tile = ({
 			style={{ ...style, visibility: asset ? 'visible' : 'hidden' }}
 			size={size}
 			onPress={onPress}
+			onFocus={onFocus}
 		>
 			<InnerWrap>
 				<Image

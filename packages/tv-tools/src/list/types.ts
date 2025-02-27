@@ -27,6 +27,10 @@ export interface RenderDataElement {
 	 * elements are being offset behind the current elements.
 	 */
 	offset: number;
+	/**
+	 * Listener for the element for when it gains a focus.
+	 */
+	onFocus: (event: FocusEvent) => void;
 }
 
 /**
@@ -52,7 +56,8 @@ export type DataChange = { start?: number; end?: number };
 /**
  * List implementation interface.
  */
-export interface ListBehavior extends IEventListener<{ dataIndex: number }> {
+export interface ListBehavior
+	extends IEventListener<{ dataIndex: number; renderData: RenderData }> {
 	/**
 	 * Get current render data.
 	 * @returns RenderData data for current rendering purposes
@@ -64,14 +69,14 @@ export interface ListBehavior extends IEventListener<{ dataIndex: number }> {
 	 * @param index - the index to move to
 	 * @returns RenderData data for rendering after the move has been calculated
 	 */
-	moveTo(index: number): RenderData;
+	moveTo(index: number): boolean;
 	/**
 	 * Move the focus by diff in the index in data. This function will clamp the
 	 * resulting index between 0 and the current known data length.
 	 * @param diff - the difference by which it should move
 	 * @returns RenderData data for rendering after the move has been calculated
 	 */
-	moveBy(diff: number, fromId?: string): RenderData;
+	moveBy(diff: number, fromId?: string): boolean;
 	/**
 	 * Change the data length by adding/removing items at the start/end of data.
 	 * @param change - how many items to add/remove at the start/end of data
