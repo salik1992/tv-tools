@@ -6,6 +6,7 @@ import {
 	useState,
 	useEffect,
 } from 'react';
+import type { ControlEvent } from '@salik1992/tv-tools/focus';
 import type {
 	ListImplementation,
 	RenderDataElement,
@@ -78,7 +79,7 @@ export const List = <
 
 	// Backwards movement from keys
 	const backward = useThrottledCallback(
-		(e: KeyboardEvent<HTMLElement>) => {
+		(e: ControlEvent) => {
 			const newRenderData = list.moveBy(-1, (e.target as HTMLElement).id);
 			if (newRenderData === renderData) {
 				return false;
@@ -92,7 +93,7 @@ export const List = <
 
 	// Forwards movement from keys
 	const forward = useThrottledCallback(
-		(e: KeyboardEvent<HTMLElement>) => {
+		(e: ControlEvent) => {
 			const newRenderData = list.moveBy(1, (e.target as HTMLElement).id);
 			if (newRenderData === renderData) {
 				return false;
