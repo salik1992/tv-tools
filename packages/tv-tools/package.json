@@ -2,6 +2,7 @@
     "name": "@salik1992/tv-tools",
     "private": true,
     "version": "0.0.0",
+    "type": "module",
     "exports": {
         "./*": "./dist/*/index.js",
         "./list/*": "./dist/list/*.js",
@@ -12,7 +13,7 @@
         "watch": "tsc --watch",
         "test": "jest"
     },
-    "author": "DNA.inc",
-    "license": "ISC",
+    "author": "Vit Salomon (salik1992)",
+    "license": "MIT",
     "description": "Main core TV Tools"
 }
