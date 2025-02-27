@@ -10,6 +10,7 @@ import {
 	type KeyOption,
 } from '@salik1992/tv-tools/control';
 import {
+	type ControlEvent,
 	type ControlListener,
 	type ControlPhase,
 	type ControlType,
@@ -34,7 +35,7 @@ export function getUseOnKey(id: string) {
 		}: Options = {},
 	) {
 		const cachedListener = useCallback(
-			(event: KeyboardEvent<HTMLElement>) => {
+			(event: ControlEvent) => {
 				if (!key || key.is(event, { ignoreRtl })) {
 					return listener(event);
 				}
@@ -44,10 +45,8 @@ export function getUseOnKey(id: string) {
 		);
 
 		useEffect(() => {
-			// @ts-ignore: reversed type restriction
 			focus.addEventListener(id, cachedListener, type, phase);
 			return () => {
-				// @ts-ignore: reversed type restriction
 				focus.removeEventListener(id, cachedListener, type, phase);
 			};
 		}, [id, cachedListener, type, phase]);

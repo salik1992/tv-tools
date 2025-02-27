@@ -1,4 +1,5 @@
-import type { KeyboardEvent, PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
+import type { ControlEvent } from '@salik1992/tv-tools/focus';
 import { useFocusContainer } from './useFocusContainer';
 import { FocusContext } from './context';
 
@@ -41,8 +42,7 @@ export const HorizontalFocus = ({
 		useFocusContainer(id);
 
 	useOnLeft(
-		// @ts-ignore: TODO reversed limitation
-		(event: KeyboardEvent<HTMLElement>) => {
+		(event: ControlEvent) => {
 			return container.moveFocus(-1, (event.target as HTMLElement).id);
 		},
 		[container],
@@ -50,8 +50,7 @@ export const HorizontalFocus = ({
 	);
 
 	useOnRight(
-		// @ts-ignore: TODO reversed limitation
-		(event: KeyboardEvent<HTMLElement>) => {
+		(event: ControlEvent) => {
 			return container.moveFocus(1, (event.target as HTMLElement).id);
 		},
 		[container],
