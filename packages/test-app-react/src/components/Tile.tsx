@@ -14,6 +14,7 @@ import { H5, oneLineEllipsis } from './Typography';
 const WIDTH = {
 	landscape: 240,
 	portrait: 135,
+	margin: 30,
 } as const;
 
 const Image = styled(ImageWithFallback)<
@@ -101,4 +102,12 @@ export const Tile = ({
 			</InnerWrap>
 		</Wrap>
 	);
+};
+Tile.width = {
+	landscape: WIDTH.landscape + WIDTH.margin,
+	portrait: WIDTH.portrait + WIDTH.margin,
+};
+Tile.height = {
+	landscape: WIDTH.portrait + WIDTH.margin,
+	portrait: WIDTH.landscape + WIDTH.margin,
 };

@@ -29,6 +29,9 @@ const Wrap = styled.div`
 
 const P = styled(H3)`
 	text-align: center;
+	height: ${Hero.height}px;
+	line-height: ${Hero.height}px;
+	vertical-align: middle;
 `;
 
 export const HeroRow = ({
@@ -93,9 +96,9 @@ export const HeroRow = ({
 		<Wrap onFocus={onFocus}>
 			{loading && <P>Loading...</P>}
 			{error !== null && data.pages === 0 && (
-				<P>There was an error loading the data</P>
+				<P>There was an error loading the data.</P>
 			)}
-			{!loading && !hasData && <P>Nothing was found.</P>}
+			{!loading && !error && !hasData && <P>Nothing was found.</P>}
 			{hasData && (
 				<>
 					<List

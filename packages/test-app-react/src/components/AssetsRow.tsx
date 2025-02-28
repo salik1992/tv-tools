@@ -28,6 +28,9 @@ const Wrap = styled.div`
 
 const P = styled(H3)`
 	text-align: center;
+	height: ${Tile.height.landscape}px;
+	line-height: ${Tile.height.landscape}px;
+	vertical-align: middle;
 `;
 
 export const AssetsRow = ({
@@ -98,8 +101,8 @@ export const AssetsRow = ({
 			navigatableElements: 7,
 			config: {
 				scrolling: {
-					first: 195,
-					other: 270,
+					first: Tile.width.landscape / 1.3,
+					other: Tile.width.landscape,
 				},
 			},
 		}),
