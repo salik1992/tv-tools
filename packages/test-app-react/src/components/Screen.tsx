@@ -1,6 +1,5 @@
 import { useCallback, useState, type PropsWithChildren } from 'react';
 import styled from 'styled-components';
-import type { ControlEvent } from '@salik1992/tv-tools/focus';
 import {
 	useFocusContainer,
 	FocusContext,
@@ -28,7 +27,7 @@ export const Screen = ({
 	const [isMenuVisible, setIsMenuVisible] = useState(false);
 
 	const openMenu = useCallback(() => {
-		if (!isMenuVisible) {
+		if (withMenu && !isMenuVisible) {
 			setIsMenuVisible(true);
 			return true;
 		}
@@ -36,7 +35,7 @@ export const Screen = ({
 	}, [isMenuVisible, setIsMenuVisible]);
 
 	const closeMenu = useCallback(() => {
-		if (isMenuVisible) {
+		if (withMenu && isMenuVisible) {
 			setIsMenuVisible(false);
 			container.moveFocus(1, MENU);
 			return true;
@@ -44,11 +43,16 @@ export const Screen = ({
 		return false;
 	}, [isMenuVisible, setIsMenuVisible]);
 
+	const toggleMenu = useCallback(
+		() => (isMenuVisible ? closeMenu() : openMenu()),
+		[isMenuVisible, openMenu, closeMenu],
+	);
+
 	useOnLeft(openMenu);
 
 	useOnRight(closeMenu);
 
-	useOnBack(closeMenu);
+	useOnBack(toggleMenu);
 
 	return (
 		<ScreenContainer className={className} $withMenu={withMenu}>

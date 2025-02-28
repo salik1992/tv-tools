@@ -137,6 +137,7 @@ export const Menu = ({
 						const isActive = isOpen && currentPath === item.path;
 						return (
 							<Item
+								key={item.path}
 								$isOpen={isOpen}
 								onPress={() =>
 									navigate(item.path, { replace: true })
