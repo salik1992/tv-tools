@@ -141,6 +141,7 @@ export class BasicList extends ListBase<{
 							(this.c.visibleElements *
 								this.c.config.scrolling.other)
 						: 0,
+					onFocus: this.getOnFocusForElement(element.id),
 				};
 			}),
 			listOffset: moveResult.listOffset,

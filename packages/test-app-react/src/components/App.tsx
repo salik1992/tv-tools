@@ -1,7 +1,10 @@
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FocusRoot } from '@salik1992/tv-tools-react/focus';
+import { BackNavigation } from './BackNavigation';
 import { Disclaimer } from './Disclaimer';
 import { Home } from './Home';
+import { NotFound } from './NotFound';
 
 const GlobalStyles = createGlobalStyle`
 html, body {
@@ -20,7 +23,14 @@ export const App = () => {
 		<>
 			<GlobalStyles />
 			<FocusRoot>
-				<Home />
+				<Router>
+					<BackNavigation>
+						<Routes>
+							<Route path="*" element={<NotFound />} />
+							<Route path="/" element={<Home />} />
+						</Routes>
+					</BackNavigation>
+				</Router>
 			</FocusRoot>
 			<Disclaimer />
 		</>

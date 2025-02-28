@@ -45,3 +45,10 @@ export type DiscoverMapping = {
 	movie: TmdbBaseMovieAsset;
 	tv: TmdbBaseTvAsset;
 };
+
+export type TrendingTypes = 'movie' | 'tv'; // TODO: | 'people';
+export type TrendingTimeWindow = 'day' | 'week';
+export type TrendingMapping = {
+	movie: TmdbBaseMovieAsset;
+	tv: TmdbBaseTvAsset;
+};

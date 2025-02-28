@@ -11,11 +11,11 @@ import { useCallback, useState } from 'react';
  * a dependency array to refresh context value.
  */
 export function useRefresh() {
-	const [now, setNow] = useState(Date.now());
+	const [loop, setLoop] = useState(0);
 
 	const refresh = useCallback(() => {
-		setNow(Date.now());
-	}, [now]);
+		setLoop((old) => old + 1);
+	}, [loop]);
 
 	return refresh;
 }

@@ -1,4 +1,4 @@
-import { type KeyboardEvent, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
 	BACK,
 	DOWN,
@@ -56,7 +56,7 @@ export function getUseOnKey(id: string) {
 export function getUseOnEnter(id: string) {
 	return function useOnEnter(
 		listener: ControlListener,
-		dependencies: unknown[],
+		dependencies: unknown[] = [listener],
 	) {
 		getUseOnKey(id)(listener, dependencies, { key: ENTER });
 	};
@@ -65,7 +65,7 @@ export function getUseOnEnter(id: string) {
 export function getUseOnBack(id: string) {
 	return function useOnBack(
 		listener: ControlListener,
-		dependencies: unknown[],
+		dependencies: unknown[] = [listener],
 	) {
 		getUseOnKey(id)(listener, dependencies, { key: BACK });
 	};
@@ -74,7 +74,7 @@ export function getUseOnBack(id: string) {
 export function getUseOnUp(id: string) {
 	return function useOnUp(
 		listener: ControlListener,
-		dependencies: unknown[],
+		dependencies: unknown[] = [listener],
 	) {
 		getUseOnKey(id)(listener, dependencies, { key: UP });
 	};
@@ -83,7 +83,7 @@ export function getUseOnUp(id: string) {
 export function getUseOnDown(id: string) {
 	return function useOnDown(
 		listener: ControlListener,
-		dependencies: unknown[],
+		dependencies: unknown[] = [listener],
 	) {
 		getUseOnKey(id)(listener, dependencies, { key: DOWN });
 	};
@@ -92,7 +92,7 @@ export function getUseOnDown(id: string) {
 export function getUseOnLeft(id: string) {
 	return function useOnLeft(
 		listener: ControlListener,
-		dependencies: unknown[],
+		dependencies: unknown[] = [listener],
 		{ ignoreRtl }: KeyOption = {},
 	) {
 		getUseOnKey(id)(listener, dependencies, { key: LEFT, ignoreRtl });
@@ -102,7 +102,7 @@ export function getUseOnLeft(id: string) {
 export function getUseOnRight(id: string) {
 	return function useOnRight(
 		listener: ControlListener,
-		dependencies: unknown[],
+		dependencies: unknown[] = [listener],
 		{ ignoreRtl }: KeyOption = {},
 	) {
 		getUseOnKey(id)(listener, dependencies, { key: RIGHT, ignoreRtl });

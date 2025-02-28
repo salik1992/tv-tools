@@ -2,6 +2,7 @@ import type { Key } from '../control';
 import { uuidV4 } from '../utils/uuidV4';
 import type {
 	FocusFunction,
+	FocusWithinListener,
 	ControlType,
 	ControlPhase,
 	ControlListener,
@@ -55,6 +56,11 @@ class FocusManager {
 	private currentKeySequence: ControlEvent[] = [];
 
 	/**
+	 * Listeners for focus within.
+	 */
+	private focusWithinListeners = new Map<string, FocusWithinListener>();
+
+	/**
 	 * This is used for components to signal that their focus was requested but
 	 * there was no element to focus. It helps to determine whether the focus
 	 * should be continued to the element once any appears.
@@ -97,6 +103,7 @@ class FocusManager {
 	public removeFocusId(id: string) {
 		this.focusIds.delete(id);
 		this.focusFunctions.delete(id);
+		this.focusWithinListeners.delete(id);
 		this.eventListeners.delete(id);
 		this.children.delete(id);
 		this.parents.delete(id);
@@ -233,6 +240,32 @@ class FocusManager {
 		}
 		const focusFunction = this.focusFunctions.get(id);
 		focusFunction?.(options);
+	}
+
+	/**
+	 * Sets the focus withing listener for id.
+	 * @param id - id of the listenee (parent)
+	 * @param listener = function that is called if focus is within a child
+	 */
+	public addOnFocusWithin(id: string, listener: FocusWithinListener) {
+		this.focusWithinListeners.set(id, listener);
+	}
+
+	/**
+	 * Handles focus event for focusWithinListeners
+	 * @param event - original focus event
+	 */
+	public handeFocusEvent(e: FocusEvent) {
+		const targetId = (e.target as HTMLElement).id;
+		if (this.children.has(targetId)) {
+			const childrenPath = this.getEventChildren(targetId);
+			for (let i = 0; i < childrenPath.length; i++) {
+				const listener = this.focusWithinListeners.get(childrenPath[i]);
+				if (listener) {
+					listener(childrenPath[i - 1]);
+				}
+			}
+		}
 	}
 
 	/**

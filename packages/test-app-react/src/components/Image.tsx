@@ -22,6 +22,10 @@ export const ImageWithFallback = ({
 		buffer.src = src;
 	}, [buffer]);
 
+	useEffect(() => {
+		setImage(loadingImage);
+	}, [src]);
+
 	return (
 		<div
 			className={className}

@@ -4,38 +4,71 @@ import {
 	type HTMLAttributes,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
 import { tmdb } from '../data';
 import type { Asset } from '../data/types';
 import { ImageWithFallback } from './Image';
-import { H5, oneLineEllipsis } from './Typography';
+import { H1, H4, oneLineEllipsis } from './Typography';
 
-const WIDTH = {
-	landscape: 240,
-	portrait: 135,
-	margin: 30,
-} as const;
+const WIDTH = 1000;
+const MARGIN = 100;
+const HEIGHT = 563;
 
 const Image = styled(ImageWithFallback)<
-	Pick<Parameters<typeof Tile>[0], 'size'>
+	Pick<Parameters<typeof Hero>[0], 'size'>
 >`
 	background-size: cover;
 	background-position: center center;
-	border-radius: 15px;
-	width: ${({ size }) => (size === 'landscape' ? 240 : 135)}px;
-	height: ${({ size }) => (size === 'landscape' ? 135 : 240)}px;
+	width: ${WIDTH}px;
+	height: ${HEIGHT}px;
 `;
 
 const InnerWrap = styled.div`
+	position: relative;
+	border-radius: 50px;
 	transition: transform 300ms;
+	overflow: hidden;
 `;
 
-const Wrap = styled(Interactable)<Pick<Parameters<typeof Tile>[0], 'size'>>`
+const Shade = styled.div`
+	position: absolute;
+	top: 50%;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0;
+	background-image: linear-gradient(
+		to bottom,
+		transparent,
+		rgba(0, 0, 0, 0.8)
+	);
+`;
+
+const Text = css`
+	position: absolute;
+	left: 40px;
+	max-width: ${WIDTH - 80}px;
+	opacity: 0;
+	transition: opacity 300ms;
+	${oneLineEllipsis}
+`;
+
+const Title = styled(H1)`
+	${Text}
+	bottom: 70px;
+`;
+
+const Description = styled(H4)`
+	${Text}
+	bottom: 20px;
+`;
+
+const Wrap = styled(Interactable)<Pick<Parameters<typeof Hero>[0], 'size'>>`
 	display: inline-block;
-	width: ${({ size }) => (size === 'landscape' ? 240 : 135)}px;
-	height: ${({ size }) => (size === 'landscape' ? 165 : 270)}px;
-	margin-right: 30px;
+	width: ${WIDTH}px;
+	height: ${HEIGHT}px;
+	margin-right: ${MARGIN}px;
 	opacity: 0.7;
 	transition: opacity 300ms;
 	outline: none;
@@ -45,16 +78,12 @@ const Wrap = styled(Interactable)<Pick<Parameters<typeof Tile>[0], 'size'>>`
 	&:focus ${InnerWrap} {
 		transform: scale(1.1);
 	}
+	&:focus ${Title}, &:focus ${Description}, &:focus ${Shade} {
+		opacity: 1;
+	}
 `;
 
-const Title = styled(H5)`
-	margin: 0;
-	line-height: 30px;
-	text-align: center;
-	${oneLineEllipsis}
-`;
-
-export const Tile = ({
+export const Hero = ({
 	asset,
 	id,
 	size = 'landscape',
@@ -92,22 +121,18 @@ export const Tile = ({
 									size === 'landscape'
 										? 'backdrop'
 										: 'poster',
-									WIDTH[size],
+									WIDTH,
 								)
 							: ''
 					}
 					size={size}
 				/>
-				<Title>{asset?.title ?? '-'}</Title>
+				<Shade />
+				<Title>{asset?.title}</Title>
+				<Description>{asset?.description}</Description>
 			</InnerWrap>
 		</Wrap>
 	);
 };
-Tile.width = {
-	landscape: WIDTH.landscape + WIDTH.margin,
-	portrait: WIDTH.portrait + WIDTH.margin,
-};
-Tile.height = {
-	landscape: WIDTH.portrait + WIDTH.margin,
-	portrait: WIDTH.landscape + WIDTH.margin,
-};
+Hero.width = WIDTH + MARGIN;
+Hero.height = HEIGHT;

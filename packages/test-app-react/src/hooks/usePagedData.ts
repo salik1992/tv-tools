@@ -24,9 +24,10 @@ export const usePagedData = <T>(
 				...currentData,
 				...pageData,
 			}));
-			setLoading(false);
 		} catch (e: unknown) {
 			setError(e);
+		} finally {
+			setLoading(false);
 		}
 	}, [fetchPage]);
 

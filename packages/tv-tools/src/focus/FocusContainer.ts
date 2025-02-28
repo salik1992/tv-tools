@@ -61,6 +61,7 @@ export class FocusContainer {
 
 	constructor(public readonly id: string = focus.generateId()) {
 		focus.addFocusId(this.id, this.focus.bind(this));
+		focus.addOnFocusWithin(id, this.onFocusWithin.bind(this));
 	}
 
 	/**
@@ -124,8 +125,8 @@ export class FocusContainer {
 		if (this.renderProgress === RenderProgress.STARTED) {
 			this.wipFocusChildren = [];
 			this.setRenderProgress(RenderProgress.CHILDREN);
-		}
-		if (this.renderProgress === RenderProgress.CHILDREN) {
+			this.wipFocusChildren.push(childId);
+		} else if (this.renderProgress === RenderProgress.CHILDREN) {
 			this.wipFocusChildren.push(childId);
 		}
 	}
@@ -151,7 +152,9 @@ export class FocusContainer {
 			originalChildIndex + diff,
 			this.focusChildren.length - 1,
 		);
-		this.focusChild(this.focusChildren[targetChildIndex]);
+		this.focusChild(this.focusChildren[targetChildIndex], {
+			preventScroll: true,
+		});
 		return true;
 	}
 
@@ -170,5 +173,15 @@ export class FocusContainer {
 	public focusChild(id: string, options?: FocusOptions) {
 		this.lastFocusedId = id;
 		focus.focus(id, options);
+	}
+
+	/**
+	 * Remember id of the child that had focus last time.
+	 * @param id = id of the child
+	 */
+	private onFocusWithin(id: string) {
+		if (this.focusChildren.includes(id)) {
+			this.lastFocusedId = id;
+		}
 	}
 }

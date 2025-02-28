@@ -5,11 +5,12 @@ const Wrap = styled.div`
 	bottom: 0;
 	right: 0;
 	background-color: #000000;
-	color: #aaaaaa;
-	border-left: 3px solid #ffff00;
-	border-top: 3px solid #ffff00;
+	color: #cccc00;
+	font-weight: bold;
+	border-left: 6px dashed #ffff00;
+	border-top: 6px dashed #ffff00;
 	padding: 10px 20px;
-	line-height: 1.25em;
+	line-height: 1.5em;
 `;
 
 export const Disclaimer = () => (

@@ -1,5 +1,7 @@
 export type FocusFunction = (options?: FocusOptions) => void;
 
+export type FocusWithinListener = (id: string) => void;
+
 export type ControlEvent = {
 	target: EventTarget;
 	keyCode?: number;

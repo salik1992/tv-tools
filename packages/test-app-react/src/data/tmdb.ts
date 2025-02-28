@@ -1,12 +1,14 @@
 import { mapMovieAsset, mapPage, mapTvAsset } from './tmdbMapping';
-import {
+import type {
 	DiscoverMapping,
 	DiscoverTypes,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbPagedResults,
+	TrendingTimeWindow,
+	TrendingTypes,
 } from './tmdbTypes';
-import { Asset, Paged } from './types';
+import type { Asset, Paged } from './types';
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE = 'https://image.tmdb.org/t/p';
@@ -38,6 +40,24 @@ export class TmdbApi {
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
 			: mapPage<DiscoverMapping[typeof type]>(
 					page,
+					mapTvAsset,
+				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
+	}
+
+	public async getTrending(
+		type: TrendingTypes,
+		timeWindow: TrendingTimeWindow = 'day',
+	): Promise<Paged<Asset>> {
+		const pagedResponse = await this.fetch<
+			TmdbPagedResults<DiscoverMapping[typeof type]>
+		>(`trending/${type}/${timeWindow}`);
+		return type === 'movie'
+			? mapPage<DiscoverMapping[typeof type]>(
+					1,
+					mapMovieAsset,
+				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
+			: mapPage<DiscoverMapping[typeof type]>(
+					1,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
 	}
