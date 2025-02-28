@@ -1,9 +1,13 @@
 import { useCallback, useState, type PropsWithChildren } from 'react';
 import styled from 'styled-components';
+import type { ControlEvent } from '@salik1992/tv-tools/focus';
 import {
 	useFocusContainer,
 	FocusContext,
 } from '@salik1992/tv-tools-react/focus';
+import { Menu } from './Menu';
+
+const MENU = 'menu';
 
 const ScreenContainer = styled.div<{ $withMenu: boolean }>`
 	width: 1920px;
@@ -19,7 +23,7 @@ export const Screen = ({
 	className,
 	withMenu = false,
 }: PropsWithChildren<{ withMenu?: boolean; className?: string }>) => {
-	const { focusContextValue, useOnLeft, useOnRight, useOnBack } =
+	const { focusContextValue, container, useOnLeft, useOnRight, useOnBack } =
 		useFocusContainer();
 	const [isMenuVisible, setIsMenuVisible] = useState(false);
 
@@ -34,6 +38,7 @@ export const Screen = ({
 	const closeMenu = useCallback(() => {
 		if (isMenuVisible) {
 			setIsMenuVisible(false);
+			container.moveFocus(1, MENU);
 			return true;
 		}
 		return false;
@@ -48,6 +53,14 @@ export const Screen = ({
 	return (
 		<ScreenContainer className={className} $withMenu={withMenu}>
 			<FocusContext.Provider value={focusContextValue}>
+				{withMenu && (
+					<Menu
+						id={MENU}
+						isOpen={isMenuVisible}
+						onMouseOpen={openMenu}
+						onMouseClose={closeMenu}
+					/>
+				)}
 				{children}
 			</FocusContext.Provider>
 		</ScreenContainer>
