@@ -57,3 +57,11 @@ behavior.
 - Automated movement for List
 - Dynamically changing number of data elements in List/Grid
 - EPG - electronic program guide
+
+## Test App
+Test apps have two main purposes. First, they provide a testing environment that
+is close to a usual OTT style application. Second, they should also show an example
+implementation for you when you need to do similar thing in your application.
+
+The data for the testing applications are provided by
+[The Movie Database](https://www.themoviedb.org/)
