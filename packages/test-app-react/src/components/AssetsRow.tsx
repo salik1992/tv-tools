@@ -31,11 +31,13 @@ const P = styled(H3)`
 `;
 
 export const AssetsRow = ({
+	id,
 	list,
 	header,
 	focusOnMount = false,
 	onFocus: onOuterFocus,
 }: {
+	id?: string;
 	list:
 		| { from: 'discover'; type: DiscoverTypes }
 		| {
@@ -130,6 +132,7 @@ export const AssetsRow = ({
 			{hasData && (
 				<>
 					<List
+						id={id}
 						Implementation={BasicList}
 						configuration={listConfiguration}
 						renderItem={renderElement}

@@ -32,10 +32,12 @@ const P = styled(H3)`
 `;
 
 export const HeroRow = ({
+	id,
 	list,
 	focusOnMount = false,
 	onFocus,
 }: {
+	id?: string;
 	list:
 		| { from: 'discover'; type: DiscoverTypes }
 		| {
@@ -97,6 +99,7 @@ export const HeroRow = ({
 			{hasData && (
 				<>
 					<List
+						id={id}
 						Implementation={BasicList}
 						configuration={listConfiguration}
 						renderItem={renderElement}
