@@ -18,7 +18,7 @@ export const BackNavigation = ({
 		if (location.hash === '') {
 			navigate(initialRoute);
 		}
-	}, []);
+	});
 
 	useOnBack(() => {
 		navigate(-1);
