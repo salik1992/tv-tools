@@ -97,7 +97,7 @@ export const Tile = ({
 					}
 					size={size}
 				/>
-				<Title>{asset?.title}</Title>
+				<Title>{asset?.title ?? '-'}</Title>
 			</InnerWrap>
 		</Wrap>
 	);
