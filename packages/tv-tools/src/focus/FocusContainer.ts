@@ -124,8 +124,8 @@ export class FocusContainer {
 		if (this.renderProgress === RenderProgress.STARTED) {
 			this.wipFocusChildren = [];
 			this.setRenderProgress(RenderProgress.CHILDREN);
-		}
-		if (this.renderProgress === RenderProgress.CHILDREN) {
+			this.wipFocusChildren.push(childId);
+		} else if (this.renderProgress === RenderProgress.CHILDREN) {
 			this.wipFocusChildren.push(childId);
 		}
 	}

@@ -38,16 +38,12 @@ export const VerticalFocus = ({
 		useFocusContainer(id);
 
 	useOnUp(
-		(event) => {
-			return container.moveFocus(-1, (event.target as HTMLElement).id);
-		},
+		(event) => container.moveFocus(-1, (event.target as HTMLElement).id),
 		[container],
 	);
 
 	useOnDown(
-		(event) => {
-			return container.moveFocus(1, (event.target as HTMLElement).id);
-		},
+		(event) => container.moveFocus(1, (event.target as HTMLElement).id),
 		[container],
 	);
 

@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from 'react';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { FocusContainer, RenderProgress } from '@salik1992/tv-tools/focus';
 import { useRefresh } from './useRefresh';
@@ -67,12 +66,12 @@ export function useFocusContainer(id?: string) {
 
 	container.setRenderProgress(RenderProgress.STARTED);
 
-	useEffect(() => {
-		context.addChild(container.id);
-		return () => {
+	useEffect(
+		() => () => {
 			container.destroy();
-		};
-	}, [container]);
+		},
+		[container],
+	);
 
 	useEffect(() => {
 		// Needs to run every time to maintain children order.
@@ -87,17 +86,14 @@ export function useFocusContainer(id?: string) {
 				container.addChild(childId);
 			}
 		},
-		[container],
+		[container, refresh, context.addChild],
 	);
 
 	useEffect(() => {
 		container.setRenderProgress(RenderProgress.FINISHED);
 	});
 
-	const focusContextValue = useMemo(
-		(): Focus => ({ addChild }),
-		[refresh, addChild],
-	);
+	const focusContextValue = useMemo((): Focus => ({ addChild }), [addChild]);
 
 	const useOnKeyDown = useCallback(getUseOnKey(container.id), [container.id]);
 	const useOnEnter = useCallback(getUseOnEnter(container.id), [container.id]);
