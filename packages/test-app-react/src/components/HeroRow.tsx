@@ -52,9 +52,14 @@ export const HeroRow = ({
 	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const fetchFunction = useMemo(() => {
-		return list.type === 'movie'
-			? (page: number) => tmdb.getDiscover('movie', page)
-			: (page: number) => tmdb.getDiscover('tv', page);
+		switch (list.from) {
+			case 'discover':
+				return (page: number) => tmdb.getDiscover(list.type, page);
+			case 'trending':
+				return () => tmdb.getTrending(list.type, list.timeWindow);
+			default:
+				return async () => ({ pages: 0, [0]: [] });
+		}
 	}, [list]);
 
 	const { data, loading, error } = usePagedData(fetchFunction, [list]);
