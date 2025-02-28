@@ -1,4 +1,4 @@
-import type { PropsWithChildren, KeyboardEvent } from 'react';
+import type { PropsWithChildren, KeyboardEvent, FocusEvent } from 'react';
 import { useCallback } from 'react';
 import { focus } from '@salik1992/tv-tools/focus';
 
@@ -8,6 +8,10 @@ import { focus } from '@salik1992/tv-tools/focus';
  * Use at the root of your application.
  */
 export const FocusRoot = ({ children }: PropsWithChildren) => {
+	const onFocus = useCallback((event: FocusEvent) => {
+		focus.handeFocusEvent(event.nativeEvent);
+	}, []);
+
 	const keyDownCapture = useCallback((event: KeyboardEvent<HTMLElement>) => {
 		focus.handleKeyEvent('keydown', 'capture', event);
 	}, []);
@@ -27,6 +31,7 @@ export const FocusRoot = ({ children }: PropsWithChildren) => {
 	return (
 		<div
 			id="focusRoot"
+			onFocus={onFocus}
 			onKeyDownCapture={keyDownCapture}
 			onKeyDown={keyDownBubble}
 			onKeyUpCapture={keyUpCapture}
