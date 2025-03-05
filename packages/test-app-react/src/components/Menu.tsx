@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus, Interactable } from '@salik1992/tv-tools-react/focus';
@@ -50,6 +50,7 @@ const Item = styled(Interactable).attrs<{ $isOpen: boolean }>(
 )`
 	margin-bottom: 30px;
 	outline: none;
+	cursor: pointer;
 	white-space: nowrap;
 
 	${Icon}, ${Title} {
@@ -127,21 +128,24 @@ export const Menu = ({
 	const navigate = useNavigate();
 	const currentPath = getCurrentPath();
 
+	const onPresses = useMemo(
+		() => ITEMS.map((item) => navigate(item.path, { replace: true })),
+		[navigate, ITEMS],
+	);
+
 	return (
 		<Wrap $isOpen={isOpen} onMouseOver={onMouseOpen}>
 			<MenuBackground $isOpen={isOpen} />
 			<MenuShade $isOpen={isOpen} onClick={onMouseClose} />
 			<ItemWrap>
 				<VerticalFocus id={id}>
-					{ITEMS.map((item) => {
+					{ITEMS.map((item, i) => {
 						const isActive = isOpen && currentPath === item.path;
 						return (
 							<Item
 								key={item.path}
 								$isOpen={isOpen}
-								onPress={() =>
-									navigate(item.path, { replace: true })
-								}
+								onPress={onPresses[i]}
 								focusOnMount={isActive}
 							>
 								<Icon $isActive={isActive} $src={item.icon} />

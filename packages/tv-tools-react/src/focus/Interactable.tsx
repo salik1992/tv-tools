@@ -40,38 +40,42 @@ export const Interactable = ({
 	focusOnMount,
 	id,
 	tabIndex,
+	disabled = false,
 	...props
-}: { onPress: () => boolean; focusOnMount?: boolean } & DetailedHTMLProps<
-	HTMLAttributes<HTMLDivElement>,
-	HTMLDivElement
->) => {
+}: {
+	onPress: () => boolean;
+	focusOnMount?: boolean;
+	disabled?: boolean;
+} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
 	const interactable = useMemo(
-		() => new InteractableBase(onPress, id, tabIndex),
-		[onPress, id],
+		() => (disabled ? null : new InteractableBase(onPress, id, tabIndex)),
+		[onPress, id, disabled],
 	);
 	const { addChild } = useContext(FocusContext);
 	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		// Needs to run every time to maintain children order.
-		addChild(interactable.id);
+		if (interactable) {
+			addChild(interactable.id);
+		}
 	});
 
 	useEffect(() => {
-		interactable.setElement(ref.current);
+		interactable?.setElement(ref.current);
 	}, [interactable, ref.current]);
 
 	useEffect(() => {
 		if (focusOnMount) {
-			interactable.focus({ preventScroll: true });
+			interactable?.focus({ preventScroll: true });
 		}
 	}, [focusOnMount]);
 
 	useEffect(
 		() => () => {
-			interactable.destroy();
+			interactable?.destroy();
 		},
-		[],
+		[interactable],
 	);
 
 	return <div {...props} ref={ref} />;

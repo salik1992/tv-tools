@@ -72,6 +72,7 @@ const Wrap = styled(Interactable)<Pick<Parameters<typeof Hero>[0], 'size'>>`
 	opacity: 0.7;
 	transition: opacity 300ms;
 	outline: none;
+	cursor: pointer;
 	&:focus {
 		opacity: 1;
 	}

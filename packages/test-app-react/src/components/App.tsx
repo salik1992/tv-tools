@@ -22,7 +22,7 @@ export const App = () => {
 	return (
 		<>
 			<GlobalStyles />
-			<FocusRoot>
+			<FocusRoot alwaysPreventNavigationalEvents>
 				<Router>
 					<BackNavigation>
 						<Routes>

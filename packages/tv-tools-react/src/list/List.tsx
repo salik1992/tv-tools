@@ -127,7 +127,6 @@ export const List = <
 				processed = list.moveBy(1, targetId);
 			}
 			if (processed) {
-				e.preventDefault();
 				e.stopPropagation();
 			}
 		},
