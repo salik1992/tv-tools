@@ -50,6 +50,7 @@ const Item = styled(Interactable).attrs<{ $isOpen: boolean }>(
 )`
 	margin-bottom: 30px;
 	outline: none;
+	cursor: pointer;
 	white-space: nowrap;
 
 	${Icon}, ${Title} {
