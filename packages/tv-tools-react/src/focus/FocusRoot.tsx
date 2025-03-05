@@ -1,5 +1,6 @@
 import type { PropsWithChildren, KeyboardEvent, FocusEvent } from 'react';
 import { useCallback } from 'react';
+import { isDirectional } from '@salik1992/tv-tools/control';
 import { focus } from '@salik1992/tv-tools/focus';
 
 /**
@@ -7,7 +8,13 @@ import { focus } from '@salik1992/tv-tools/focus';
  * It creates a div element that is used for listening to key events in the manager.
  * Use at the root of your application.
  */
-export const FocusRoot = ({ children }: PropsWithChildren) => {
+export const FocusRoot = ({
+	children,
+	/** Use this to prevent TV use their own navigation  . */
+	alwaysPreventNavigationalEvents,
+}: PropsWithChildren<{
+	alwaysPreventNavigationalEvents?: boolean;
+}>) => {
 	const onFocus = useCallback((event: FocusEvent) => {
 		focus.handeFocusEvent(event.nativeEvent);
 	}, []);
@@ -18,6 +25,10 @@ export const FocusRoot = ({ children }: PropsWithChildren) => {
 
 	const keyDownBubble = useCallback((event: KeyboardEvent<HTMLElement>) => {
 		focus.handleKeyEvent('keydown', 'bubble', event);
+		if (alwaysPreventNavigationalEvents && isDirectional(event)) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
 	}, []);
 
 	const keyUpCapture = useCallback((event: KeyboardEvent<HTMLElement>) => {
@@ -26,6 +37,10 @@ export const FocusRoot = ({ children }: PropsWithChildren) => {
 
 	const keyUpBubble = useCallback((event: KeyboardEvent<HTMLElement>) => {
 		focus.handleKeyEvent('keyup', 'bubble', event);
+		if (alwaysPreventNavigationalEvents && isDirectional(event)) {
+			event.preventDefault();
+			event.stopPropagation();
+		}
 	}, []);
 
 	return (
