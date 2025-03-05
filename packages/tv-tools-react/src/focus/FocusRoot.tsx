@@ -10,7 +10,7 @@ import { focus } from '@salik1992/tv-tools/focus';
  */
 export const FocusRoot = ({
 	children,
-	/** Use this to prevent TV use their own navigation  . */
+	/** Use this to prevent TV use their own navigation. */
 	alwaysPreventNavigationalEvents,
 }: PropsWithChildren<{
 	alwaysPreventNavigationalEvents?: boolean;
