@@ -106,7 +106,11 @@ class FocusManager {
 		this.focusWithinListeners.delete(id);
 		this.eventListeners.delete(id);
 		this.children.delete(id);
+		const parentId = this.getParent(id);
 		this.parents.delete(id);
+		if (id === (document.activeElement as HTMLElement).id) {
+			this.focusParentOrSomeRoot(parentId);
+		}
 	}
 
 	/**
@@ -415,6 +419,25 @@ class FocusManager {
 		this.currentKeySequence.push(event);
 		this.truncateSequence();
 		this.testSequences();
+	}
+
+	/**
+	 * Attempts to focus the parent of the element if any.
+	 * If the parent does not exist then we attempt to focus first known root
+	 * and hope for the best.
+	 * @param parentId - id of the potential parent
+	 */
+	private focusParentOrSomeRoot(parentId: string | null) {
+		if (parentId) {
+			this.focus(parentId, { preventScroll: true });
+		} else {
+			const firstAvailableRoot = Array.from(this.parents).find(
+				([, parentId]) => parentId === null,
+			);
+			if (firstAvailableRoot) {
+				this.focus(firstAvailableRoot[0], { preventScroll: true });
+			}
+		}
 	}
 }
 
