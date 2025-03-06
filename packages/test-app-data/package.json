@@ -13,6 +13,6 @@
         "test": "jest"
     },
     "author": "Vit Salomon (salik1992)",
-    "license": "MIT",
+    "license": "GNU-GPLv3",
     "description": "Abstract data layer to unify multiple data providers"
 }
