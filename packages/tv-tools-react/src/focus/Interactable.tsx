@@ -1,12 +1,16 @@
 import {
 	useContext,
 	useEffect,
+	useLayoutEffect,
 	useMemo,
 	useRef,
 	type DetailedHTMLProps,
 	type HTMLAttributes,
 } from 'react';
-import { Interactable as InteractableBase } from '@salik1992/tv-tools/focus';
+import {
+	focus,
+	Interactable as InteractableBase,
+} from '@salik1992/tv-tools/focus';
 import { FocusContext } from './context';
 
 /**
@@ -48,8 +52,8 @@ export const Interactable = ({
 	disabled?: boolean;
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
 	const interactable = useMemo(
-		() => (disabled ? null : new InteractableBase(onPress, id, tabIndex)),
-		[onPress, id, disabled],
+		() => (disabled ? null : new InteractableBase(id, tabIndex)),
+		[id, disabled],
 	);
 	const { addChild } = useContext(FocusContext);
 	const ref = useRef<HTMLDivElement>(null);
@@ -66,17 +70,23 @@ export const Interactable = ({
 	}, [interactable, ref.current]);
 
 	useEffect(() => {
-		if (focusOnMount) {
-			interactable?.focus({ preventScroll: true });
+		if (focusOnMount && interactable) {
+			focus.focus(interactable.id, { preventScroll: true });
 		}
-	}, [focusOnMount]);
+	}, [focusOnMount, interactable]);
 
-	useEffect(
+	useLayoutEffect(
 		() => () => {
 			interactable?.destroy();
 		},
 		[interactable],
 	);
+
+	useEffect(() => {
+		if (interactable) {
+			interactable.setOnPress(onPress);
+		}
+	}, [interactable, onPress]);
 
 	return <div {...props} ref={ref} />;
 };

@@ -61,6 +61,11 @@ class FocusManager {
 	private focusWithinListeners = new Map<string, FocusWithinListener>();
 
 	/**
+	 * Focus ids that were focused historically.
+	 */
+	private focusHistory: string[] = [];
+
+	/**
 	 * This is used for components to signal that their focus was requested but
 	 * there was no element to focus. It helps to determine whether the focus
 	 * should be continued to the element once any appears.
@@ -108,9 +113,18 @@ class FocusManager {
 		this.children.delete(id);
 		const parentId = this.getParent(id);
 		this.parents.delete(id);
+		this.removeFromFocusHistory(id);
 		if (id === (document.activeElement as HTMLElement).id) {
-			this.focusParentOrSomeRoot(parentId);
+			this.focusRestoreAttempt(parentId);
 		}
+	}
+
+	/**
+	 * Returns whether id is maintained by focus manager.
+	 * @param id - id to enquire
+	 */
+	public hasFocusId(id: string) {
+		return this.focusIds.has(id);
 	}
 
 	/**
@@ -242,6 +256,8 @@ class FocusManager {
 				`Could not focus "${id}" as it is not maintained by focus manager.`,
 			);
 		}
+		this.removeFromFocusHistory(id);
+		this.focusHistory.push(id);
 		const focusFunction = this.focusFunctions.get(id);
 		focusFunction?.(options);
 	}
@@ -423,21 +439,25 @@ class FocusManager {
 
 	/**
 	 * Attempts to focus the parent of the element if any.
-	 * If the parent does not exist then we attempt to focus first known root
-	 * and hope for the best.
+	 * If the parent does not exist then we attempt to focus last known id
+	 * and hope for the best. If nothing exists then hopefully something will
+	 * self focus soon.
 	 * @param parentId - id of the potential parent
 	 */
-	private focusParentOrSomeRoot(parentId: string | null) {
-		if (parentId) {
+	private focusRestoreAttempt(parentId: string | null) {
+		if (parentId && this.focusIds.has(parentId)) {
 			this.focus(parentId, { preventScroll: true });
-		} else {
-			const firstAvailableRoot = Array.from(this.parents).find(
-				([, parentId]) => parentId === null,
-			);
-			if (firstAvailableRoot) {
-				this.focus(firstAvailableRoot[0], { preventScroll: true });
-			}
+		} else if (this.focusHistory.length) {
+			this.focus(this.focusHistory.pop()!, { preventScroll: true });
 		}
+	}
+
+	/**
+	 * Removes id from focus history.
+	 * @param idToRemove = id to remove
+	 */
+	private removeFromFocusHistory(idToRemove: string) {
+		this.focusHistory = this.focusHistory.filter((id) => id !== idToRemove);
 	}
 }
 

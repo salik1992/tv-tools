@@ -172,7 +172,11 @@ export class FocusContainer {
 	 */
 	public focusChild(id: string, options?: FocusOptions) {
 		this.lastFocusedId = id;
-		focus.focus(id, options);
+		if (focus.hasFocusId(id)) {
+			focus.focus(id, options);
+		} else {
+			focus.focusTrappedInContainer = this.id;
+		}
 	}
 
 	/**
