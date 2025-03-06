@@ -11,7 +11,7 @@ import { HeroRow } from './HeroRow';
 import { Screen } from './Screen';
 
 const HERO = 'hero';
-const SCROLLS = [0, 500, 700, 900];
+const SCROLLS = [0, 500, 800, 1100];
 
 const InnerWrap = styled.div`
 	transition: transform 300ms;
@@ -60,7 +60,7 @@ export const Home = () => {
 						<AssetsRow
 							list={{
 								from: 'trending',
-								type: 'tv',
+								type: 'series',
 								timeWindow: 'day',
 							}}
 							header="Trending TV"
@@ -72,7 +72,7 @@ export const Home = () => {
 							onFocus={() => setScroll(SCROLLS[2])}
 						/>
 						<AssetsRow
-							list={{ from: 'discover', type: 'tv' }}
+							list={{ from: 'discover', type: 'series' }}
 							header="Discover TV"
 							onFocus={() => setScroll(SCROLLS[3])}
 						/>

@@ -25,6 +25,7 @@ const InteractableButton = styled(Interactable)<
 	border-color: transparent;
 	background-color: ${({ type }) => BG_COLORS[type]};
 	outline: none;
+	cursor: pointer;
 	transition:
 		border-color 300ms,
 		transform 300ms;
