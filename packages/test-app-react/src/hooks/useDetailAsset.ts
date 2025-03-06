@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import type { AssetMapping, AssetType, Id } from '../data/types';
-import { DiscoverTypes } from '../data/tmdbTypes';
-import { tmdb } from '../data';
+import type {
+	AssetMapping,
+	AssetType,
+	Id,
+} from '@salik1992/test-app-data/types';
+import { useDataProvider } from '../data';
 
 export const useDetailAsset = (type: AssetType, id: Id) => {
 	const mounted = useRef(true);
+	const dataProvider = useDataProvider();
 	const [asset, setAsset] = useState<AssetMapping[typeof type] | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<unknown>(null);
@@ -12,7 +16,7 @@ export const useDetailAsset = (type: AssetType, id: Id) => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const data = await tmdb.getDetail(type as DiscoverTypes, id);
+				const data = await dataProvider.getAsset(type, id);
 				if (!mounted.current) {
 					return;
 				}

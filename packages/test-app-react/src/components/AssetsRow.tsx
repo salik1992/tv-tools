@@ -4,12 +4,7 @@ import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
 import { Performance } from '@salik1992/tv-tools/utils/Performance';
 import { List } from '@salik1992/tv-tools-react/list';
-import type {
-	DiscoverTypes,
-	TrendingTimeWindow,
-	TrendingTypes,
-} from '../data/tmdbTypes';
-import { tmdb } from '../data';
+import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { AssetsRowDetail } from './AssetsRowDetail';
 import { Tile } from './Tile';
@@ -35,39 +30,22 @@ const P = styled(H3)`
 
 export const AssetsRow = ({
 	id,
-	list,
+	listData,
 	header,
 	focusOnMount = false,
 	onFocus: onOuterFocus,
 }: {
 	id?: string;
-	list:
-		| { from: 'discover'; type: DiscoverTypes }
-		| {
-				from: 'trending';
-				type: TrendingTypes;
-				timeWindow: TrendingTimeWindow;
-		  };
+	listData: ListDataConfiguration;
 	header: string;
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
 }) => {
-	const fetchFunction = useMemo(() => {
-		switch (list.from) {
-			case 'discover':
-				return (page: number) => tmdb.getDiscover(list.type, page);
-			case 'trending':
-				return () => tmdb.getTrending(list.type, list.timeWindow);
-			default:
-				return async () => ({ pages: 0, [0]: [] });
-		}
-	}, [list]);
-
 	const [focusedIndex, setFocusedIndex] = useState(0);
 	const [isFocused, setIsFocused] = useState(false);
 	const isFocusDelay = useRef<number | null>(null);
 
-	const { data, loading, error } = usePagedData(fetchFunction, [list]);
+	const { data, loading, error } = usePagedData(listData);
 
 	const onFocus = useCallback(
 		(event: FocusEvent) => {

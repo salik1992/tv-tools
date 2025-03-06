@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Paged } from '../data/types';
+import type { Paged } from '@salik1992/test-app-data/types';
+import { type ListDataConfiguration, useDataProvider } from '../data';
 
-export const usePagedData = <T>(
-	rawFetchData: (page: number) => Promise<Paged<T>>,
-	dependencies: unknown[],
-) => {
+export const usePagedData = (listData: ListDataConfiguration) => {
 	const mounted = useRef(true);
-	const [data, setData] = useState<Paged<T>>({ pages: 0 });
+	const dataProvider = useDataProvider();
+	const [data, setData] = useState<Paged<(typeof listData)['pageItemType']>>({
+		pages: 0,
+	});
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<unknown>(null);
 	const fetchedPages = useRef<number>(0);
 	const requestedPages = useRef<number>(0);
-
-	const fetchPage = useCallback(rawFetchData, dependencies);
 
 	const fetchNextPage = useCallback(async () => {
 		if (requestedPages.current !== fetchedPages.current) {
@@ -20,7 +19,10 @@ export const usePagedData = <T>(
 		}
 		requestedPages.current += 1;
 		try {
-			const pageData = await fetchPage(requestedPages.current);
+			const pageData = await dataProvider.getPagedAssets(
+				listData,
+				requestedPages.current,
+			);
 			if (!mounted.current) {
 				return;
 			}
@@ -33,7 +35,7 @@ export const usePagedData = <T>(
 		} finally {
 			setLoading(false);
 		}
-	}, [fetchPage]);
+	}, [dataProvider]);
 
 	useEffect(() => {
 		fetchNextPage();

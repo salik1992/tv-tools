@@ -100,7 +100,7 @@ export class Interactable {
 	 */
 	private onKeyDown = (event: ControlEvent): boolean => {
 		if (ENTER.is(event)) {
-			return this.onPress();
+			return this.onPress?.() ?? false;
 		}
 		return false;
 	};
@@ -112,7 +112,7 @@ export class Interactable {
 	private onPointerDown = (event: PointerEvent) => {
 		if (
 			(event.pointerType !== 'mouse' || event.button === 0) &&
-			this.onPress()
+			this.onPress?.()
 		) {
 			event.preventDefault();
 			event.stopPropagation();

@@ -1,18 +1,17 @@
 import type {
+	Asset,
+	MovieAsset,
+	Paged,
+	SeriesAsset,
+} from '@salik1992/test-app-data/types';
+import type {
 	TmdbAsset,
 	TmdbBaseAsset,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbMovieAsset,
 	TmdbPagedResults,
-} from './tmdbTypes';
-import type {
-	Asset,
-	MovieAsset,
-	Paged,
-	SeriesAsset,
-	MovieAsset,
-} from './types';
+} from '../types';
 
 export const mapPage =
 	<In extends TmdbBaseAsset>(
@@ -61,7 +60,17 @@ export const mapOriginal = <
 	title: a.original_title,
 });
 
-export const mapProductionCompanies = <T extends {}>(a: TmdbMovieAsset) =>
+export const mapProductionCompanies = <
+	T extends {
+		production_companies: {
+			logo_path: string;
+			name: string;
+			origin_country: string;
+		}[];
+	},
+>(
+	a: T,
+) =>
 	a.production_companies.map((c) => ({
 		logo: c.logo_path,
 		title: c.name,

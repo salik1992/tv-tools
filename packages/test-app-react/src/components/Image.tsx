@@ -6,7 +6,7 @@ export const ImageWithFallback = ({
 	src,
 	className,
 }: {
-	src: string;
+	src: string | null;
 	className?: string;
 }) => {
 	const buffer = useMemo(() => new Image(), [src]);
@@ -14,12 +14,12 @@ export const ImageWithFallback = ({
 
 	useEffect(() => {
 		buffer.onload = () => {
-			setImage(src);
+			setImage(src ?? noImage);
 		};
 		buffer.onerror = () => {
 			setImage(noImage);
 		};
-		buffer.src = src;
+		buffer.src = src ?? noImage;
 	}, [buffer]);
 
 	useEffect(() => {

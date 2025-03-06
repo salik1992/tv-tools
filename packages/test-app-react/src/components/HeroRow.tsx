@@ -4,12 +4,7 @@ import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
 import { Performance } from '@salik1992/tv-tools/utils/Performance';
 import { List } from '@salik1992/tv-tools-react/list';
-import type {
-	DiscoverTypes,
-	TrendingTimeWindow,
-	TrendingTypes,
-} from '../data/tmdbTypes';
-import { tmdb } from '../data';
+import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { Hero } from './Hero';
 import { H3 } from './Typography';
@@ -36,33 +31,16 @@ const P = styled(H3)`
 
 export const HeroRow = ({
 	id,
-	list,
+	listData,
 	focusOnMount = false,
 	onFocus,
 }: {
 	id?: string;
-	list:
-		| { from: 'discover'; type: DiscoverTypes }
-		| {
-				from: 'trending';
-				type: TrendingTypes;
-				timeWindow: TrendingTimeWindow;
-		  };
+	listData: ListDataConfiguration;
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
 }) => {
-	const fetchFunction = useMemo(() => {
-		switch (list.from) {
-			case 'discover':
-				return (page: number) => tmdb.getDiscover(list.type, page);
-			case 'trending':
-				return () => tmdb.getTrending(list.type, list.timeWindow);
-			default:
-				return async () => ({ pages: 0, [0]: [] });
-		}
-	}, [list]);
-
-	const { data, loading, error } = usePagedData(fetchFunction, [list]);
+	const { data, loading, error } = usePagedData(listData);
 
 	const hasData = useMemo(() => (data[1]?.length ?? 0) > 0, [data[1]]);
 
