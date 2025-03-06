@@ -5,6 +5,7 @@ export const usePagedData = <T>(
 	rawFetchData: (page: number) => Promise<Paged<T>>,
 	dependencies: unknown[],
 ) => {
+	const mounted = useRef(true);
 	const [data, setData] = useState<Paged<T>>({ pages: 0 });
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<unknown>(null);
@@ -20,6 +21,9 @@ export const usePagedData = <T>(
 		requestedPages.current += 1;
 		try {
 			const pageData = await fetchPage(requestedPages.current);
+			if (!mounted.current) {
+				return;
+			}
 			setData((currentData) => ({
 				...currentData,
 				...pageData,
@@ -34,6 +38,13 @@ export const usePagedData = <T>(
 	useEffect(() => {
 		fetchNextPage();
 	}, []);
+
+	useEffect(
+		() => () => {
+			mounted.current = false;
+		},
+		[],
+	);
 
 	return {
 		data,

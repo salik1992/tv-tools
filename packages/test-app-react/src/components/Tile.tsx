@@ -9,7 +9,7 @@ import { Interactable } from '@salik1992/tv-tools-react/focus';
 import { tmdb } from '../data';
 import type { Asset } from '../data/types';
 import { ImageWithFallback } from './Image';
-import { H5, oneLineEllipsis } from './Typography';
+import { oneLineEllipsis, P } from './Typography';
 
 const WIDTH = {
 	landscape: 240,
@@ -48,7 +48,7 @@ const Wrap = styled(Interactable)<Pick<Parameters<typeof Tile>[0], 'size'>>`
 	}
 `;
 
-const Title = styled(H5)`
+const Title = styled(P)`
 	margin: 0;
 	line-height: 30px;
 	text-align: center;
@@ -72,9 +72,10 @@ export const Tile = ({
 	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const navigate = useNavigate();
+
 	const onPress = useCallback(() => {
-		navigate(`detail/movie/${asset?.id}`);
-	}, [navigate]);
+		navigate(`detail/${asset?.type}/${asset?.id}`);
+	}, [navigate, asset]);
 
 	return (
 		<Wrap

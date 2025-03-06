@@ -1,17 +1,9 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { Screen } from './Screen';
-import { H1 } from './Typography';
 import { Button } from './Button';
-
-const Wrap = styled.div`
-	position: absolute;
-	top: 50%;
-	width: 100%;
-	transform: translateY(-50%);
-	text-align: center;
-`;
+import { Screen } from './Screen';
+import { ScreenCentered } from './ScreenCentered';
+import { H1 } from './Typography';
 
 export const NotFound = () => {
 	const navigate = useNavigate();
@@ -22,12 +14,12 @@ export const NotFound = () => {
 
 	return (
 		<Screen>
-			<Wrap>
+			<ScreenCentered>
 				<H1>Not Found</H1>
 				<Button onPress={back} focusOnMount>
 					Back
 				</Button>
-			</Wrap>
+			</ScreenCentered>
 		</Screen>
 	);
 };

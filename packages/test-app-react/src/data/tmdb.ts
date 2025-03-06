@@ -1,15 +1,28 @@
-import { mapMovieAsset, mapPage, mapTvAsset } from './tmdbMapping';
+import {
+	mapBaseMovieAsset,
+	mapMovieAsset,
+	mapPage,
+	mapTvAsset,
+} from './tmdbMapping';
 import type {
 	DiscoverMapping,
 	DiscoverTypes,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
+	TmdbMovieAsset,
 	TmdbPagedResults,
 	TrendingTimeWindow,
 	TrendingTypes,
 } from './tmdbTypes';
-import type { Asset, Paged } from './types';
+import type { Asset, Id, Paged, AssetMapping, AssetType } from './types';
 
+const GENERIC_TYPE_TO_TMDB_TYPE = {
+	movie: 'movie',
+	series: 'tv',
+	season: 'season',
+	episode: 'episode',
+	person: 'people',
+} as const;
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE = 'https://image.tmdb.org/t/p';
 const IMAGE_SIZES = {
@@ -27,16 +40,16 @@ export class TmdbApi {
 	}
 
 	public async getDiscover(
-		type: DiscoverTypes,
+		type: 'movie' | 'series',
 		page = 1,
 	): Promise<Paged<Asset>> {
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<DiscoverMapping[typeof type]>
-		>(`discover/${type}?page=${page}`);
+		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?page=${page}`);
 		return type === 'movie'
 			? mapPage<DiscoverMapping[typeof type]>(
 					page,
-					mapMovieAsset,
+					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
 			: mapPage<DiscoverMapping[typeof type]>(
 					page,
@@ -45,21 +58,33 @@ export class TmdbApi {
 	}
 
 	public async getTrending(
-		type: TrendingTypes,
+		type: 'movie' | 'series',
 		timeWindow: TrendingTimeWindow = 'day',
 	): Promise<Paged<Asset>> {
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<DiscoverMapping[typeof type]>
-		>(`trending/${type}/${timeWindow}`);
+		>(`trending/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${timeWindow}`);
 		return type === 'movie'
 			? mapPage<DiscoverMapping[typeof type]>(
 					1,
-					mapMovieAsset,
+					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
 			: mapPage<DiscoverMapping[typeof type]>(
 					1,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
+	}
+
+	public async getDetail(
+		type: DiscoverTypes,
+		id: Id,
+	): Promise<AssetMapping[typeof type]> {
+		const response = await this.fetch<DiscoverMapping[typeof type]>(
+			`${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${id}`,
+		);
+		return type === 'movie'
+			? mapMovieAsset(response as TmdbMovieAsset)
+			: mapTvAsset(response as TmdbBaseTvAsset);
 	}
 
 	private async fetch<T>(url: string) {

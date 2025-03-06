@@ -1,4 +1,10 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import {
+	useCallback,
+	useContext,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+} from 'react';
 import { FocusContainer, RenderProgress } from '@salik1992/tv-tools/focus';
 import { useRefresh } from './useRefresh';
 import { FocusContext } from './context';
@@ -66,7 +72,7 @@ export function useFocusContainer(id?: string) {
 
 	container.setRenderProgress(RenderProgress.STARTED);
 
-	useEffect(
+	useLayoutEffect(
 		() => () => {
 			container.destroy();
 		},

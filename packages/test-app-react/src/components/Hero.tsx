@@ -9,7 +9,7 @@ import { Interactable } from '@salik1992/tv-tools-react/focus';
 import { tmdb } from '../data';
 import type { Asset } from '../data/types';
 import { ImageWithFallback } from './Image';
-import { H1, H4, oneLineEllipsis } from './Typography';
+import { H1, oneLineEllipsis, P } from './Typography';
 
 const WIDTH = 1000;
 const MARGIN = 100;
@@ -57,9 +57,10 @@ const Text = css`
 const Title = styled(H1)`
 	${Text}
 	bottom: 70px;
+	margin-bottom: 0;
 `;
 
-const Description = styled(H4)`
+const Description = styled(P)`
 	${Text}
 	bottom: 20px;
 `;
@@ -102,8 +103,8 @@ export const Hero = ({
 }) => {
 	const navigate = useNavigate();
 	const onPress = useCallback(() => {
-		navigate(`detail/movie/${asset?.id}`);
-	}, [navigate]);
+		navigate(`detail/${asset?.type}/${asset?.id}`);
+	}, [navigate, asset]);
 
 	return (
 		<Wrap
