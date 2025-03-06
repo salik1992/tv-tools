@@ -1,4 +1,15 @@
-import { TmdbApi } from './tmdb';
+import { useContext, createContext } from 'react';
+import { DataProvider } from '@salik1992/test-app-data/DataProvider';
+import {
+	TmdbDataProvider,
+	type TmdbConfiguration,
+} from '@salik1992/test-app-data-tmdb';
 import { ACCESS_TOKEN } from './token';
 
-export const tmdb = new TmdbApi(ACCESS_TOKEN);
+const tmdb = new TmdbDataProvider(ACCESS_TOKEN);
+
+const DataProviderContext =
+	createContext<DataProvider<TmdbConfiguration>>(tmdb);
+
+export type ListDataConfiguration = TmdbConfiguration['filter'];
+export const useDataProvider = () => useContext(DataProviderContext);

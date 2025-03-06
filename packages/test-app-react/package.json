@@ -1,5 +1,5 @@
 {
-    "name": "@salik1992/tv-tools-test-app-react",
+    "name": "@salik1992/test-app-react",
     "private": true,
     "version": "0.0.0",
     "type": "module",
@@ -10,6 +10,8 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@salik1992/test-app-data": "*",
+        "@salik1992/test-app-data-tmdb": "*",
         "@salik1992/tv-tools": "*",
         "@salik1992/tv-tools-react": "*",
         "react": "^19.0.0",

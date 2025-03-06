@@ -1,19 +1,19 @@
+import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
+import type { AssetType, Id } from '@salik1992/test-app-data/types';
+import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
 import { useDetailAsset } from '../hooks/useDetailAsset';
-import { H2, P } from './Typography';
+import { Button } from './Button';
+import { DetailMovie } from './DetailMovie';
+import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
 import { ScreenCentered } from './ScreenCentered';
-import { AssetType, Id } from '../data/types';
-import { tmdb } from '../data';
-import { isMovie, isSeries } from '../data/guards';
-import { DetailMovie } from './DetailMovie';
-import { useCallback, useState } from 'react';
-import { Button } from './Button';
-import { DetailSeries } from './DetailSeries';
+import { H2, P } from './Typography';
+import { useDataProvider } from '../data';
 
-const BackdropImage = styled.div.attrs<{ $src: string }>(({ $src }) => ({
+const BackdropImage = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
 	style: { backgroundImage: `url(${$src})` },
 }))`
 	position: absolute;
@@ -65,6 +65,8 @@ export const Detail = () => {
 	assertParams(params);
 	const { type, id } = params;
 
+	const dataProvider = useDataProvider();
+
 	const { asset, loading, error } = useDetailAsset(type, id);
 
 	const [scroll, setScroll] = useState(0);
@@ -73,6 +75,7 @@ export const Detail = () => {
 
 	const onBack = useCallback(() => {
 		navigate(-1);
+		return true;
 	}, [navigate]);
 
 	return (
@@ -100,7 +103,11 @@ export const Detail = () => {
 				<Scroller style={{ transform: `translateY(-${scroll}px)` }}>
 					<VerticalFocus>
 						<BackdropImage
-							$src={tmdb.getImage(asset, 'backdrop', 1920)}
+							$src={dataProvider.getImageUrl(
+								asset,
+								['backdrop'],
+								{ width: 1920 },
+							)}
 						/>
 						<BackdropShadow />
 						<InnerWrap>

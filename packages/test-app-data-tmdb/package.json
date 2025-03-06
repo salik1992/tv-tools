@@ -1,0 +1,20 @@
+{
+    "name": "@salik1992/test-app-data-tmdb",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "exports": {
+        ".":  "./dist/index.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "test": "jest"
+    },
+    "dependencies": {
+        "@salik1992/test-app-data": "*"
+    },
+    "author": "Vit Salomon (salik1992)",
+    "license": "MIT",
+    "description": "TMDB API that conforms to general data provider"
+}

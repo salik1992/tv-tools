@@ -20,7 +20,7 @@ const InnerWrap = styled.div`
 const OnBackScrollTop = ({
 	onBack,
 	children,
-}: PropsWithChildren<{ onBack: () => void }>) => {
+}: PropsWithChildren<{ onBack: () => boolean }>) => {
 	const { focusContextValue, useOnBack } = useFocusContainer();
 	useOnBack(onBack);
 
@@ -49,8 +49,8 @@ export const Home = () => {
 					<VerticalFocus>
 						<HeroRow
 							id={HERO}
-							list={{
-								from: 'trending',
+							listData={{
+								filterBy: 'trending',
 								type: 'movie',
 								timeWindow: 'day',
 							}}
@@ -58,8 +58,8 @@ export const Home = () => {
 							focusOnMount
 						/>
 						<AssetsRow
-							list={{
-								from: 'trending',
+							listData={{
+								filterBy: 'trending',
 								type: 'series',
 								timeWindow: 'day',
 							}}
@@ -67,12 +67,12 @@ export const Home = () => {
 							onFocus={() => setScroll(SCROLLS[1])}
 						/>
 						<AssetsRow
-							list={{ from: 'discover', type: 'movie' }}
+							listData={{ filterBy: 'discover', type: 'movie' }}
 							header="Discover Movies"
 							onFocus={() => setScroll(SCROLLS[2])}
 						/>
 						<AssetsRow
-							list={{ from: 'discover', type: 'series' }}
+							listData={{ filterBy: 'discover', type: 'series' }}
 							header="Discover TV"
 							onFocus={() => setScroll(SCROLLS[3])}
 						/>

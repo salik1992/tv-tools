@@ -81,6 +81,9 @@ export type DiscoverTypes = 'movie' | 'series';
 export type DiscoverMapping = {
 	movie: TmdbBaseMovieAsset;
 	series: TmdbBaseTvAsset;
+	season: TmdbAsset;
+	person: TmdbAsset;
+	episode: TmdbAsset;
 };
 
 export type TrendingTypes = 'movie' | 'series'; // TODO: | 'people';

@@ -1,15 +1,16 @@
 import {
 	useCallback,
 	type DetailedHTMLProps,
+	type FocusEvent,
 	type HTMLAttributes,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
-import { tmdb } from '../data';
-import type { Asset } from '../data/types';
+import { Asset } from '@salik1992/test-app-data/types';
 import { ImageWithFallback } from './Image';
 import { H1, oneLineEllipsis, P } from './Typography';
+import { useDataProvider } from '../data';
 
 const WIDTH = 1000;
 const MARGIN = 100;
@@ -101,9 +102,12 @@ export const Hero = ({
 	>['style'];
 	onFocus?: (event: FocusEvent) => void;
 }) => {
+	const dataProvider = useDataProvider();
 	const navigate = useNavigate();
+
 	const onPress = useCallback(() => {
 		navigate(`detail/${asset?.type}/${asset?.id}`);
+		return true;
 	}, [navigate, asset]);
 
 	return (
@@ -118,12 +122,12 @@ export const Hero = ({
 				<Image
 					src={
 						asset
-							? tmdb.getImage(
+							? dataProvider.getImageUrl(
 									asset,
 									size === 'landscape'
-										? 'backdrop'
-										: 'poster',
-									WIDTH,
+										? ['backdrop']
+										: ['poster'],
+									{ width: WIDTH },
 								)
 							: ''
 					}

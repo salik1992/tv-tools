@@ -1,0 +1,18 @@
+{
+    "name": "@salik1992/test-app-data",
+    "private": true,
+    "version": "0.0.0",
+    "exports": {
+        "./DataProvider":  "./dist/DataProvider.js",
+        "./guards":  "./dist/guards.js",
+        "./types":  "./dist/types/index.js"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch",
+        "test": "jest"
+    },
+    "author": "Vit Salomon (salik1992)",
+    "license": "MIT",
+    "description": "Abstract data layer to unify multiple data providers"
+}
