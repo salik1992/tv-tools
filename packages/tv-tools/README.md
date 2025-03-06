@@ -1,0 +1,5 @@
+# TV Tools
+This package is the core package for simplifying app development for JS based
+SmartTVs and set-top-boxes.
+
+For more information see wiki. (TBA)
