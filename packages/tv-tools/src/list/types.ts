@@ -45,6 +45,14 @@ export interface RenderData {
 	 * The offset of the list to create the effect of scrolling in pixels.
 	 */
 	listOffset: number;
+	/**
+	 * Whether the previous arrow for pointer navigation should be visible.
+	 */
+	previousArrow: boolean;
+	/**
+	 * Whether the next arrow for pointer navigation should be visible.
+	 */
+	nextArrow: boolean;
 }
 
 /**

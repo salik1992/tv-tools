@@ -1,4 +1,5 @@
 import {
+	type MouseEvent,
 	type WheelEvent,
 	type ReactNode,
 	useMemo,
@@ -90,8 +91,8 @@ export const List = <
 
 	// Backwards movement from keys
 	const backward = useThrottledCallback(
-		(e: ControlEvent) => {
-			return list.moveBy(-1, (e.target as HTMLElement).id);
+		(e?: ControlEvent) => {
+			return list.moveBy(-1, (e?.target as HTMLElement | undefined)?.id);
 		},
 		[list, renderData],
 		{ throttledReturn: true, limitMs: throttleMs },
@@ -99,8 +100,8 @@ export const List = <
 
 	// Forwards movement from keys
 	const forward = useThrottledCallback(
-		(e: ControlEvent) => {
-			return list.moveBy(1, (e.target as HTMLElement).id);
+		(e?: ControlEvent) => {
+			return list.moveBy(1, (e?.target as HTMLElement | undefined)?.id);
 		},
 		[list, renderData],
 		{ throttledReturn: true, limitMs: throttleMs },
@@ -119,12 +120,11 @@ export const List = <
 	const onWheel = useThrottledCallback(
 		(e: WheelEvent<HTMLElement>) => {
 			const delta = e.deltaX || e.deltaY;
-			const targetId = (e.target as HTMLElement).id;
 			let processed = false;
 			if (delta < 0) {
-				processed = list.moveBy(-1, targetId);
+				processed = list.moveBy(-1);
 			} else if (delta > 0) {
-				processed = list.moveBy(1, targetId);
+				processed = list.moveBy(1);
 			}
 			if (processed) {
 				e.stopPropagation();
@@ -132,6 +132,24 @@ export const List = <
 		},
 		[list, renderData],
 		{ throttledReturn: undefined, limitMs: throttleMs },
+	);
+
+	const onMousePrevious = useCallback(
+		(e: MouseEvent) => {
+			e.preventDefault();
+			e.stopPropagation();
+			backward();
+		},
+		[backward],
+	);
+
+	const onMouseNext = useCallback(
+		(e: MouseEvent) => {
+			e.preventDefault();
+			e.stopPropagation();
+			forward();
+		},
+		[forward],
 	);
 
 	useEffect(() => {
@@ -157,6 +175,15 @@ export const List = <
 				>
 					{renderData.elements.map(renderItem)}
 				</div>
+				{renderData.previousArrow && (
+					<div
+						className="mouse-arrow previous"
+						onClick={onMousePrevious}
+					/>
+				)}
+				{renderData.nextArrow && (
+					<div className="mouse-arrow next" onClick={onMouseNext} />
+				)}
 			</div>
 		</FocusContext.Provider>
 	);

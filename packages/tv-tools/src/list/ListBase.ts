@@ -55,6 +55,8 @@ export abstract class ListBase<
 		// Creates the initial render data.
 		this.renderData = {
 			listOffset: 0,
+			previousArrow: false,
+			nextArrow: c.dataLength > 0,
 			elements: (() => {
 				const array = [];
 				for (let i = 0; i < elementsLength; i++) {
