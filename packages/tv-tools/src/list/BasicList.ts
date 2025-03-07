@@ -145,6 +145,8 @@ export class BasicList extends ListBase<{
 				};
 			}),
 			listOffset: moveResult.listOffset,
+			previousArrow: newIndex > 0,
+			nextArrow: newIndex < this.c.dataLength - 1,
 		};
 	}
 

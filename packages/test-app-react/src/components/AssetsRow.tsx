@@ -7,15 +7,41 @@ import { List } from '@salik1992/tv-tools-react/list';
 import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { AssetsRowDetail } from './AssetsRowDetail';
+import { MouseArrows } from './MouseArrows';
 import { Tile } from './Tile';
 import { H2, H3 } from './Typography';
 
 const Wrap = styled.div`
 	margin-top: 15px;
+
 	.list {
+		position: relative;
 		white-space: nowrap;
 		overflow: hideen;
+		${MouseArrows}
+
+		.mouse-arrow {
+			height: 170px;
+			&.next {
+				right: -40px;
+				width: 170px;
+			}
+
+			&.previous {
+				left: -40px;
+				width: 170px;
+			}
+		}
+
+		&:hover .mouse-arrow {
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
 	}
+
 	.list-inner-wrap {
 		transition: transform 300ms;
 	}

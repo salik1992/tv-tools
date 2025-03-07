@@ -129,14 +129,18 @@ export const Menu = ({
 	const currentPath = getCurrentPath();
 
 	const onPresses = useMemo(
-		() => ITEMS.map((item) => navigate(item.path, { replace: true })),
+		() =>
+			ITEMS.map((item) => () => {
+				navigate(item.path, { replace: true });
+				return true;
+			}),
 		[navigate, ITEMS],
 	);
 
 	return (
 		<Wrap $isOpen={isOpen} onMouseOver={onMouseOpen}>
 			<MenuBackground $isOpen={isOpen} />
-			<MenuShade $isOpen={isOpen} onClick={onMouseClose} />
+			<MenuShade $isOpen={isOpen} onMouseOver={onMouseClose} />
 			<ItemWrap>
 				<VerticalFocus id={id}>
 					{ITEMS.map((item, i) => {
