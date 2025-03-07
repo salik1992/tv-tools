@@ -6,17 +6,43 @@ import { Performance } from '@salik1992/tv-tools/utils/Performance';
 import { List } from '@salik1992/tv-tools-react/list';
 import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
+import { MouseArrows } from './MouseArrows';
 import { Hero } from './Hero';
 import { H3 } from './Typography';
 
 const Wrap = styled.div`
 	margin-top: 15px;
 	margin-left: 50px;
+
 	.list {
+		position: relative;
 		white-space: nowrap;
 		padding: 50px 0;
 		box-sizing: border-box;
+		${MouseArrows}
+
+		.mouse-arrow {
+			height: 660px;
+			&.next {
+				right: -40px;
+				width: 675px;
+			}
+
+			&.previous {
+				left: -90px;
+				width: 90px;
+			}
+		}
+
+		&:hover .mouse-arrow {
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
 	}
+
 	.list-inner-wrap {
 		transition: transform 300ms;
 	}
