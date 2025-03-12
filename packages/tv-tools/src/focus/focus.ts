@@ -256,6 +256,7 @@ class FocusManager {
 				`Could not focus "${id}" as it is not maintained by focus manager.`,
 			);
 		}
+		this.focusTrappedInContainer = undefined;
 		this.removeFromFocusHistory(id);
 		this.focusHistory.push(id);
 		const focusFunction = this.focusFunctions.get(id);
