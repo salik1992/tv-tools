@@ -46,7 +46,7 @@ export class Interactable {
 	 * when we get the element.
 	 * @param options - optional FocusOptions
 	 */
-	focus(options?: FocusOptions) {
+	public focus(options?: FocusOptions) {
 		if (this.element) {
 			this.element.focus(options);
 		} else {
@@ -59,7 +59,7 @@ export class Interactable {
 	 * Function for setting or removing the element from this component.
 	 * @param element - HTMLElement or null or undefined
 	 */
-	setElement(element: HTMLElement | null | undefined) {
+	public setElement(element: HTMLElement | null | undefined) {
 		this.cleanElement();
 		this.element = element ?? undefined;
 		this.handleElement();
@@ -72,14 +72,14 @@ export class Interactable {
 	 * Set onPress function.
 	 * @param onPress = the onPress function to be called
 	 */
-	setOnPress(onPress: () => boolean) {
+	public setOnPress(onPress: () => boolean) {
 		this.onPress = onPress;
 	}
 
 	/**
 	 * Function to update tab index if it is used by the app.
 	 */
-	updateTabIndex(tabIndex: number = 0) {
+	public updateTabIndex(tabIndex: number = 0) {
 		this.tabIndex = tabIndex;
 		if (this.element) {
 			this.element.tabIndex = this.tabIndex;
@@ -89,7 +89,7 @@ export class Interactable {
 	/**
 	 * Cleanup when the component is removed.
 	 */
-	destroy() {
+	public destroy() {
 		focus.removeFocusId(this.id);
 		this.cleanElement();
 	}

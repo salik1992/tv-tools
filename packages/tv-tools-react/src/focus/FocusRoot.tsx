@@ -16,7 +16,7 @@ export const FocusRoot = ({
 	alwaysPreventNavigationalEvents?: boolean;
 }>) => {
 	const onFocus = useCallback((event: FocusEvent) => {
-		focus.handeFocusEvent(event.nativeEvent);
+		focus.handleFocusEvent(event.nativeEvent);
 	}, []);
 
 	const keyDownCapture = useCallback((event: KeyboardEvent<HTMLElement>) => {

@@ -75,8 +75,8 @@ export const HeroRow = ({
 			performance: Performance.ANIMATED,
 			dataLength: data[1]?.length,
 			visibleElements: 5,
-			navigatableElements: 2,
 			config: {
+				navigatableElements: 2,
 				scrolling: {
 					first: Hero.width,
 					other: Hero.width,

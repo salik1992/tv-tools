@@ -97,8 +97,19 @@ const animateForward = animate(baseForward);
 const animateBackward = animate(baseBackward);
 
 export class BasicList extends ListBase<{
+	/**
+	 * The number of elements which are focusable. The rule of thumb is usually
+	 * navigatableElements + 2 === visibleElements
+	 */
+	navigatableElements: number;
 	scrolling: {
+		/**
+		 * The number of pixels by which to scroll from the 0.
+		 */
 		first: number;
+		/**
+		 * The number of pixels bu which to scroll in all other scroll movements.
+		 */
 		other: number;
 	};
 }> {
@@ -117,7 +128,7 @@ export class BasicList extends ListBase<{
 			listOffset: this.renderData.listOffset,
 			firstScroll: this.c.config.scrolling.first,
 			scroll: this.c.config.scrolling.other,
-			navigatableCount: this.c.navigatableElements,
+			navigatableCount: this.c.config.navigatableElements,
 		});
 		const isAnimated = this.isAnimated();
 		const { length } = this.renderData.elements;

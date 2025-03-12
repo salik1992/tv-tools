@@ -1,6 +1,8 @@
 import type { Key, KeyOption } from './types';
 import { Keys } from './Keys';
 
+export { updateKey } from './updateKey';
+
 export * from './utils';
 
 export type { Key, KeyOption };

@@ -256,6 +256,7 @@ class FocusManager {
 				`Could not focus "${id}" as it is not maintained by focus manager.`,
 			);
 		}
+		this.focusTrappedInContainer = undefined;
 		this.removeFromFocusHistory(id);
 		this.focusHistory.push(id);
 		const focusFunction = this.focusFunctions.get(id);
@@ -275,7 +276,7 @@ class FocusManager {
 	 * Handles focus event for focusWithinListeners
 	 * @param event - original focus event
 	 */
-	public handeFocusEvent(e: FocusEvent) {
+	public handleFocusEvent(e: FocusEvent) {
 		const targetId = (e.target as HTMLElement).id;
 		if (this.children.has(targetId)) {
 			const childrenPath = this.getEventChildren(targetId);
