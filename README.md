@@ -6,6 +6,8 @@ primarily by directional navigation.
 > [!CAUTION]
 > This package is currently under active development and not yet ready for production
 
+**Full documentation in [WIKI](https://github.com/salik1992/tv-tools/wiki)**
+
 ## Which UI library does it use?
 This is the most important question for you if you are considering using this library.
 The core is written in VanillaTS as no matter what UI rendering library you use,
