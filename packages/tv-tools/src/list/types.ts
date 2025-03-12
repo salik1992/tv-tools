@@ -30,7 +30,7 @@ export interface RenderDataElement {
 	/**
 	 * Listener for the element for when it gains a focus.
 	 */
-	onFocus: (event: FocusEvent) => void;
+	onFocus: <T extends { target: null | EventTarget }>(event: T) => void;
 }
 
 /**

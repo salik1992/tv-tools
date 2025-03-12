@@ -22,7 +22,10 @@ export abstract class ListBase<
 	/**
 	 * Stores focus listeners for the elements.
 	 */
-	private focusListeners = new Map<string, (event: FocusEvent) => void>();
+	private focusListeners = new Map<
+		string,
+		<T extends { target: null | EventTarget }>(event: T) => void
+	>();
 
 	/**
 	 * Render data that contain the information of what should be rendered.
@@ -158,7 +161,7 @@ export abstract class ListBase<
 	protected getOnFocusForElement(id: string) {
 		const listener =
 			this.focusListeners.get(id) ??
-			((event: FocusEvent) => {
+			(<T extends { target: null | EventTarget }>(event: T) => {
 				if ((event.target as HTMLElement).id === id) {
 					const element = this.renderData.elements.find(
 						(e) => e.id === id,
