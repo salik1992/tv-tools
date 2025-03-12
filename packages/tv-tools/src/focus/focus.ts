@@ -275,7 +275,7 @@ class FocusManager {
 	 * Handles focus event for focusWithinListeners
 	 * @param event - original focus event
 	 */
-	public handeFocusEvent(e: FocusEvent) {
+	public handleFocusEvent(e: FocusEvent) {
 		const targetId = (e.target as HTMLElement).id;
 		if (this.children.has(targetId)) {
 			const childrenPath = this.getEventChildren(targetId);
