@@ -1,6 +1,7 @@
 {
     "name": "@salik1992/tv-tools-monorepo",
     "private": true,
+    "type": "module",
     "version": "1.0.0",
     "description": "Monorepository for TV Tools",
     "workspaces": [
