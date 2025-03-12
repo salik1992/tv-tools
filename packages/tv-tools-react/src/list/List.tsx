@@ -10,6 +10,7 @@ import {
 import type { ControlEvent } from '@salik1992/tv-tools/focus';
 import type {
 	ListImplementation,
+	ListSetup,
 	RenderData,
 	RenderDataElement,
 } from '@salik1992/tv-tools/list';
@@ -19,11 +20,7 @@ import { useThrottledCallback } from '../utils/useThrottledCallback';
 /**
  * List component.
  */
-export const List = <
-	Implementation extends ListImplementation,
-	Configuration extends
-		ConstructorParameters<Implementation>[1] = ConstructorParameters<Implementation>[1],
->({
+export const List = <Configuration extends Record<string, unknown>>({
 	id,
 	Implementation,
 	configuration,
@@ -37,9 +34,9 @@ export const List = <
 	/* The optional ID to use for focus and the list. */
 	id?: string;
 	/* The behavior of the list. */
-	Implementation: Implementation;
+	Implementation: ListImplementation<ListSetup<Configuration>>;
 	/* The configuration of the list. */
-	configuration: Omit<Configuration, 'id'>;
+	configuration: Omit<ListSetup<Configuration>, 'id'>;
 	/* The function that renders each element. */
 	renderItem: (element: RenderDataElement) => ReactNode;
 	/* Orientation of the list that will change control keys. */
