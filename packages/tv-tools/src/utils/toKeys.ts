@@ -3,6 +3,6 @@
  * @param o - object which keys to convert to Array
  * @returns keys as array typed to (keyof typeof o)[]
  */
-export function toKeys<T extends {}>(o: T): (keyof T)[] {
+export function toKeys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
 }

@@ -11,5 +11,24 @@ export default [
 	pluginJs.configs.recommended,
 	...tseslint.configs.recommended,
 	pluginReact.configs.flat.recommended,
+	pluginReact.configs.flat['jsx-runtime'],
 	prettier,
+	{
+		settings: {
+			react: {
+				version: 'detect',
+			},
+		},
+		rules: {
+			'@typescript-eslint/no-unused-vars': [
+				'error',
+				{
+					argsIgnorePattern: '^_',
+					caughtErrorsIgnorePattern: '^_',
+					destructuredArrayIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+				},
+			],
+		},
+	},
 ];

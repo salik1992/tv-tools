@@ -96,7 +96,7 @@ export abstract class ListBase<
 	 * @param change - the change data defining what is changed
 	 * @returns RenderData - updated render data
 	 */
-	public updateDataLength({ start, end }: DataChange): RenderData {
+	public updateDataLength(_dataChange: DataChange): RenderData {
 		throw new Error('Not implemented');
 	}
 

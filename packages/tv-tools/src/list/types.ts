@@ -127,7 +127,9 @@ export interface ListSetup<ListConfiguration extends Record<string, unknown>> {
  * Interface that creates an instance of ListBehavior.
  */
 export interface ListImplementation<
-	Configuration extends ListSetup<{}> = ListSetup<{}>,
+	Configuration extends ListSetup<Record<string, unknown>> = ListSetup<
+		Record<string, unknown>
+	>,
 > {
 	new (focus: FocusContainer, configuration: Configuration): ListBehavior;
 }

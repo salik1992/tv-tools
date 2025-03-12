@@ -18,7 +18,7 @@ import { useCallback, useRef } from 'react';
  *     return false;
  * }, [list, renderData], { throttledReturn: true, limitMs: 300 });
  */
-export function useThrottledCallback<T extends (...args: any) => any>(
+export function useThrottledCallback<T extends (...args: unknown[]) => unknown>(
 	callback: T,
 	dependencies: unknown[],
 	{
@@ -38,7 +38,7 @@ export function useThrottledCallback<T extends (...args: any) => any>(
 				return throttledReturn;
 			}
 			lastCall.current = now;
-			return callback(...args);
+			return callback(...args) as unknown as ReturnType<T>;
 		},
 		dependencies,
 	);
