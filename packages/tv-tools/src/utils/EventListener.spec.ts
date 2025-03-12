@@ -1,3 +1,4 @@
+import { logger } from '../logger';
 import { EventListener } from './EventListener';
 import { noop } from './noop';
 
@@ -34,7 +35,7 @@ describe('EventListener', () => {
 	});
 
 	it('should not fail if listeners error out', () => {
-		const spy = jest.spyOn(console, 'error').mockImplementation(noop);
+		const spy = jest.spyOn(logger, 'error').mockImplementation(noop);
 		const error = new Error();
 		const errorListener = jest.fn(() => {
 			throw error;
@@ -43,7 +44,7 @@ describe('EventListener', () => {
 		events.triggerEvent('test', 2);
 		jest.runAllTimers();
 		expect(errorListener).toHaveBeenCalledWith(2);
-		expect(spy).toHaveBeenCalledWith(error);
+		expect(spy).toHaveBeenCalledWith('EventListener', error);
 		spy.mockRestore();
 	});
 });

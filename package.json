@@ -8,7 +8,7 @@
     ],
     "scripts": {
         "lintcheck": "npm run lintcheck --workspaces",
-        "test": "npm run test --workspaces",
+        "test": "jest",
         "typecheck": "npm run typecheck --workspaces"
     },
     "author": "Vit Salomon (salik1992)",

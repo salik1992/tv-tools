@@ -36,6 +36,7 @@ describe('Interactable', () => {
 	const addEventListener = jest.spyOn(element, 'addEventListener');
 	const removeEventListener = jest.spyOn(element, 'removeEventListener');
 	const interactable = new Interactable('interactable', 1);
+	interactable.setOnPress(onPress);
 
 	beforeEach(() => {
 		jest.clearAllMocks();
