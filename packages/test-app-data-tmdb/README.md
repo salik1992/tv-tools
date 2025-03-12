@@ -3,4 +3,4 @@ This package implements the [Test App Data interface](../test-app-data) and conn
 to [The Movie Database API](https://developer.themoviedb.org/reference/intro/getting-started)
 to provide testing data for the Test Apps.
 
-For more information see wiki. (TBA)
+For more information see [wiki](https://github.com/salik1992/tv-tools/wiki/Test-Apps).
