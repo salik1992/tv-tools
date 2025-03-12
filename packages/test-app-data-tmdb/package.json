@@ -9,7 +9,9 @@
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch",
-        "test": "jest"
+        "lintcheck": "eslint ./src",
+        "test": "jest",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@salik1992/test-app-data": "*"

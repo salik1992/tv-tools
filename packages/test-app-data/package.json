@@ -10,7 +10,9 @@
     "scripts": {
         "build": "tsc",
         "watch": "tsc --watch",
-        "test": "jest"
+        "lintcheck": "eslint ./src",
+        "test": "jest",
+        "typecheck": "tsc --noEmit"
     },
     "author": "Vit Salomon (salik1992)",
     "license": "GNU-GPLv3",

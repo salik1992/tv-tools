@@ -7,7 +7,9 @@
         "packages/*"
     ],
     "scripts": {
-        "test": "jest"
+        "lintcheck": "npm run lintcheck --workspaces",
+        "test": "npm run test --workspaces",
+        "typecheck": "npm run typecheck --workspaces"
     },
     "author": "Vit Salomon (salik1992)",
     "license": "mixed",

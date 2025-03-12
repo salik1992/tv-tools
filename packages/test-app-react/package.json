@@ -6,8 +6,10 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "lint": "eslint .",
-        "preview": "vite preview"
+        "lintcheck": "eslint ./src",
+        "preview": "vite preview",
+        "test": "jest",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@salik1992/test-app-data": "*",
