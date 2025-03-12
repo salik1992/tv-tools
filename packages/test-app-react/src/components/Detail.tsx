@@ -2,7 +2,12 @@ import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
-import type { AssetType, Id } from '@salik1992/test-app-data/types';
+import type {
+	AssetType,
+	Id,
+	MovieAsset,
+	SeriesAsset,
+} from '@salik1992/test-app-data/types';
 import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
 import { useDetailAsset } from '../hooks/useDetailAsset';
 import { Button } from './Button';
@@ -113,13 +118,13 @@ export const Detail = () => {
 						<InnerWrap>
 							{isMovie(asset) && (
 								<DetailMovie
-									asset={asset}
+									asset={asset as MovieAsset}
 									setScroll={setScroll}
 								/>
 							)}
 							{isSeries(asset) && (
 								<DetailSeries
-									asset={asset}
+									asset={asset as SeriesAsset}
 									setScroll={setScroll}
 								/>
 							)}

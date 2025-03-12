@@ -22,6 +22,7 @@ export const BackNavigation = ({
 
 	useOnBack(() => {
 		navigate(-1);
+		return true;
 	}, [navigate]);
 
 	return (

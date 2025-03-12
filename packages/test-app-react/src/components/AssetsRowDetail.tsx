@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Asset } from '../data/types';
+import type { Asset } from '@salik1992/test-app-data/types';
 import { H4, nLineEllipsis, oneLineEllipsis, P } from './Typography';
 
 const Wrap = styled.div.attrs<{ $visible: boolean }>(({ $visible }) => ({

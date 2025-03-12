@@ -78,6 +78,7 @@ const ScrollableText = ({
 				0,
 			),
 		);
+		return true;
 	}, [setScroll, availableHeight.current, scrollHeight.current]);
 
 	const scrollDown = useCallback(() => {
@@ -87,6 +88,7 @@ const ScrollableText = ({
 				scrollHeight.current - availableHeight.current,
 			),
 		);
+		return true;
 	}, [setScroll, availableHeight.current, scrollHeight.current]);
 
 	useOnUp(scrollUp);
@@ -115,19 +117,21 @@ const ScrollableText = ({
 	}, [scroll, availableHeight.current, scrollHeight.current]);
 
 	const upArrowStyle = useMemo(
-		() => ({
-			visibility: scroll > 0 ? 'visible' : 'hidden',
-		}),
+		() =>
+			({
+				visibility: scroll > 0 ? 'visible' : 'hidden',
+			}) as const,
 		[scroll],
 	);
 
 	const downArrowStyle = useMemo(
-		() => ({
-			visibility:
-				scroll < scrollHeight.current - availableHeight.current
-					? 'visible'
-					: 'hidden',
-		}),
+		() =>
+			({
+				visibility:
+					scroll < scrollHeight.current - availableHeight.current
+						? 'visible'
+						: 'hidden',
+			}) as const,
 		[scroll, availableHeight.current, scrollHeight.current],
 	);
 
