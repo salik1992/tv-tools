@@ -114,11 +114,6 @@ export interface ListSetup<ListConfiguration extends Record<string, unknown>> {
 	 */
 	visibleElements: number;
 	/**
-	 * The number of elements which are focusable. The rule of thumb is usually
-	 * navigatableElements + 2 === visibleElements
-	 */
-	navigatableElements: number;
-	/**
 	 * The initial index in data to focus.
 	 */
 	initialIndex?: number;

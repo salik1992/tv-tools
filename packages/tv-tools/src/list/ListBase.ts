@@ -45,11 +45,6 @@ export abstract class ListBase<
 		 */
 		protected c: ListSetup<ListConfiguration>,
 	) {
-		if (c.navigatableElements > c.visibleElements) {
-			throw new Error(
-				'visibleElements must be same or larger than navigatableElements, recommended value is 2 or 4 larger.',
-			);
-		}
 		const elementsLength =
 			c.dataLength > c.visibleElements ? c.visibleElements : c.dataLength;
 		// Creates the initial render data.

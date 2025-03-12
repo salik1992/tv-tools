@@ -107,8 +107,8 @@ export const AssetsRow = ({
 			performance: Performance.ANIMATED,
 			dataLength: data[1]?.length,
 			visibleElements: 9,
-			navigatableElements: 7,
 			config: {
+				navigatableElements: 7,
 				scrolling: {
 					first: Tile.width.landscape / 1.3,
 					other: Tile.width.landscape,
