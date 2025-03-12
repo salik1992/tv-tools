@@ -18,6 +18,7 @@ import { useCallback, useRef } from 'react';
  *     return false;
  * }, [list, renderData], { throttledReturn: true, limitMs: 300 });
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useThrottledCallback<T extends (...args: any) => any>(
 	callback: T,
 	dependencies: unknown[],
@@ -43,5 +44,5 @@ export function useThrottledCallback<T extends (...args: any) => any>(
 		dependencies,
 	);
 
-	return throttledCallback as unknown as T;
+	return throttledCallback as T;
 }

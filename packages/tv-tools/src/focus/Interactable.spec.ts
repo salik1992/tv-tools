@@ -2,7 +2,7 @@ import { BACK, ENTER, type Key } from '../control';
 import { focus } from './focus';
 import { Interactable } from './Interactable';
 
-// @ts-ignore: mock
+// @ts-expect-error: mock
 global.PointerEvent = class {
 	constructor(
 		type: string,
@@ -11,7 +11,7 @@ global.PointerEvent = class {
 		},
 	) {
 		const event = new MouseEvent(type, { button: init.button });
-		// @ts-ignore: mock
+		// @ts-expect-error: mock
 		event.pointerType = init.pointerType;
 		return event;
 	}
@@ -35,7 +35,8 @@ describe('Interactable', () => {
 	const focusSpy = jest.spyOn(element, 'focus');
 	const addEventListener = jest.spyOn(element, 'addEventListener');
 	const removeEventListener = jest.spyOn(element, 'removeEventListener');
-	const interactable = new Interactable(onPress, 'interactable', 1);
+	const interactable = new Interactable('interactable', 1);
+	interactable.setOnPress(onPress);
 
 	beforeEach(() => {
 		jest.clearAllMocks();

@@ -329,7 +329,7 @@ class FocusManager {
 		if (!(target instanceof HTMLElement)) {
 			return false;
 		}
-		let currentNodeId: string | null = target.id ?? null;
+		const currentNodeId: string | null = target.id ?? null;
 		if (!this.focusIds.has(currentNodeId)) {
 			return false;
 		}

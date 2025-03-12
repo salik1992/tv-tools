@@ -10,6 +10,7 @@ export const NotFound = () => {
 
 	const back = useCallback(() => {
 		navigate(-1);
+		return true;
 	}, [navigate]);
 
 	return (
