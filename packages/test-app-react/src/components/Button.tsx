@@ -14,7 +14,7 @@ const BG_COLORS = {
 } as const;
 
 const InteractableButton = styled(Interactable)<
-	Pick<Parameters<typeof Button>[0], 'type'>
+	Required<Pick<Parameters<typeof Button>[0], 'type'>>
 >`
 	display: inline-block;
 	padding: 10px 20px;
