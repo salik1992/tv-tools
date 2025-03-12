@@ -17,11 +17,11 @@
         "@salik1992/tv-tools": "*"
     },
     "devDependencies": {
-        "@types/react": "^18.3.12",
-        "react": "^18.3.1"
+        "@types/react": "^19.0.8",
+        "react": "^19.0.0"
     },
     "peerDependencies": {
-        "react": "^18.3.1"
+        "react": "^19.0.0"
     },
     "author": "Vit Salomon (salik1992)",
     "license": "MIT",

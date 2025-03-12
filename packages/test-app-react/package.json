@@ -9,7 +9,7 @@
         "lintcheck": "eslint ./src",
         "preview": "vite preview",
         "test": "jest",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit --project tsconfig.app.json"
     },
     "dependencies": {
         "@salik1992/test-app-data": "*",
