@@ -21,13 +21,14 @@ class Logger implements ConsoleAdapter {
 	 * @param adapter - the adapter to feed logs into
 	 * @example
 	 * ```typescript
-	 * logger.use(window.console);
+	 * logger.use(window.console).use(debugConsole);
 	 * ```
 	 */
 	use(adapter: ConsoleAdapter) {
 		if (!this.adapters.has(adapter)) {
 			this.adapters.add(adapter);
 		}
+		return this;
 	}
 
 	/**
@@ -52,15 +53,15 @@ class Logger implements ConsoleAdapter {
 			clear: () => logger.clear(),
 			count: (label: string) => logger.count(`${namespace} ${label}`),
 			countReset: (label: string) =>
-				logger.count(`${namespace} ${label}`),
+				logger.countReset(`${namespace} ${label}`),
 			debug: (...params: unknown[]) => logger.debug(namespace, ...params),
 			error: (...params: unknown[]) => logger.error(namespace, ...params),
 			info: (...params: unknown[]) => logger.info(namespace, ...params),
 			log: (...params: unknown[]) => logger.log(namespace, ...params),
 			time: (label: string) => logger.time(`${namespace} ${label}`),
-			timeEnd: (label: string) => logger.time(`${namespace} ${label}`),
-			timeLog: (label: string) => logger.time(`${namespace} ${label}`),
-			warn: (...params: unknown[]) => logger.log(namespace, ...params),
+			timeEnd: (label: string) => logger.timeEnd(`${namespace} ${label}`),
+			timeLog: (label: string) => logger.timeLog(`${namespace} ${label}`),
+			warn: (...params: unknown[]) => logger.warn(namespace, ...params),
 		};
 	}
 
