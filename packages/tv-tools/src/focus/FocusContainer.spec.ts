@@ -57,4 +57,17 @@ describe('FocusContainer', () => {
 		focus.focus('container');
 		expect(children[4].onFocus).toHaveBeenCalled();
 	});
+
+	it('should keep track of last focused child when it was focused from the outside', () => {
+		focus.handleFocusEvent({
+			target: { id: children[1].id },
+		} as unknown as FocusEvent);
+		focus.focus('container');
+		expect(children[1].onFocus).toHaveBeenCalled();
+	});
+
+	it('should remove itself from focus when destroyed', () => {
+		container.destroy();
+		expect(() => focus.focus('container')).toThrow();
+	});
 });

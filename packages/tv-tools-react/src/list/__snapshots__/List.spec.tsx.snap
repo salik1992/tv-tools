@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List should render the list 1`] = `"<div id="focusRoot"><div class="list"><div class="list-inner-wrap" style="transform: translateX(-0px);"><div data-data-index="0" data-offset="0" id="list-0" tabindex="0"></div><div data-data-index="1" data-offset="0" id="list-1" tabindex="0"></div><div data-data-index="2" data-offset="0" id="list-2" tabindex="0"></div><div data-data-index="3" data-offset="0" id="list-3" tabindex="0"></div><div data-data-index="4" data-offset="0" id="list-4" tabindex="0"></div></div><div class="mouse-arrow next"></div></div></div>"`;

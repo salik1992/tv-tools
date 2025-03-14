@@ -280,7 +280,7 @@ class FocusManager {
 		const targetId = (e.target as HTMLElement).id;
 		if (this.children.has(targetId)) {
 			const childrenPath = this.getEventChildren(targetId);
-			for (let i = 0; i < childrenPath.length; i++) {
+			for (let i = 1; i < childrenPath.length; i++) {
 				const listener = this.focusWithinListeners.get(childrenPath[i]);
 				if (listener) {
 					listener(childrenPath[i - 1]);

@@ -11,6 +11,7 @@
         "prepare": "husky",
         "lintcheck": "npm run lintcheck --workspaces",
         "test": "jest",
+        "test:coverage": "jest --coverage",
         "typecheck": "npm run typecheck --workspaces"
     },
     "author": "Vit Salomon (salik1992)",
