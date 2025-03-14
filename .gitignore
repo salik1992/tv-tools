@@ -2,3 +2,4 @@ node_modules
 dist
 .localrc.vim
 mprocs.yaml
+coverage
