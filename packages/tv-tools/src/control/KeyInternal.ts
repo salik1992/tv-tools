@@ -88,6 +88,7 @@ export class KeyInternal implements Key {
 				rtl && this.rtlKeyCodes
 					? this.rtlKeyCodes[0]
 					: this.keyCodes[0],
+			bubbles: true,
 		});
 	}
 

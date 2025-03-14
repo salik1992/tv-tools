@@ -1,6 +1,11 @@
 export default {
 	testEnvironment: 'jsdom',
 	transform: {
-		'^.+.tsx?$': ['ts-jest', {}],
+		'^.+.[tj]sx?$': [
+			'ts-jest',
+			{
+				tsconfig: './tsconfig.jest.json',
+			},
+		],
 	},
 };

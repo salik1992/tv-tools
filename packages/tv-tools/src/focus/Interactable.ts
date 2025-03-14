@@ -123,7 +123,7 @@ export class Interactable {
 	 * Focus itself when the pointer is over the component.
 	 */
 	private onPointerMove = () => {
-		this.element?.focus();
+		focus.focus(this.id, { preventScroll: true });
 	};
 
 	/**

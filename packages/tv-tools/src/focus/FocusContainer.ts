@@ -152,10 +152,13 @@ export class FocusContainer {
 			originalChildIndex + diff,
 			this.focusChildren.length - 1,
 		);
-		this.focusChild(this.focusChildren[targetChildIndex], {
-			preventScroll: true,
-		});
-		return true;
+		if (targetChildIndex !== originalChildIndex) {
+			this.focusChild(this.focusChildren[targetChildIndex], {
+				preventScroll: true,
+			});
+			return true;
+		}
+		return false;
 	}
 
 	/**
