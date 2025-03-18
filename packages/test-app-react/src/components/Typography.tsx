@@ -1,33 +1,52 @@
 import styled, { css } from 'styled-components';
 
+export const Typography = {
+	row: 30,
+	column: 15,
+	font: 25,
+} as const;
+
+export const Base = css`
+	margin: 0;
+	line-height: ${Typography.row}px;
+	font-size: ${Typography.font}px;
+`;
+
 export const H1 = styled.h1`
-	font-size: 50px;
+	${Base}
+	font-weight: 900;
 `;
 
 export const H2 = styled.h2`
-	font-size: 42px;
+	${Base}
+	font-weight: 800;
 `;
 
 export const H3 = styled.h3`
-	font-size: 36px;
+	${Base}
+	font-weight: 700;
 `;
 
 export const H4 = styled.h4`
-	font-size: 31px;
+	${Base}
+	font-weight: 600;
 `;
 
 export const H5 = styled.h5`
-	font-size: 27px;
+	${Base}
+	font-weight: 500;
 `;
 
 export const H6 = styled.h6`
-	font-size: 23px;
+	${Base}
+	font-weight: 400;
+	text-decoration: underline;
 `;
 
 export const P = styled.p`
+	${Base}
+	font-weight: 400;
 	margin: 0;
-	font-size: 23px;
-	line-height: 31px;
 `;
 
 export const oneLineEllipsis = css`
@@ -42,3 +61,5 @@ export const nLineEllipsis = (n: number) => css`
 	-webkit-line-clamp: ${n};
 	overflow: hidden;
 `;
+
+export const NBSP = '\u00A0';

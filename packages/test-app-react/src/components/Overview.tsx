@@ -1,36 +1,32 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import styled from 'styled-components';
 import {
 	useFocusContainer,
 	FocusContext,
 	Interactable,
 } from '@salik1992/tv-tools-react/focus';
-import { nLineEllipsis, P } from './Typography';
-import { ScrollableTextModal } from './ScrollableTextModal';
+import { useModal } from './Modal';
+import { ScrollableText } from './ScrollableText';
+import { Border, Colors, Transition } from './Theme';
+import { nLineEllipsis, P, Typography } from './Typography';
 
 const Text = styled(Interactable)`
-	margin-left: -8px;
-	padding: 10px;
-	box-sizing: border-box;
-	border-width: 2px;
-	border-style: solid;
-	border-color: transparent;
-	border-radius: 5px;
-	background-color: transparent;
-	max-width: 750px;
+	padding: ${Typography.column}px ${Typography.column}px;
+	max-width: ${50 * Typography.column}px;
 	cursor: pointer;
-	transition:
-		border-color 300ms,
-		background-color 300ms;
 	outline: none;
+	${Border}
 
 	${P} {
+		color: ${Colors.fg.secondary};
+		${Transition('color')}
 		${nLineEllipsis(3)}
 	}
 
 	&:focus {
-		border-color: #ffffff;
-		background-color: rgba(102, 102, 153, 0.25);
+		${P} {
+			color: ${Colors.fg.primary};
+		}
 	}
 `;
 
@@ -44,17 +40,19 @@ export const Overview = ({
 	focusOnMount?: boolean;
 }) => {
 	const { focusContextValue } = useFocusContainer();
-	const [isModalVisible, setIsModalVisible] = useState(false);
-
-	const onPress = useCallback(() => {
-		setIsModalVisible(true);
-		return true;
-	}, [setIsModalVisible]);
+	const modal = useModal();
 
 	const onClose = useCallback(() => {
-		setIsModalVisible(false);
+		modal.close();
 		return true;
-	}, [setIsModalVisible]);
+	}, [modal]);
+
+	const onPress = useCallback(() => {
+		modal.open(
+			<ScrollableText onClose={onClose}>{overview}</ScrollableText>,
+		);
+		return true;
+	}, [modal]);
 
 	return (
 		<FocusContext.Provider value={focusContextValue}>
@@ -65,11 +63,6 @@ export const Overview = ({
 			>
 				<P>{overview}</P>
 			</Text>
-			{isModalVisible && (
-				<ScrollableTextModal onClose={onClose}>
-					{overview}
-				</ScrollableTextModal>
-			)}
 		</FocusContext.Provider>
 	);
 };

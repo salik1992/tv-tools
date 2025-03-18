@@ -15,8 +15,9 @@ import { DetailMovie } from './DetailMovie';
 import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
 import { ScreenCentered } from './ScreenCentered';
-import { H2, P } from './Typography';
+import { H2, P, Typography } from './Typography';
 import { useDataProvider } from '../data';
+import { Border, Colors, Transition } from './Theme';
 
 const BackdropImage = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
 	style: { backgroundImage: `url(${$src})` },
@@ -30,28 +31,27 @@ const BackdropImage = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
 	background-position: center center;
 `;
 
-const BackdropShadow = styled.div`
-	position: absolute;
-	top: 680px;
-	left: 0;
-	width: 100%;
-	height: 400px;
-	background-image: linear-gradient(to bottom, transparent, #22222f);
-`;
-
 const Scroller = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
-	padding: 0 40px;
-	height: 1080px;
-	transition: transform 300ms;
+	bottom: 0;
+	padding: ${Typography.row}px;
+	${Transition('transform')}
 `;
 
 const InnerWrap = styled.div`
-	position: relative;
-	margin-top: 550px;
+	position: absolute;
+	left: ${Typography.row}px;
+	right: ${Typography.row}px;
+	bottom: ${Typography.row}px;
+	height: ${15 * Typography.row}px;
+	${Border}
+	border-style: solid;
+	border-color: ${Colors.fg.primary};
+	background-color: ${Colors.bg.opaque};
+	overflow: hidden;
 `;
 
 type Params = { type: AssetType; id: Id };
@@ -105,17 +105,16 @@ export const Detail = () => {
 				</ScreenCentered>
 			)}
 			{asset && (
-				<Scroller style={{ transform: `translateY(-${scroll}px)` }}>
-					<VerticalFocus>
-						<BackdropImage
-							$src={dataProvider.getImageUrl(
-								asset,
-								['backdrop'],
-								{ width: 1920 },
-							)}
-						/>
-						<BackdropShadow />
-						<InnerWrap>
+				<VerticalFocus>
+					<BackdropImage
+						$src={dataProvider.getImageUrl(asset, ['backdrop'], {
+							width: 1920,
+						})}
+					/>
+					<InnerWrap>
+						<Scroller
+							style={{ transform: `translateY(-${scroll}px)` }}
+						>
 							{isMovie(asset) && (
 								<DetailMovie
 									asset={asset as MovieAsset}
@@ -128,9 +127,9 @@ export const Detail = () => {
 									setScroll={setScroll}
 								/>
 							)}
-						</InnerWrap>
-					</VerticalFocus>
-				</Scroller>
+						</Scroller>
+					</InnerWrap>
+				</VerticalFocus>
 			)}
 		</Screen>
 	);

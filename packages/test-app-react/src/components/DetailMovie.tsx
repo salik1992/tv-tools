@@ -2,17 +2,19 @@ import { useCallback, type Dispatch } from 'react';
 import styled from 'styled-components';
 import type { MovieAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
-import { H1, P } from './Typography';
+import { DetailLabel } from './DetailLabel';
+import { DetailRating } from './DetailRating';
 import { Overview } from './Overview';
+import { H1, P, Typography } from './Typography';
 
 const Poster = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
 	style: { backgroundImage: `url(${$src})` },
 }))`
 	position: absolute;
-	top: 0;
-	right: 0;
-	width: 200px;
-	height: 356px;
+	top: ${Typography.row}px;
+	right: ${Typography.row}px;
+	width: ${13 * Typography.column}px;
+	height: ${12 * Typography.row}px;
 	background-size: cover;
 	background-position: center center;
 `;
@@ -37,17 +39,19 @@ export const DetailMovie = ({
 			/>
 			<H1>{asset.title}</H1>
 			<P>
+				<DetailLabel>Released: </DetailLabel>
 				{new Date(asset.releaseDate).getFullYear()}{' '}
-				{asset.countries &&
-					`(${asset.countries.map((c) => c.iso_3166_1.toUpperCase()).join(', ')})`}
+				{asset.countries && (
+					<DetailLabel>
+						(
+						{asset.countries
+							.map((c) => c.iso_3166_1.toUpperCase())
+							.join(', ')}
+						)
+					</DetailLabel>
+				)}
 			</P>
-			{asset.rating && (
-				<P>
-					Rating: {asset.rating.value}
-					{asset.rating.unit}
-					{asset.rating.votes && ` (${asset.rating.votes} votes)`}
-				</P>
-			)}
+			<DetailRating asset={asset} />
 			<br />
 			<Overview
 				overview={asset.description}

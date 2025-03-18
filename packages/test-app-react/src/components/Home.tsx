@@ -9,12 +9,13 @@ import {
 import { AssetsRow } from './AssetsRow';
 import { HeroRow } from './HeroRow';
 import { Screen } from './Screen';
+import { Transition } from './Theme';
 
 const HERO = 'hero';
 const SCROLLS = [0, 500, 800, 1100];
 
 const InnerWrap = styled.div`
-	transition: transform 300ms;
+	${Transition('transform')}
 `;
 
 const OnBackScrollTop = ({
