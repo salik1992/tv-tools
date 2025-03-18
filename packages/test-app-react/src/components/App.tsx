@@ -13,9 +13,16 @@ html, body {
     padding: 0;
 }
 body {
-    background-color: #22222f;
+    background-color: #000000;
     font-family: sans-serif;
     color: #ffffff;
+}
+#root {
+	position: relative;
+    background-color: #22222f;
+	width: 1920px;
+	height: 1080px;
+	overflow: hidden;
 }
 `;
 

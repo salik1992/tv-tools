@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Wrap = styled.div`
-	position: fixed;
+	position: absolute;
 	bottom: 0;
 	right: 0;
 	background-color: #000000;
