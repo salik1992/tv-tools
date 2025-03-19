@@ -1,10 +1,21 @@
 {
-    "bracketSameLine": false,
-    "bracketSpacing": true,
-    "jsxSingleQuote": false,
-    "semi": true,
-    "singleQuote": true,
-    "tabWidth": 4,
-    "trailingComma": "all",
-    "useTabs": true
+	"plugins": ["@trivago/prettier-plugin-sort-imports"],
+	"bracketSameLine": false,
+	"bracketSpacing": true,
+	"jsxSingleQuote": false,
+	"semi": true,
+	"singleQuote": true,
+	"tabWidth": 4,
+	"trailingComma": "all",
+	"useTabs": true,
+	"importOrder": [
+		"^react(.*)$",
+		"^(?!(@salik1992)|(\\.+))",
+		"^@salik1992/tv-tools/(.*)$",
+		"^@salik1992/tv-tools-react/(.*)$",
+		"^@salik1992/test-app-data/(.*)$",
+		"^[./]"
+	],
+	"importOrderSeparation": false,
+	"importOrderSortSpecifiers": true
 }
