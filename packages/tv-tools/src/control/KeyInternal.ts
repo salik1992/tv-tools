@@ -1,4 +1,4 @@
-import type { KeyInformation, Key, KeyOption } from './types';
+import type { Key, KeyInformation, KeyOption } from './types';
 
 /**
  * Returns whether the document is in right to left layout.

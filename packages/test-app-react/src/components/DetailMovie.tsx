@@ -1,4 +1,4 @@
-import { useCallback, type Dispatch } from 'react';
+import { type Dispatch, useCallback } from 'react';
 import styled from 'styled-components';
 import type { MovieAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';

@@ -1,5 +1,5 @@
-import type { Key, KeyOption } from './types';
 import { Keys } from './Keys';
+import type { Key, KeyOption } from './types';
 
 export { updateKey } from './updateKey';
 

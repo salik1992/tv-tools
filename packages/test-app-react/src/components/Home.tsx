@@ -1,10 +1,10 @@
-import { useCallback, useState, type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { focus } from '@salik1992/tv-tools/focus';
 import {
-	useFocusContainer,
 	FocusContext,
 	VerticalFocus,
+	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
 import { AssetsRow } from './AssetsRow';
 import { HeroRow } from './HeroRow';

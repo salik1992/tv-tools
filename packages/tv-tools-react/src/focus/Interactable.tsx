@@ -1,15 +1,15 @@
 import {
+	type DetailedHTMLProps,
+	type HTMLAttributes,
 	useContext,
 	useEffect,
 	useLayoutEffect,
 	useMemo,
 	useRef,
-	type DetailedHTMLProps,
-	type HTMLAttributes,
 } from 'react';
 import {
-	focus,
 	Interactable as InteractableBase,
+	focus,
 } from '@salik1992/tv-tools/focus';
 import { FocusContext } from './context';
 

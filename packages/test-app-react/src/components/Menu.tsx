@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { VerticalFocus, Interactable } from '@salik1992/tv-tools-react/focus';
-import { H1, Typography } from './Typography';
+import { Interactable, VerticalFocus } from '@salik1992/tv-tools-react/focus';
 import { Border, Colors, Transition } from './Theme';
+import { H1, Typography } from './Typography';
 
 const ITEMS = [
 	{ title: 'Home', glyph: '\u2302', path: '/' },

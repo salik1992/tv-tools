@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
-import { focus } from '@salik1992/tv-tools/focus';
-import { Interactable } from './Interactable';
 import { ENTER } from '@salik1992/tv-tools/control';
+import { focus } from '@salik1992/tv-tools/focus';
 import { FocusRoot } from './FocusRoot';
+import { Interactable } from './Interactable';
 
 const onPress = jest.fn(() => true);
 const focusSpy = jest.spyOn(focus, 'focus');

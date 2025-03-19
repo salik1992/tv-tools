@@ -1,7 +1,7 @@
 import type { FocusContainer } from '../focus';
-import { clamp } from '../utils/clamp';
 import { EventListener } from '../utils/EventListener';
 import { Performance } from '../utils/Performance';
+import { clamp } from '../utils/clamp';
 import type { DataChange, ListBehavior, ListSetup, RenderData } from './types';
 
 /**

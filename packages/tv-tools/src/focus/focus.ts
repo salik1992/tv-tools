@@ -1,12 +1,12 @@
 import type { Key } from '../control';
 import { uuidV4 } from '../utils/uuidV4';
 import type {
+	ControlEvent,
+	ControlListener,
+	ControlPhase,
+	ControlType,
 	FocusFunction,
 	FocusWithinListener,
-	ControlType,
-	ControlPhase,
-	ControlListener,
-	ControlEvent,
 } from './types';
 
 /**

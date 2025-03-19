@@ -1,5 +1,5 @@
-import { render, act } from '@testing-library/react';
-import { UP, DOWN } from '@salik1992/tv-tools/control';
+import { act, render } from '@testing-library/react';
+import { DOWN, UP } from '@salik1992/tv-tools/control';
 import { focus } from '@salik1992/tv-tools/focus';
 import { FocusRoot } from './FocusRoot';
 import { Interactable } from './Interactable';

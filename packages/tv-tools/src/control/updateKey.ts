@@ -1,5 +1,5 @@
-import type { Key } from './types';
 import { KeyInternal } from './KeyInternal';
+import type { Key } from './types';
 
 /**
  * Checks that the passed object is KeyInternal instance and it is
