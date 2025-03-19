@@ -1,19 +1,19 @@
 import {
+	type PropsWithChildren,
 	useCallback,
 	useLayoutEffect,
 	useMemo,
 	useRef,
 	useState,
-	type PropsWithChildren,
 } from 'react';
 import styled from 'styled-components';
 import {
-	useFocusContainer,
 	FocusContext,
+	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
 import { Button } from './Button';
-import { P, Typography } from './Typography';
 import { Transition } from './Theme';
+import { P, Typography } from './Typography';
 
 const Wrap = styled.div`
 	position: relative;

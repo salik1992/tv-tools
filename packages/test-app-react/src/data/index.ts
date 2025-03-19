@@ -1,8 +1,8 @@
-import { useContext, createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { DataProvider } from '@salik1992/test-app-data/DataProvider';
 import {
-	TmdbDataProvider,
 	type TmdbConfiguration,
+	TmdbDataProvider,
 } from '@salik1992/test-app-data-tmdb';
 import { ACCESS_TOKEN } from './token';
 

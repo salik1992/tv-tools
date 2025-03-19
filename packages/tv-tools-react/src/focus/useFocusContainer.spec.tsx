@@ -3,15 +3,15 @@ import {
 	BACK,
 	DOWN,
 	ENTER,
+	type Key,
 	LEFT,
 	RIGHT,
 	UP,
-	type Key,
 } from '@salik1992/tv-tools/control';
 import {
 	type ControlEvent,
-	focus,
 	FocusContainer,
+	focus,
 } from '@salik1992/tv-tools/focus';
 import { useFocusContainer } from './useFocusContainer';
 

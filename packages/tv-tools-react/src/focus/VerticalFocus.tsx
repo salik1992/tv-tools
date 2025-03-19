@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from 'react';
-import { useFocusContainer } from './useFocusContainer';
 import { FocusContext } from './context';
+import { useFocusContainer } from './useFocusContainer';
 
 /**
  * Component for markup of where the focus should navigate vertically.

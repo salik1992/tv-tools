@@ -1,4 +1,4 @@
-import { BLUE, GREEN, RED, YELLOW, type Key } from '../control';
+import { BLUE, GREEN, type Key, RED, YELLOW } from '../control';
 import { focus } from './focus';
 import type { ControlEvent } from './types';
 

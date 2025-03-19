@@ -1,4 +1,4 @@
-import { render, act } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import { LEFT, RIGHT } from '@salik1992/tv-tools/control';
 import { focus } from '@salik1992/tv-tools/focus';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, type FocusEvent } from 'react';
+import { type FocusEvent, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
@@ -6,10 +6,10 @@ import { Performance } from '@salik1992/tv-tools/utils/Performance';
 import { List } from '@salik1992/tv-tools-react/list';
 import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
-import { MouseArrows } from './MouseArrows';
 import { Hero } from './Hero';
-import { H3, Typography } from './Typography';
+import { MouseArrows } from './MouseArrows';
 import { Transition } from './Theme';
+import { H3, Typography } from './Typography';
 
 const Wrap = styled.div`
 	margin-top: 15px;

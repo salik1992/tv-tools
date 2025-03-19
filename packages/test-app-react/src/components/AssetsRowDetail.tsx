@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import type { Asset } from '@salik1992/test-app-data/types';
+import { Colors, Transition } from './Theme';
 import {
 	H4,
-	nLineEllipsis,
-	oneLineEllipsis,
 	P,
 	Typography,
+	nLineEllipsis,
+	oneLineEllipsis,
 } from './Typography';
-import { Colors, Transition } from './Theme';
 
 const Wrap = styled.div.attrs<{ $visible: boolean }>(({ $visible }) => ({
 	style: { height: $visible ? `${6 * Typography.row}px` : '0px' },

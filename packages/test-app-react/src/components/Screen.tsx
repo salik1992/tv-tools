@@ -1,8 +1,8 @@
-import { useCallback, useState, type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import {
-	useFocusContainer,
 	FocusContext,
+	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
 import { Menu } from './Menu';
 import { Typography } from './Typography';

@@ -3,11 +3,11 @@ import {
 	BACK,
 	DOWN,
 	ENTER,
+	type Key,
+	type KeyOption,
 	LEFT,
 	RIGHT,
 	UP,
-	type Key,
-	type KeyOption,
 } from '@salik1992/tv-tools/control';
 import {
 	type ControlEvent,

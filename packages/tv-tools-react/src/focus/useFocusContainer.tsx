@@ -6,9 +6,7 @@ import {
 	useMemo,
 } from 'react';
 import { FocusContainer, RenderProgress } from '@salik1992/tv-tools/focus';
-import { useRefresh } from './useRefresh';
 import { FocusContext } from './context';
-import type { Focus } from './types';
 import {
 	getUseOnBack,
 	getUseOnDown,
@@ -18,6 +16,8 @@ import {
 	getUseOnRight,
 	getUseOnUp,
 } from './keyboardHooks';
+import type { Focus } from './types';
+import { useRefresh } from './useRefresh';
 
 /**
  * Hook containing common functionality for focus containers (HorizontalFocus,

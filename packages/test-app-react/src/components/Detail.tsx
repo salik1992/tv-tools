@@ -2,13 +2,13 @@ import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
+import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
 import type {
 	AssetType,
 	Id,
 	MovieAsset,
 	SeriesAsset,
 } from '@salik1992/test-app-data/types';
-import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
 import { useDataProvider } from '../data';
 import { useDetailAsset } from '../hooks/useDetailAsset';
 import { Button } from './Button';
@@ -16,8 +16,8 @@ import { DetailMovie } from './DetailMovie';
 import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
 import { ScreenCentered } from './ScreenCentered';
-import { H2, P, Typography } from './Typography';
 import { Border, Colors, Transition } from './Theme';
+import { H2, P, Typography } from './Typography';
 
 const BackdropImage = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
 	style: { backgroundImage: `url(${$src})` },

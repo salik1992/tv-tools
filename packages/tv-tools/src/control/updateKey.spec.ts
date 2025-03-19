@@ -1,5 +1,5 @@
-import type { Key } from './types';
 import { KeyInternal } from './KeyInternal';
+import type { Key } from './types';
 import { updateKey } from './updateKey';
 
 describe('updateKey', () => {

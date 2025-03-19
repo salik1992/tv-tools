@@ -1,6 +1,6 @@
 import { toKeys } from '../utils/toKeys';
 import { Keys } from './Keys';
-import { isDirectional, isVertical, isHorizontal } from './utils';
+import { isDirectional, isHorizontal, isVertical } from './utils';
 
 const VERTICAL_KEYS = ['UP', 'DOWN'];
 const HORIZONTAL_KEYS = ['LEFT', 'RIGHT'];

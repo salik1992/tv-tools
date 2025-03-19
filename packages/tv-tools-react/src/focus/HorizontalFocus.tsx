@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react';
 import type { ControlEvent } from '@salik1992/tv-tools/focus';
-import { useFocusContainer } from './useFocusContainer';
 import { FocusContext } from './context';
+import { useFocusContainer } from './useFocusContainer';
 
 /**
  * Component for markup of where the focus should navigate horizontally.

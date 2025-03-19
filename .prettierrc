@@ -14,6 +14,7 @@
 		"^@salik1992/tv-tools/(.*)$",
 		"^@salik1992/tv-tools-react/(.*)$",
 		"^@salik1992/test-app-data/(.*)$",
+		"^@salik1992/test-app-data-tmdb$",
 		"^[./]"
 	],
 	"importOrderSeparation": false,

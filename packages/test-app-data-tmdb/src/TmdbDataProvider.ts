@@ -1,13 +1,14 @@
+import { DataProvider } from '@salik1992/test-app-data/DataProvider';
 import type {
 	Asset,
-	Id,
-	Paged,
 	AssetMapping,
+	AssetType,
+	Id,
 	ImageSize,
 	ImageType,
-	AssetType,
+	Paged,
 } from '@salik1992/test-app-data/types';
-import { DataProvider } from '@salik1992/test-app-data/DataProvider';
+import { BASE_URL, GENERIC_TYPE_TO_TMDB_TYPE } from './constants';
 import {
 	mapBaseMovieAsset,
 	mapConfiguration,
@@ -26,7 +27,6 @@ import type {
 	TmdbPagedResults,
 	TrendingTimeWindow,
 } from './types';
-import { BASE_URL, GENERIC_TYPE_TO_TMDB_TYPE } from './constants';
 
 export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	private configuration: Configuration | undefined;

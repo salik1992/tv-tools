@@ -1,4 +1,4 @@
-import type { PropsWithChildren, KeyboardEvent, FocusEvent } from 'react';
+import type { FocusEvent, KeyboardEvent, PropsWithChildren } from 'react';
 import { useCallback } from 'react';
 import { isDirectional } from '@salik1992/tv-tools/control';
 import { focus } from '@salik1992/tv-tools/focus';

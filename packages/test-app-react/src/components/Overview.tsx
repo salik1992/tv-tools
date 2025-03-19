@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import styled from 'styled-components';
 import {
-	useFocusContainer,
 	FocusContext,
 	Interactable,
+	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
 import { useModal } from './Modal';
 import { ScrollableText } from './ScrollableText';
 import { Border, Colors, Transition } from './Theme';
-import { nLineEllipsis, P, Typography } from './Typography';
+import { P, Typography, nLineEllipsis } from './Typography';
 
 const Text = styled(Interactable)`
 	padding: ${Typography.column}px ${Typography.column}px;

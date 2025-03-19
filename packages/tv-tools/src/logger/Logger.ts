@@ -1,4 +1,4 @@
-import { LogLevel, type ConsoleAdapter } from './types';
+import { type ConsoleAdapter, LogLevel } from './types';
 
 /**
  * Main logger to be used by packages so that the developers can

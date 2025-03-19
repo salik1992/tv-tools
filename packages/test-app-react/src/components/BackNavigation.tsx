@@ -1,8 +1,8 @@
-import { useEffect, type PropsWithChildren } from 'react';
+import { type PropsWithChildren, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-	useFocusContainer,
 	FocusContext,
+	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
 
 export const BackNavigation = ({

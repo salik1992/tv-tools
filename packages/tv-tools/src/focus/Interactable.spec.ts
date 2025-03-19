@@ -1,6 +1,6 @@
 import { BACK, ENTER, type Key } from '../control';
-import { focus } from './focus';
 import { Interactable } from './Interactable';
+import { focus } from './focus';
 
 // @ts-expect-error: mock
 global.PointerEvent = class {

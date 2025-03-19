@@ -1,4 +1,4 @@
-import { useRef, useCallback, useMemo, useState, type FocusEvent } from 'react';
+import { type FocusEvent, useCallback, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
@@ -8,9 +8,9 @@ import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { AssetsRowDetail } from './AssetsRowDetail';
 import { MouseArrows } from './MouseArrows';
+import { Transition } from './Theme';
 import { Tile } from './Tile';
 import { H2, P, Typography } from './Typography';
-import { Transition } from './Theme';
 
 const Header = styled(H2)`
 	margin-bottom: ${Typography.row}px;

@@ -1,8 +1,8 @@
 import {
-	useCallback,
 	type DetailedHTMLProps,
 	type FocusEvent,
 	type HTMLAttributes,
+	useCallback,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -10,8 +10,8 @@ import { Interactable } from '@salik1992/tv-tools-react/focus';
 import { Asset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 import { ImageWithFallback } from './Image';
-import { H1, NBSP, oneLineEllipsis, P, Typography } from './Typography';
 import { Border, Colors, Transition } from './Theme';
+import { H1, NBSP, P, Typography, oneLineEllipsis } from './Typography';
 
 const WIDTH = 66 * Typography.column;
 const HEIGHT = 19 * Typography.row;
