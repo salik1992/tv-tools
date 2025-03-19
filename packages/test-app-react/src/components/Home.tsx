@@ -33,7 +33,8 @@ const OnBackScrollTop = ({
 };
 
 export const Home = () => {
-	const [scroll, setScroll] = useState(0);
+	const [index, setIndex] = useState(0);
+	const scroll = SCROLLS[index];
 
 	const onBack = useCallback(() => {
 		if (scroll !== 0) {
@@ -55,7 +56,7 @@ export const Home = () => {
 								type: 'movie',
 								timeWindow: 'day',
 							}}
-							onFocus={() => setScroll(SCROLLS[0])}
+							onFocus={() => setIndex(0)}
 							focusOnMount
 						/>
 						<AssetsRow
@@ -65,17 +66,20 @@ export const Home = () => {
 								timeWindow: 'day',
 							}}
 							header="Trending TV"
-							onFocus={() => setScroll(SCROLLS[1])}
+							showDetail={index === 1}
+							onFocus={() => setIndex(1)}
 						/>
 						<AssetsRow
 							listData={{ filterBy: 'discover', type: 'movie' }}
 							header="Discover Movies"
-							onFocus={() => setScroll(SCROLLS[2])}
+							showDetail={index === 2}
+							onFocus={() => setIndex(2)}
 						/>
 						<AssetsRow
 							listData={{ filterBy: 'discover', type: 'series' }}
 							header="Discover TV"
-							onFocus={() => setScroll(SCROLLS[3])}
+							showDetail={index === 3}
+							onFocus={() => setIndex(3)}
 						/>
 					</VerticalFocus>
 				</OnBackScrollTop>
