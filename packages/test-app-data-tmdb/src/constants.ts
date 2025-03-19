@@ -1,5 +1,7 @@
 import { ListType, ScreenType } from '@salik1992/test-app-data/types';
 
+export const BASE_URL = 'https://api.themoviedb.org/3';
+
 export const GENERIC_TYPE_TO_TMDB_TYPE = {
 	movie: 'movie',
 	series: 'tv',
@@ -7,8 +9,6 @@ export const GENERIC_TYPE_TO_TMDB_TYPE = {
 	episode: 'episode',
 	person: 'people',
 } as const;
-
-export const BASE_URL = 'https://api.themoviedb.org/3';
 
 export const MENU = [
 	{

@@ -34,7 +34,12 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 
 	constructor(private tmdbAccessToken: string) {
 		super();
-		this.initialize();
+	}
+
+	public override async initialize() {
+		const configurationResponse =
+			await this.fetch<ConfigurationResponse>('configuration');
+		this.configuration = mapConfiguration(configurationResponse);
 	}
 
 	public override getImageUrl(
@@ -151,12 +156,6 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 					1,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
-	}
-
-	private async initialize() {
-		const configurationResponse =
-			await this.fetch<ConfigurationResponse>('configuration');
-		this.configuration = mapConfiguration(configurationResponse);
 	}
 
 	private async fetch<T>(url: string) {

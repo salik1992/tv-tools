@@ -15,6 +15,8 @@ export abstract class DataProvider<
 		filter: ConfigurationFilter;
 	},
 > {
+	public abstract initialize(): Promise<void>;
+
 	public abstract getImageUrl(
 		asset: Asset,
 		types: (keyof Asset['images'])[],
