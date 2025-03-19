@@ -54,13 +54,13 @@ const InnerWrap = styled.div`
 	overflow: hidden;
 `;
 
-type Params = { type: AssetType; id: Id };
+type Params = { assetType: AssetType; assetId: Id };
 
 function assertParams(params: Partial<Params>): asserts params is Params {
-	if (params.id === undefined) {
+	if (params.assetId === undefined) {
 		throw new Error('Missing "id" parameter');
 	}
-	if (params.type === undefined) {
+	if (params.assetType === undefined) {
 		throw new Error('Missing "type" parameter');
 	}
 }
@@ -68,23 +68,23 @@ function assertParams(params: Partial<Params>): asserts params is Params {
 export const Detail = () => {
 	const params = useParams<Params>();
 	assertParams(params);
-	const { type, id } = params;
+	const { assetId, assetType } = params;
 
 	const dataProvider = useDataProvider();
 
-	const { asset, loading, error } = useDetailAsset(type, id);
+	const { asset, loading, error } = useDetailAsset(assetType, assetId);
 
 	const [scroll, setScroll] = useState(0);
 
 	const navigate = useNavigate();
 
 	const onBack = useCallback(() => {
-		navigate(-1);
+		navigate('..');
 		return true;
 	}, [navigate]);
 
 	return (
-		<Screen>
+		<Screen backNavigation="..">
 			{loading && (
 				<ScreenCentered>
 					<H2>Loading...</H2>

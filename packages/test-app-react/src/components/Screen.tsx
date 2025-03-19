@@ -1,5 +1,5 @@
 import { type PropsWithChildren, useCallback, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
 	FocusContext,
@@ -31,10 +31,16 @@ const ScreenContainer = styled.div<{ $withMenu: boolean }>`
 export const Screen = ({
 	children,
 	className,
-}: PropsWithChildren<{ withMenu?: boolean; className?: string }>) => {
+	backNavigation,
+}: PropsWithChildren<{
+	withMenu?: boolean;
+	className?: string;
+	backNavigation?: string;
+}>) => {
 	const { focusContextValue, container, useOnLeft, useOnRight, useOnBack } =
 		useFocusContainer();
 	const [isMenuVisible, setIsMenuVisible] = useState(false);
+	const navigate = useNavigate();
 	const menuItems = useMenuItems();
 	const currentPath = getCurrentPath();
 	const withMenu = !!menuItems.find(
@@ -58,16 +64,19 @@ export const Screen = ({
 		return false;
 	}, [withMenu, isMenuVisible, setIsMenuVisible]);
 
-	const toggleMenu = useCallback(
-		() => (isMenuVisible ? closeMenu() : openMenu()),
-		[isMenuVisible, openMenu, closeMenu],
-	);
-
 	useOnLeft(openMenu);
 
 	useOnRight(closeMenu);
 
-	useOnBack(toggleMenu);
+	useOnBack(() => {
+		if (isMenuVisible) {
+			return closeMenu();
+		} else if (backNavigation && !withMenu) {
+			navigate(backNavigation);
+			return true;
+		}
+		return openMenu();
+	}, [isMenuVisible, closeMenu, openMenu, backNavigation, navigate]);
 
 	return (
 		<>

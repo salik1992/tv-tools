@@ -3,13 +3,13 @@ import {
 	type Asset,
 	type AssetMapping,
 	type AssetType,
+	BrowseItem,
 	type Id,
 	type ImageSize,
 	type ImageType,
 	type Paged,
-	ScreenType,
 } from '@salik1992/test-app-data/types';
-import { BASE_URL, GENERIC_TYPE_TO_TMDB_TYPE } from './constants';
+import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
 	mapBaseMovieAsset,
 	mapConfiguration,
@@ -60,16 +60,18 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	public override async getMenu() {
-		return [
-			{ title: 'Home', glyph: '\u2302', screen: ScreenType.Home },
-			{ title: 'Search', glyph: '\u2328', screen: ScreenType.Search },
-			{
-				title: 'Genres',
-				glyph: '\u2388',
-				screen: ScreenType.Discover,
-				params: ['genres'],
-			},
-		];
+		return MENU;
+	}
+
+	public override async getBrowse(id: Id) {
+		return (
+			(
+				BROWSE as unknown as Record<
+					string,
+					BrowseItem<TmdbConfiguration['filter']>[]
+				>
+			)[id] ?? []
+		);
 	}
 
 	public override async getPagedAssets(

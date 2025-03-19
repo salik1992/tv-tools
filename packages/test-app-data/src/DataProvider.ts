@@ -2,6 +2,8 @@ import type {
 	Asset,
 	AssetMapping,
 	AssetType,
+	BrowseItem,
+	ConfigurationFilter,
 	Id,
 	ImageSize,
 	MenuItem,
@@ -10,10 +12,7 @@ import type {
 
 export abstract class DataProvider<
 	Configuration extends {
-		filter: {
-			[key: string]: unknown;
-			pageItemType: unknown;
-		};
+		filter: ConfigurationFilter;
 	},
 > {
 	public abstract getImageUrl(
@@ -23,6 +22,10 @@ export abstract class DataProvider<
 	): string | null;
 
 	public abstract getMenu(): Promise<MenuItem[]>;
+
+	public abstract getBrowse(
+		id: Id,
+	): Promise<BrowseItem<Configuration['filter']>[]>;
 
 	public abstract getPagedAssets(
 		filter: Configuration['filter'],

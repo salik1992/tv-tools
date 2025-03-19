@@ -2,9 +2,9 @@ import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { FocusRoot } from '@salik1992/tv-tools-react/focus';
 import { BackNavigation } from './BackNavigation';
+import { Browse } from './Browse';
 import { Detail } from './Detail';
 import { Disclaimer } from './Disclaimer';
-import { Home } from './Home';
 import { ModalProvider } from './Modal';
 import { NotFound } from './NotFound';
 import { Colors } from './Theme';
@@ -38,9 +38,12 @@ export const App = () => {
 						<BackNavigation>
 							<Routes>
 								<Route path="*" element={<NotFound />} />
-								<Route path="/" element={<Home />}>
+								<Route
+									path="/browse/:browseId"
+									element={<Browse />}
+								>
 									<Route
-										path="/detail/:type/:id"
+										path="detail/:assetType/:assetId"
 										element={<Detail />}
 									/>
 								</Route>

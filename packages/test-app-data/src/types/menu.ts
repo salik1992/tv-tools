@@ -6,7 +6,8 @@ export type MenuItem = {
 	glyph: string;
 } & (
 	| {
-			screen: ScreenType.Home;
+			screen: ScreenType.Browse;
+			params: [Id];
 	  }
 	| {
 			screen: ScreenType.Detail;
