@@ -20,9 +20,7 @@ const MARGIN = 5 * Typography.column;
 const IMAGE_WIDTH = 64 * Typography.column;
 const IMAGE_HEIGHT = 15 * Typography.row;
 
-const Image = styled(ImageWithFallback)<
-	Pick<Parameters<typeof Hero>[0], 'size'>
->`
+const Image = styled(ImageWithFallback)`
 	background-size: cover;
 	background-position: center center;
 	width: ${IMAGE_WIDTH}px;
@@ -44,7 +42,7 @@ const Description = styled(P)`
 	${Text}
 `;
 
-const Wrap = styled(Interactable)<Pick<Parameters<typeof Hero>[0], 'size'>>`
+const Wrap = styled(Interactable)`
 	display: inline-block;
 	width: ${WIDTH}px;
 	height: ${HEIGHT}px;
@@ -61,13 +59,11 @@ const Wrap = styled(Interactable)<Pick<Parameters<typeof Hero>[0], 'size'>>`
 export const Hero = ({
 	asset,
 	id,
-	size = 'landscape',
 	style,
 	onFocus,
 }: {
 	asset?: Asset;
 	id?: string;
-	size?: 'landscape' | 'portrait';
 	style?: DetailedHTMLProps<
 		HTMLAttributes<HTMLDivElement>,
 		HTMLDivElement
@@ -86,7 +82,6 @@ export const Hero = ({
 		<Wrap
 			id={id}
 			style={{ ...style, visibility: asset ? 'visible' : 'hidden' }}
-			size={size}
 			onPress={onPress}
 			onFocus={onFocus}
 		>
@@ -95,14 +90,11 @@ export const Hero = ({
 					asset
 						? dataProvider.getImageUrl(
 								asset,
-								size === 'landscape'
-									? ['backdrop']
-									: ['poster'],
+								['backdrop', 'still'],
 								{ width: WIDTH },
 							)
 						: ''
 				}
-				size={size}
 			/>
 			<Title>{asset?.title ?? NBSP}</Title>
 			<Description>{asset?.description ?? NBSP}</Description>

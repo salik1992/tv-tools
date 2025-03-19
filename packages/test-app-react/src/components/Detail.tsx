@@ -9,6 +9,7 @@ import type {
 	SeriesAsset,
 } from '@salik1992/test-app-data/types';
 import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
+import { useDataProvider } from '../data';
 import { useDetailAsset } from '../hooks/useDetailAsset';
 import { Button } from './Button';
 import { DetailMovie } from './DetailMovie';
@@ -16,7 +17,6 @@ import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
 import { ScreenCentered } from './ScreenCentered';
 import { H2, P, Typography } from './Typography';
-import { useDataProvider } from '../data';
 import { Border, Colors, Transition } from './Theme';
 
 const BackdropImage = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
