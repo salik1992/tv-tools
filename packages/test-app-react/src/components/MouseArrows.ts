@@ -1,6 +1,5 @@
 import { css } from 'styled-components';
-import leftArrow from '../assets/left-arrow.png';
-import rightArrow from '../assets/right-arrow.png';
+import { Colors, Transition } from './Theme';
 
 export const MouseArrows = css`
 	.mouse-arrow {
@@ -11,20 +10,36 @@ export const MouseArrows = css`
 		background-position: center center;
 		background-repeat: no-repeat;
 		cursor: pointer;
-		transition:
-			opacity 300ms,
-			background-color 300ms;
+		${Transition('opacity', 'background-color')}
 
 		&:hover {
-			background-color: rgba(0, 0, 0, 0.3);
+			background-color: ${Colors.bg.opaque};
+
+			&::after {
+				color: ${Colors.fg.focus};
+			}
+		}
+
+		&::after {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 100px;
+			color: ${Colors.fg.primary};
+			${Transition('color')}
 		}
 
 		&.next {
-			background-image: url(${rightArrow});
+			&::after {
+				content: '\\2192';
+			}
 		}
 
 		&.previous {
-			background-image: url(${leftArrow});
+			&::after {
+				content: '\\2190';
+			}
 		}
 	}
 `;

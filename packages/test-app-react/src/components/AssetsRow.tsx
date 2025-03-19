@@ -9,27 +9,33 @@ import { usePagedData } from '../hooks/usePagedData';
 import { AssetsRowDetail } from './AssetsRowDetail';
 import { MouseArrows } from './MouseArrows';
 import { Tile } from './Tile';
-import { H2, H3 } from './Typography';
+import { H2, P, Typography } from './Typography';
+import { Transition } from './Theme';
+
+const Header = styled(H2)`
+	margin-bottom: ${Typography.row}px;
+`;
 
 const Wrap = styled.div`
-	margin-top: 15px;
+	margin-top: ${Typography.row}px;
 
 	.list {
 		position: relative;
 		white-space: nowrap;
-		overflow: hideen;
+		overflow: hidden;
 		${MouseArrows}
 
 		.mouse-arrow {
-			height: 170px;
-			&.next {
-				right: -40px;
-				width: 170px;
-			}
-
+			height: ${6 * Typography.row}px;
+			&.next,
 			&.previous {
-				left: -40px;
-				width: 170px;
+				width: ${12 * Typography.column}px;
+			}
+			&.previous {
+				left: -${3 * Typography.column}px;
+			}
+			&.next {
+				right: -${3 * Typography.column}px;
 			}
 		}
 
@@ -43,15 +49,8 @@ const Wrap = styled.div`
 	}
 
 	.list-inner-wrap {
-		transition: transform 300ms;
+		${Transition('transform')}
 	}
-`;
-
-const P = styled(H3)`
-	text-align: center;
-	height: ${Tile.height.landscape}px;
-	line-height: ${Tile.height.landscape}px;
-	vertical-align: middle;
 `;
 
 export const AssetsRow = ({
@@ -110,8 +109,8 @@ export const AssetsRow = ({
 			config: {
 				navigatableElements: 7,
 				scrolling: {
-					first: Tile.width.landscape / 1.3,
-					other: Tile.width.landscape,
+					first: Tile.width / 1.3,
+					other: Tile.width,
 				},
 			},
 		}),
@@ -135,7 +134,7 @@ export const AssetsRow = ({
 
 	return (
 		<Wrap onFocus={onFocus} onBlur={onBlur}>
-			<H2>{header}</H2>
+			<Header>{header}</Header>
 			{loading && <P>Loading...</P>}
 			{error !== null && data.pages === 0 && (
 				<P>There was an error loading the data</P>

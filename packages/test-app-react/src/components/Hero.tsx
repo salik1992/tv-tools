@@ -8,94 +8,62 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
 import { Asset } from '@salik1992/test-app-data/types';
-import { ImageWithFallback } from './Image';
-import { H1, oneLineEllipsis, P } from './Typography';
 import { useDataProvider } from '../data';
+import { ImageWithFallback } from './Image';
+import { H1, NBSP, oneLineEllipsis, P, Typography } from './Typography';
+import { Border, Colors, Transition } from './Theme';
 
-const WIDTH = 1000;
-const MARGIN = 100;
-const HEIGHT = 563;
+const WIDTH = 66 * Typography.column;
+const HEIGHT = 19 * Typography.row;
+const MARGIN = 5 * Typography.column;
 
-const Image = styled(ImageWithFallback)<
-	Pick<Parameters<typeof Hero>[0], 'size'>
->`
+const IMAGE_WIDTH = 64 * Typography.column;
+const IMAGE_HEIGHT = 15 * Typography.row;
+
+const Image = styled(ImageWithFallback)`
 	background-size: cover;
 	background-position: center center;
-	width: ${WIDTH}px;
-	height: ${HEIGHT}px;
-`;
-
-const InnerWrap = styled.div`
-	position: relative;
-	border-radius: 50px;
-	transition: transform 300ms;
-	overflow: hidden;
-`;
-
-const Shade = styled.div`
-	position: absolute;
-	top: 50%;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	opacity: 0;
-	background-image: linear-gradient(
-		to bottom,
-		transparent,
-		rgba(0, 0, 0, 0.8)
-	);
+	width: ${IMAGE_WIDTH}px;
+	height: ${IMAGE_HEIGHT}px;
+	margin-bottom: ${Typography.row}px;
 `;
 
 const Text = css`
-	position: absolute;
-	left: 40px;
-	max-width: ${WIDTH - 80}px;
-	opacity: 0;
-	transition: opacity 300ms;
+	color: ${Colors.fg.secondary};
+	${Transition('color')}
 	${oneLineEllipsis}
 `;
 
 const Title = styled(H1)`
 	${Text}
-	bottom: 70px;
-	margin-bottom: 0;
 `;
 
 const Description = styled(P)`
 	${Text}
-	bottom: 20px;
 `;
 
-const Wrap = styled(Interactable)<Pick<Parameters<typeof Hero>[0], 'size'>>`
+const Wrap = styled(Interactable)`
 	display: inline-block;
 	width: ${WIDTH}px;
 	height: ${HEIGHT}px;
 	margin-right: ${MARGIN}px;
-	opacity: 0.7;
-	transition: opacity 300ms;
+	padding: ${Typography.column}px ${Typography.column}px;
+	${Border}
 	outline: none;
 	cursor: pointer;
-	&:focus {
-		opacity: 1;
-	}
-	&:focus ${InnerWrap} {
-		transform: scale(1.1);
-	}
-	&:focus ${Title}, &:focus ${Description}, &:focus ${Shade} {
-		opacity: 1;
+	&:focus ${Title}, &:focus ${Description} {
+		color: ${Colors.fg.primary};
 	}
 `;
 
 export const Hero = ({
 	asset,
 	id,
-	size = 'landscape',
 	style,
 	onFocus,
 }: {
 	asset?: Asset;
 	id?: string;
-	size?: 'landscape' | 'portrait';
 	style?: DetailedHTMLProps<
 		HTMLAttributes<HTMLDivElement>,
 		HTMLDivElement
@@ -114,29 +82,22 @@ export const Hero = ({
 		<Wrap
 			id={id}
 			style={{ ...style, visibility: asset ? 'visible' : 'hidden' }}
-			size={size}
 			onPress={onPress}
 			onFocus={onFocus}
 		>
-			<InnerWrap>
-				<Image
-					src={
-						asset
-							? dataProvider.getImageUrl(
-									asset,
-									size === 'landscape'
-										? ['backdrop']
-										: ['poster'],
-									{ width: WIDTH },
-								)
-							: ''
-					}
-					size={size}
-				/>
-				<Shade />
-				<Title>{asset?.title}</Title>
-				<Description>{asset?.description}</Description>
-			</InnerWrap>
+			<Image
+				src={
+					asset
+						? dataProvider.getImageUrl(
+								asset,
+								['backdrop', 'still'],
+								{ width: WIDTH },
+							)
+						: ''
+				}
+			/>
+			<Title>{asset?.title ?? NBSP}</Title>
+			<Description>{asset?.description ?? NBSP}</Description>
 		</Wrap>
 	);
 };

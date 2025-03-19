@@ -1,22 +1,24 @@
 import styled from 'styled-components';
+import { Border, Colors } from './Theme';
+import { P, Typography } from './Typography';
 
 const Wrap = styled.div`
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	background-color: #000000;
-	color: #cccc00;
-	font-weight: bold;
-	border-left: 6px dashed #ffff00;
-	border-top: 6px dashed #ffff00;
-	padding: 10px 20px;
-	line-height: 1.5em;
+	background-color: ${Colors.bg.opaque};
+	${Border}
+	border-color: ${Colors.fg.warning};
+	padding: ${Typography.column}px ${Typography.column}px;
+`;
+
+const Text = styled(P)`
+	color: ${Colors.fg.warning};
 `;
 
 export const Disclaimer = () => (
 	<Wrap>
-		The data for the application are provided by
-		<br />
-		The Movie Database at https://www.themoviedb.org
+		<Text>The data for the application are provided by</Text>
+		<Text>The Movie Database (https://themoviedb.org)</Text>
 	</Wrap>
 );

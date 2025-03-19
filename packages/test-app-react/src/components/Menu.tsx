@@ -2,63 +2,47 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus, Interactable } from '@salik1992/tv-tools-react/focus';
-import iconGenres from '../assets/icon-genres.png';
-import iconHome from '../assets/icon-home.png';
-import iconSearch from '../assets/icon-search.png';
-import { H3 } from './Typography';
+import { H1, Typography } from './Typography';
+import { Border, Colors, Transition } from './Theme';
 
 const ITEMS = [
-	{ title: 'Home', icon: iconHome, path: '/' },
-	{ title: 'Search', icon: iconSearch, path: '/search' },
-	{ title: 'Genres', icon: iconGenres, path: '/discover/genres' },
+	{ title: 'Home', glyph: '\u2302', path: '/' },
+	{ title: 'Search', glyph: '\u2328', path: '/search' },
+	{ title: 'Genres', glyph: '\u2388', path: '/discover/genres' },
 ] as const;
 
 const WIDTH = {
-	closed: '80px',
-	open: '350px',
-	shade: `${1920 - 350}px`,
+	closed: 4 * Typography.column,
+	open: 20 * Typography.column,
+	shade: 1920 - 20 * Typography.column,
 } as const;
 
-const Icon = styled.div.attrs<{ $isActive: boolean; $src: string }>(
-	({ $isActive, $src }) => ({
-		style: {
-			opacity: $isActive ? '1' : '0.6',
-			backgroundImage: `url(${$src})`,
-		},
-	}),
-)`
-	display: inline-block;
-	width: 50px;
-	height: 50px;
-	margin-left: 15px;
-	margin-right: 30px;
-	background-size: cover;
-	background-position: center center;
-`;
-
-const Title = styled(H3)`
-	display: inline-block;
-	line-height: 50px;
-	margin: 0;
-	vertical-align: top;
+const Glyph = styled.span.attrs<{ $isActive: boolean }>(({ $isActive }) => ({
+	style: {
+		color: $isActive ? Colors.fg.focus : Colors.fg.secondary,
+	},
+}))`
+	font-size: 2em;
+	vertical-align: bottom;
+	margin: 0 ${Typography.column}px;
 `;
 
 const Item = styled(Interactable).attrs<{ $isOpen: boolean }>(
 	({ $isOpen }) => ({
-		style: { width: $isOpen ? WIDTH.open : WIDTH.closed },
+		style: { width: `${$isOpen ? WIDTH.open : WIDTH.closed}px` },
 	}),
 )`
-	margin-bottom: 30px;
+	color: ${Colors.fg.secondary};
+	padding: ${Typography.column}px 0;
 	outline: none;
 	cursor: pointer;
 	white-space: nowrap;
+	${Border}
+	${Transition('color')}
 
-	${Icon}, ${Title} {
-		opacity: 0.5;
-	}
-
-	&:focus ${Icon}, &:focus ${Title} {
-		opacity: 1 !important;
+	&:focus {
+		color: ${Colors.fg.primary};
+		border-color: ${Colors.fg.focus};
 	}
 `;
 
@@ -71,10 +55,7 @@ const ItemWrap = styled.div`
 const MenuBackground = styled.div.attrs<{ $isOpen: boolean }>(
 	({ $isOpen }) => ({
 		style: {
-			width: $isOpen ? WIDTH.open : WIDTH.closed,
-			backgroundColor: $isOpen
-				? 'rgba(0, 0, 0, 0.85)'
-				: 'rgba(0, 0, 0, 0.25)',
+			width: `${$isOpen ? WIDTH.open : WIDTH.closed}px`,
 		},
 	}),
 )`
@@ -82,24 +63,24 @@ const MenuBackground = styled.div.attrs<{ $isOpen: boolean }>(
 	top: 0;
 	left: 0;
 	bottom: 0;
+	background-color: ${Colors.bg.opaque};
 `;
 
 const MenuShade = styled.div.attrs<{ $isOpen: boolean }>(({ $isOpen }) => ({
-	style: { width: $isOpen ? WIDTH.shade : '0px' },
+	style: { width: `${$isOpen ? WIDTH.shade : 0}px` },
 }))`
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: ${WIDTH.open};
-	background-image: linear-gradient(
-		to right,
-		rgba(0, 0, 0, 0.85),
-		rgba(0, 0, 0, 0.25)
-	);
+	left: ${WIDTH.open}px;
+	background-color: ${Colors.bg.opaque};
 `;
 
 const Wrap = styled.div.attrs<{ $isOpen: boolean }>(({ $isOpen }) => ({
-	style: { width: $isOpen ? '100%' : WIDTH.closed },
+	style: {
+		width: $isOpen ? '100%' : `${WIDTH.closed}px`,
+		opacity: $isOpen ? 1 : 0.5,
+	},
 }))`
 	position: absolute;
 	top: 0;
@@ -152,8 +133,12 @@ export const Menu = ({
 								onPress={onPresses[i]}
 								focusOnMount={isActive}
 							>
-								<Icon $isActive={isActive} $src={item.icon} />
-								<Title>{item.title}</Title>
+								<H1>
+									<Glyph $isActive={isActive}>
+										{item.glyph}
+									</Glyph>
+									{item.title}
+								</H1>
 							</Item>
 						);
 					})}
@@ -162,3 +147,4 @@ export const Menu = ({
 		</Wrap>
 	);
 };
+Menu.width = WIDTH;

@@ -1,39 +1,23 @@
 import styled from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
+import { Border, Colors } from './Theme';
+import { Typography } from './Typography';
 
 const COLORS = {
-	primary: '#ffffff',
-	secondary: '#666666',
-	danger: '#ff9900',
-} as const;
-
-const BG_COLORS = {
-	primary: '#666699',
-	secondary: '#ccccff',
-	danger: '#666699',
+	primary: Colors.bg.action,
+	secondary: Colors.bg.focus,
+	danger: Colors.bg.danger,
 } as const;
 
 const InteractableButton = styled(Interactable)<
 	Required<Pick<Parameters<typeof Button>[0], 'type'>>
 >`
 	display: inline-block;
-	padding: 10px 20px;
-	box-sizing: border-box;
-	border-radius: 5px;
-	border-width: 2px;
-	border-style: solid;
-	border-color: transparent;
-	background-color: ${({ type }) => BG_COLORS[type]};
+	padding: ${Typography.column}px ${Typography.column}px;
+	${Border}
+	background-color: ${({ type }) => COLORS[type]};
 	outline: none;
 	cursor: pointer;
-	transition:
-		border-color 300ms,
-		transform 300ms;
-
-	&:focus {
-		border-color: ${({ type }) => COLORS[type]};
-		transform: scale(1.1);
-	}
 `;
 
 export const Button = ({

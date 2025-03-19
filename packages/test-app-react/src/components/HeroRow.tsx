@@ -8,11 +8,11 @@ import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { MouseArrows } from './MouseArrows';
 import { Hero } from './Hero';
-import { H3 } from './Typography';
+import { H3, Typography } from './Typography';
+import { Transition } from './Theme';
 
 const Wrap = styled.div`
 	margin-top: 15px;
-	margin-left: 50px;
 
 	.list {
 		position: relative;
@@ -22,15 +22,15 @@ const Wrap = styled.div`
 		${MouseArrows}
 
 		.mouse-arrow {
-			height: 660px;
+			height: ${22 * Typography.row}px;
 			&.next {
-				right: -40px;
-				width: 675px;
+				right: -${3 * Typography.column}px;
+				width: ${49 * Typography.column}px;
 			}
 
 			&.previous {
-				left: -90px;
-				width: 90px;
+				left: -${3 * Typography.column}px;
+				width: ${6 * Typography.column}px;
 			}
 		}
 
@@ -44,12 +44,11 @@ const Wrap = styled.div`
 	}
 
 	.list-inner-wrap {
-		transition: transform 300ms;
+		${Transition('transform')}
 	}
 `;
 
 const P = styled(H3)`
-	text-align: center;
 	height: ${Hero.height}px;
 	line-height: ${Hero.height}px;
 	vertical-align: middle;

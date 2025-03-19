@@ -6,20 +6,22 @@ import { Detail } from './Detail';
 import { Disclaimer } from './Disclaimer';
 import { Home } from './Home';
 import { NotFound } from './NotFound';
+import { Colors } from './Theme';
+import { ModalProvider } from './Modal';
 
 const GlobalStyles = createGlobalStyle`
 html, body {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 body {
-    background-color: #000000;
-    font-family: sans-serif;
-    color: #ffffff;
+	background-color: #000000;
+	font-family: Fira Code, monospace;
+	color: #ffffff;
 }
 #root {
 	position: relative;
-    background-color: #22222f;
+	background-color: ${Colors.bg.primary};
 	width: 1920px;
 	height: 1080px;
 	overflow: hidden;
@@ -31,18 +33,20 @@ export const App = () => {
 		<>
 			<GlobalStyles />
 			<FocusRoot alwaysPreventNavigationalEvents>
-				<Router>
-					<BackNavigation>
-						<Routes>
-							<Route path="*" element={<NotFound />} />
-							<Route path="/" element={<Home />} />
-							<Route
-								path="/detail/:type/:id"
-								element={<Detail />}
-							/>
-						</Routes>
-					</BackNavigation>
-				</Router>
+				<ModalProvider>
+					<Router>
+						<BackNavigation>
+							<Routes>
+								<Route path="*" element={<NotFound />} />
+								<Route path="/" element={<Home />} />
+								<Route
+									path="/detail/:type/:id"
+									element={<Detail />}
+								/>
+							</Routes>
+						</BackNavigation>
+					</Router>
+				</ModalProvider>
 			</FocusRoot>
 			<Disclaimer />
 		</>

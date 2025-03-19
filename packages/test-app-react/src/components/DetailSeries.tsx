@@ -2,19 +2,25 @@ import { useCallback, type Dispatch } from 'react';
 import styled from 'styled-components';
 import type { SeriesAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
-import { H1, P } from './Typography';
+import { DetailRating } from './DetailRating';
 import { Overview } from './Overview';
+import { Colors } from './Theme';
+import { H1, P, Typography } from './Typography';
 
 const Poster = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
 	style: { backgroundImage: `url(${$src})` },
 }))`
 	position: absolute;
-	top: 0;
-	right: 0;
-	width: 200px;
-	height: 356px;
+	top: ${Typography.row}px;
+	right: ${Typography.row}px;
+	width: ${13 * Typography.column}px;
+	height: ${12 * Typography.row}px;
 	background-size: cover;
 	background-position: center center;
+`;
+
+const Label = styled.span`
+	color: ${Colors.fg.secondary};
 `;
 
 export const DetailSeries = ({
@@ -36,14 +42,11 @@ export const DetailSeries = ({
 				})}
 			/>
 			<H1>{asset.title}</H1>
-			<P>First aired: {new Date(asset.releaseDate).getFullYear()}</P>
-			{asset.rating && (
-				<P>
-					Rating: {asset.rating.value}
-					{asset.rating.unit}
-					{asset.rating.votes && ` (${asset.rating.votes} votes)`}
-				</P>
-			)}
+			<P>
+				<Label>First aired: </Label>
+				{new Date(asset.releaseDate).getFullYear()}
+			</P>
+			<DetailRating asset={asset} />
 			<br />
 			<Overview
 				overview={asset.description}

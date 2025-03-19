@@ -5,14 +5,16 @@ import {
 	FocusContext,
 } from '@salik1992/tv-tools-react/focus';
 import { Menu } from './Menu';
+import { Typography } from './Typography';
 
 const MENU = 'menu';
 
 const ScreenContainer = styled.div<{ $withMenu: boolean }>`
 	width: 1920px;
 	height: 1080px;
-	padding-left: ${({ $withMenu }) => ($withMenu ? 120 : 40)}px;
-	padding-right: 40px;
+	padding-left: ${({ $withMenu }) =>
+		($withMenu ? Menu.width.closed : 0) + 3 * Typography.column}px;
+	padding-right: ${3 * Typography.column}px;
 	overflow: hidden;
 	box-sizing: border-box;
 `;

@@ -12,14 +12,14 @@ import {
 	FocusContext,
 } from '@salik1992/tv-tools-react/focus';
 import { Button } from './Button';
-import { Modal } from './Modal';
-import { P } from './Typography';
+import { P, Typography } from './Typography';
+import { Transition } from './Theme';
 
 const Wrap = styled.div`
 	position: relative;
 	overflow: hidden;
-	height: 560px;
-	margin-bottom: 40px;
+	height: ${19 * Typography.row}px;
+	margin-bottom: ${Typography.row}px;
 `;
 
 const Centered = styled.div`
@@ -27,10 +27,9 @@ const Centered = styled.div`
 `;
 
 const Text = styled(P)`
-	width: 1130px;
+	width: ${73 * Typography.column}px;
 	text-align: justify;
-	line-height: 1.5em;
-	transition: transform 300ms;
+	${Transition('transform')}
 `;
 
 const Scrollbar = styled.div`
@@ -58,7 +57,7 @@ const Scroller = styled.div`
 	background-color: #ffffff;
 `;
 
-const ScrollableText = ({
+export const ScrollableText = ({
 	children,
 	onClose,
 }: PropsWithChildren<{ onClose: () => boolean }>) => {
@@ -164,12 +163,3 @@ const ScrollableText = ({
 		</FocusContext.Provider>
 	);
 };
-
-export const ScrollableTextModal = ({
-	children,
-	onClose,
-}: PropsWithChildren<{ onClose: () => boolean }>) => (
-	<Modal onClose={onClose}>
-		<ScrollableText onClose={onClose}>{children}</ScrollableText>
-	</Modal>
-);
