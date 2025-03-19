@@ -2,14 +2,11 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Interactable, VerticalFocus } from '@salik1992/tv-tools-react/focus';
+import { useMenuItems } from '../hooks/useMenuItems';
+import { getCurrentPath } from '../utils/getCurrentPath';
+import { menuItemToPath } from '../utils/menuItemToPath';
 import { Border, Colors, Transition } from './Theme';
 import { H1, Typography } from './Typography';
-
-const ITEMS = [
-	{ title: 'Home', glyph: '\u2302', path: '/' },
-	{ title: 'Search', glyph: '\u2328', path: '/search' },
-	{ title: 'Genres', glyph: '\u2388', path: '/discover/genres' },
-] as const;
 
 const WIDTH = {
 	closed: 4 * Typography.column,
@@ -90,11 +87,6 @@ const Wrap = styled.div.attrs<{ $isOpen: boolean }>(({ $isOpen }) => ({
 	z-index: 10;
 `;
 
-const getCurrentPath = () => {
-	const hash = location.hash.replace(/^#/, '');
-	return hash.length ? hash : '/';
-};
-
 export const Menu = ({
 	id,
 	isOpen,
@@ -108,14 +100,20 @@ export const Menu = ({
 }) => {
 	const navigate = useNavigate();
 	const currentPath = getCurrentPath();
+	const menuItems = useMenuItems();
 
 	const onPresses = useMemo(
 		() =>
-			ITEMS.map((item) => () => {
-				navigate(item.path, { replace: true });
+			menuItems.map((item) => () => {
+				const itemPath = menuItemToPath(item);
+				if (getCurrentPath() === itemPath) {
+					onMouseClose();
+				} else {
+					navigate(itemPath, { replace: true });
+				}
 				return true;
 			}),
-		[navigate, ITEMS],
+		[navigate, menuItems, onMouseClose],
 	);
 
 	return (
@@ -124,14 +122,15 @@ export const Menu = ({
 			<MenuShade $isOpen={isOpen} onMouseOver={onMouseClose} />
 			<ItemWrap>
 				<VerticalFocus id={id}>
-					{ITEMS.map((item, i) => {
-						const isActive = isOpen && currentPath === item.path;
+					{menuItems.map((item, i) => {
+						const path = menuItemToPath(item);
+						const isActive = currentPath === path;
 						return (
 							<Item
-								key={item.path}
+								key={path}
 								$isOpen={isOpen}
 								onPress={onPresses[i]}
-								focusOnMount={isActive}
+								focusOnMount={isOpen && isActive}
 							>
 								<H1>
 									<Glyph $isActive={isActive}>

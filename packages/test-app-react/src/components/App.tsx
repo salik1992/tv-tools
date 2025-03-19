@@ -38,11 +38,12 @@ export const App = () => {
 						<BackNavigation>
 							<Routes>
 								<Route path="*" element={<NotFound />} />
-								<Route path="/" element={<Home />} />
-								<Route
-									path="/detail/:type/:id"
-									element={<Detail />}
-								/>
+								<Route path="/" element={<Home />}>
+									<Route
+										path="/detail/:type/:id"
+										element={<Detail />}
+									/>
+								</Route>
 							</Routes>
 						</BackNavigation>
 					</Router>

@@ -17,6 +17,7 @@ export const NotFound = () => {
 		<Screen>
 			<ScreenCentered>
 				<H1>Not Found</H1>
+				<br />
 				<Button onPress={back} focusOnMount>
 					Back
 				</Button>
