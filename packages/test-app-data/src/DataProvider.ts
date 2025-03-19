@@ -4,6 +4,7 @@ import type {
 	AssetType,
 	Id,
 	ImageSize,
+	MenuItem,
 	Paged,
 } from './types';
 
@@ -20,6 +21,8 @@ export abstract class DataProvider<
 		types: (keyof Asset['images'])[],
 		size: ImageSize,
 	): string | null;
+
+	public abstract getMenu(): Promise<MenuItem[]>;
 
 	public abstract getPagedAssets(
 		filter: Configuration['filter'],
