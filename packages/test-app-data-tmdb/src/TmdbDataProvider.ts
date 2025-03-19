@@ -1,12 +1,13 @@
 import { DataProvider } from '@salik1992/test-app-data/DataProvider';
-import type {
-	Asset,
-	AssetMapping,
-	AssetType,
-	Id,
-	ImageSize,
-	ImageType,
-	Paged,
+import {
+	type Asset,
+	type AssetMapping,
+	type AssetType,
+	type Id,
+	type ImageSize,
+	type ImageType,
+	type Paged,
+	ScreenType,
 } from '@salik1992/test-app-data/types';
 import { BASE_URL, GENERIC_TYPE_TO_TMDB_TYPE } from './constants';
 import {
@@ -56,6 +57,19 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 			return `${this.configuration.images.base}${size.id}${imagePath}`;
 		}
 		return null;
+	}
+
+	public override async getMenu() {
+		return [
+			{ title: 'Home', glyph: '\u2302', screen: ScreenType.Home },
+			{ title: 'Search', glyph: '\u2328', screen: ScreenType.Search },
+			{
+				title: 'Genres',
+				glyph: '\u2388',
+				screen: ScreenType.Discover,
+				params: ['genres'],
+			},
+		];
 	}
 
 	public override async getPagedAssets(
