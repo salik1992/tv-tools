@@ -3,12 +3,13 @@ import type {
 	Asset,
 	AssetMapping,
 	AssetType,
+	BrowseItem,
 	Id,
 	ImageSize,
 	ImageType,
 	Paged,
 } from '@salik1992/test-app-data/types';
-import { BASE_URL, GENERIC_TYPE_TO_TMDB_TYPE } from './constants';
+import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
 	mapBaseMovieAsset,
 	mapConfiguration,
@@ -33,7 +34,12 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 
 	constructor(private tmdbAccessToken: string) {
 		super();
-		this.initialize();
+	}
+
+	public override async initialize() {
+		const configurationResponse =
+			await this.fetch<ConfigurationResponse>('configuration');
+		this.configuration = mapConfiguration(configurationResponse);
 	}
 
 	public override getImageUrl(
@@ -56,6 +62,21 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 			return `${this.configuration.images.base}${size.id}${imagePath}`;
 		}
 		return null;
+	}
+
+	public override async getMenu() {
+		return MENU;
+	}
+
+	public override async getBrowse(id: Id) {
+		return (
+			(
+				BROWSE as unknown as Record<
+					string,
+					BrowseItem<TmdbConfiguration['filter']>[]
+				>
+			)[id] ?? []
+		);
 	}
 
 	public override async getPagedAssets(
@@ -135,12 +156,6 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 					1,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
-	}
-
-	private async initialize() {
-		const configurationResponse =
-			await this.fetch<ConfigurationResponse>('configuration');
-		this.configuration = mapConfiguration(configurationResponse);
 	}
 
 	private async fetch<T>(url: string) {

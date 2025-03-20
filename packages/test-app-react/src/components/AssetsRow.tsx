@@ -1,4 +1,4 @@
-import { type FocusEvent, useCallback, useMemo, useRef, useState } from 'react';
+import { type FocusEvent, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
@@ -57,40 +57,20 @@ export const AssetsRow = ({
 	id,
 	listData,
 	header,
+	showDetail,
 	focusOnMount = false,
-	onFocus: onOuterFocus,
+	onFocus,
 }: {
 	id?: string;
 	listData: ListDataConfiguration;
 	header: string;
+	showDetail: boolean;
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const [focusedIndex, setFocusedIndex] = useState(0);
-	const [isFocused, setIsFocused] = useState(false);
-	const isFocusDelay = useRef<number | null>(null);
 
 	const { data, loading, error } = usePagedData(listData);
-
-	const onFocus = useCallback(
-		(event: FocusEvent) => {
-			setIsFocused(true);
-			if (isFocusDelay.current) {
-				window.clearTimeout(isFocusDelay.current);
-				isFocusDelay.current = null;
-			}
-			if (typeof onOuterFocus === 'function') {
-				onOuterFocus(event);
-			}
-		},
-		[setIsFocused],
-	);
-
-	const onBlur = useCallback(() => {
-		isFocusDelay.current = window.setTimeout(() => {
-			setIsFocused(false);
-		}, 50);
-	}, [setIsFocused]);
 
 	const onDataIndex = useCallback(
 		(index: number) => {
@@ -133,7 +113,7 @@ export const AssetsRow = ({
 	);
 
 	return (
-		<Wrap onFocus={onFocus} onBlur={onBlur}>
+		<Wrap onFocus={onFocus}>
 			<Header>{header}</Header>
 			{loading && <P>Loading...</P>}
 			{error !== null && data.pages === 0 && (
@@ -151,7 +131,7 @@ export const AssetsRow = ({
 						onDataIndex={onDataIndex}
 					/>
 					<AssetsRowDetail
-						visible={isFocused}
+						visible={showDetail}
 						asset={data[1][focusedIndex]}
 					/>
 				</>

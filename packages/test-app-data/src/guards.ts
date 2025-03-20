@@ -1,6 +1,9 @@
+import { ASSET_TYPES } from './constants';
 import type {
 	Asset,
+	AssetType,
 	EpisodeAsset,
+	Id,
 	MovieAsset,
 	PersonAsset,
 	SeasonAsset,
@@ -25,4 +28,12 @@ export function isEpisode(asset: Asset): asset is EpisodeAsset {
 
 export function isPerson(asset: Asset): asset is PersonAsset {
 	return asset.type === 'person';
+}
+
+export function isId(id: unknown): id is Id {
+	return typeof id === 'string';
+}
+
+export function isAssetType(type: unknown): type is AssetType {
+	return typeof type === 'string' && type in ASSET_TYPES;
 }

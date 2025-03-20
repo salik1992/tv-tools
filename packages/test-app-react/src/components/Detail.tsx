@@ -1,17 +1,15 @@
-import { useCallback, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
 import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
-import type {
-	AssetType,
-	Id,
-	MovieAsset,
-	SeriesAsset,
-} from '@salik1992/test-app-data/types';
+import type { MovieAsset, SeriesAsset } from '@salik1992/test-app-data/types';
+import {
+	validateAssetType,
+	validateId,
+} from '@salik1992/test-app-data/validations';
 import { useDataProvider } from '../data';
+import { useAssertedParams } from '../hooks/useAssertedParams';
 import { useDetailAsset } from '../hooks/useDetailAsset';
-import { Button } from './Button';
 import { DetailMovie } from './DetailMovie';
 import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
@@ -54,54 +52,29 @@ const InnerWrap = styled.div`
 	overflow: hidden;
 `;
 
-type Params = { type: AssetType; id: Id };
-
-function assertParams(params: Partial<Params>): asserts params is Params {
-	if (params.id === undefined) {
-		throw new Error('Missing "id" parameter');
-	}
-	if (params.type === undefined) {
-		throw new Error('Missing "type" parameter');
-	}
-}
-
 export const Detail = () => {
-	const params = useParams<Params>();
-	assertParams(params);
-	const { type, id } = params;
+	const { assetId, assetType } = useAssertedParams({
+		assetId: validateId,
+		assetType: validateAssetType,
+	});
 
 	const dataProvider = useDataProvider();
 
-	const { asset, loading, error } = useDetailAsset(type, id);
+	const { asset, loading, error } = useDetailAsset(assetType, assetId);
 
 	const [scroll, setScroll] = useState(0);
 
-	const navigate = useNavigate();
-
-	const onBack = useCallback(() => {
-		navigate(-1);
-		return true;
-	}, [navigate]);
-
 	return (
-		<Screen>
+		<Screen backNavigation="..">
 			{loading && (
 				<ScreenCentered>
 					<H2>Loading...</H2>
-					<br />
-					<Button onPress={onBack} focusOnMount>
-						Back
-					</Button>
 				</ScreenCentered>
 			)}
 			{!!error && (
 				<ScreenCentered>
 					<H2>There was an error loading the data.</H2>
 					<P>Error: {(error as Error)?.message}</P>
-					<br />
-					<Button onPress={onBack} focusOnMount>
-						Back
-					</Button>
 				</ScreenCentered>
 			)}
 			{asset && (
