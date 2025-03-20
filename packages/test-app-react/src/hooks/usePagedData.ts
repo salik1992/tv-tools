@@ -23,17 +23,20 @@ export const usePagedData = (listData: ListDataConfiguration) => {
 				listData,
 				requestedPages.current,
 			);
-			if (!mounted.current) {
-				return;
+			if (mounted.current) {
+				setData((currentData) => ({
+					...currentData,
+					...pageData,
+				}));
 			}
-			setData((currentData) => ({
-				...currentData,
-				...pageData,
-			}));
 		} catch (e: unknown) {
-			setError(e);
+			if (mounted.current) {
+				setError(e);
+			}
 		} finally {
-			setLoading(false);
+			if (mounted.current) {
+				setLoading(false);
+			}
 		}
 	}, [dataProvider]);
 

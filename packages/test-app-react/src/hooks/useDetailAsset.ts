@@ -17,14 +17,17 @@ export const useDetailAsset = (type: AssetType, id: Id) => {
 		(async () => {
 			try {
 				const data = await dataProvider.getAsset(type, id);
-				if (!mounted.current) {
-					return;
+				if (mounted.current) {
+					setAsset(data);
 				}
-				setAsset(data);
 			} catch (e: unknown) {
-				setError(e);
+				if (mounted.current) {
+					setError(e);
+				}
 			} finally {
-				setLoading(false);
+				if (mounted.current) {
+					setLoading(false);
+				}
 			}
 		})();
 	}, [type, id]);

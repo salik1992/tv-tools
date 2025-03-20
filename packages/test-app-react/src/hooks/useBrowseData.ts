@@ -18,14 +18,17 @@ export const useBrowseData = (id: string) => {
 		(async () => {
 			try {
 				const data = await dataProvider.getBrowse(id);
-				if (!mounted.current) {
-					return;
+				if (mounted.current) {
+					setData(data);
 				}
-				setData(data);
 			} catch (e: unknown) {
-				setError(e);
+				if (mounted.current) {
+					setError(e);
+				}
 			} finally {
-				setLoading(false);
+				if (mounted.current) {
+					setLoading(false);
+				}
 			}
 		})();
 	}, [id]);
