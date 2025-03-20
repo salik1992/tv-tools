@@ -1,15 +1,15 @@
 import { useCallback, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
 import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
-import type {
-	AssetType,
-	Id,
-	MovieAsset,
-	SeriesAsset,
-} from '@salik1992/test-app-data/types';
+import type { MovieAsset, SeriesAsset } from '@salik1992/test-app-data/types';
+import {
+	validateAssetType,
+	validateId,
+} from '@salik1992/test-app-data/validations';
 import { useDataProvider } from '../data';
+import { useAssertedParams } from '../hooks/useAssertedParams';
 import { useDetailAsset } from '../hooks/useDetailAsset';
 import { Button } from './Button';
 import { DetailMovie } from './DetailMovie';
@@ -54,21 +54,11 @@ const InnerWrap = styled.div`
 	overflow: hidden;
 `;
 
-type Params = { assetType: AssetType; assetId: Id };
-
-function assertParams(params: Partial<Params>): asserts params is Params {
-	if (params.assetId === undefined) {
-		throw new Error('Missing "id" parameter');
-	}
-	if (params.assetType === undefined) {
-		throw new Error('Missing "type" parameter');
-	}
-}
-
 export const Detail = () => {
-	const params = useParams<Params>();
-	assertParams(params);
-	const { assetId, assetType } = params;
+	const { assetId, assetType } = useAssertedParams({
+		assetId: validateId,
+		assetType: validateAssetType,
+	});
 
 	const dataProvider = useDataProvider();
 

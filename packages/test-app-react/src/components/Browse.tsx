@@ -1,5 +1,4 @@
 import { type PropsWithChildren, useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { focus } from '@salik1992/tv-tools/focus';
 import {
@@ -7,7 +6,9 @@ import {
 	VerticalFocus,
 	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
-import { Id, ListType } from '@salik1992/test-app-data/types';
+import { ListType } from '@salik1992/test-app-data/types';
+import { validateId } from '@salik1992/test-app-data/validations';
+import { useAssertedParams } from '../hooks/useAssertedParams';
 import { useBrowseData } from '../hooks/useBrowseData';
 import { AssetsRow } from './AssetsRow';
 import { HeroRow } from './HeroRow';
@@ -40,19 +41,9 @@ const OnBackScrollTop = ({
 	);
 };
 
-type Params = { browseId: Id };
-
-function assertParams(params: Partial<Params>): asserts params is Params {
-	if (params.browseId === undefined) {
-		throw new Error('Missing "id" parameter');
-	}
-}
-
 export const Browse = () => {
+	const { browseId } = useAssertedParams({ browseId: validateId });
 	const [index, setIndex] = useState(0);
-	const params = useParams();
-	assertParams(params);
-	const { browseId } = params;
 	const topRowId = `${TOP}${browseId}`;
 	const { data, loading, error } = useBrowseData(browseId);
 	const scrolls = useMemo(

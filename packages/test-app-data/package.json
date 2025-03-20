@@ -4,6 +4,7 @@
     "version": "0.0.0",
     "exports": {
         "./DataProvider":  "./dist/DataProvider.js",
+        "./validations":  "./dist/validations.js",
         "./guards":  "./dist/guards.js",
         "./types":  "./dist/types/index.js"
     },

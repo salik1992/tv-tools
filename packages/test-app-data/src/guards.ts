@@ -1,10 +1,11 @@
-import type {
-	Asset,
-	EpisodeAsset,
-	MovieAsset,
-	PersonAsset,
-	SeasonAsset,
-	SeriesAsset,
+import {
+	ASSET_TYPES,
+	type Asset,
+	type EpisodeAsset,
+	type MovieAsset,
+	type PersonAsset,
+	type SeasonAsset,
+	type SeriesAsset,
 } from './types';
 
 export function isMovie(asset: Asset): asset is MovieAsset {
@@ -25,4 +26,12 @@ export function isEpisode(asset: Asset): asset is EpisodeAsset {
 
 export function isPerson(asset: Asset): asset is PersonAsset {
 	return asset.type === 'person';
+}
+
+export function isId(id: unknown): id is string {
+	return typeof id === 'string';
+}
+
+export function isAssetType(type: unknown): type is Asset['type'] {
+	return typeof type === 'string' && type in ASSET_TYPES;
 }
