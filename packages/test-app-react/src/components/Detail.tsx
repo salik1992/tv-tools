@@ -1,5 +1,4 @@
-import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
 import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
@@ -11,7 +10,6 @@ import {
 import { useDataProvider } from '../data';
 import { useAssertedParams } from '../hooks/useAssertedParams';
 import { useDetailAsset } from '../hooks/useDetailAsset';
-import { Button } from './Button';
 import { DetailMovie } from './DetailMovie';
 import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
@@ -66,32 +64,17 @@ export const Detail = () => {
 
 	const [scroll, setScroll] = useState(0);
 
-	const navigate = useNavigate();
-
-	const onBack = useCallback(() => {
-		navigate('..');
-		return true;
-	}, [navigate]);
-
 	return (
 		<Screen backNavigation="..">
 			{loading && (
 				<ScreenCentered>
 					<H2>Loading...</H2>
-					<br />
-					<Button onPress={onBack} focusOnMount>
-						Back
-					</Button>
 				</ScreenCentered>
 			)}
 			{!!error && (
 				<ScreenCentered>
 					<H2>There was an error loading the data.</H2>
 					<P>Error: {(error as Error)?.message}</P>
-					<br />
-					<Button onPress={onBack} focusOnMount>
-						Back
-					</Button>
 				</ScreenCentered>
 			)}
 			{asset && (
