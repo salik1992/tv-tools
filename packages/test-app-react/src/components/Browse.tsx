@@ -66,7 +66,7 @@ export const Browse = () => {
 			return true;
 		}
 		return false;
-	}, [scroll]);
+	}, [scroll, topRowId]);
 
 	const onFocuses = useMemo(
 		() =>
