@@ -2,14 +2,6 @@ export type Id = string;
 
 export type AssetType = 'movie' | 'series' | 'season' | 'episode' | 'person';
 
-export const ASSET_TYPES = [
-	'movie',
-	'series',
-	'season',
-	'episode',
-	'person',
-] as const;
-
 export type Genre = {
 	id: Id;
 	title: string;

@@ -1,13 +1,13 @@
-import {
-	ASSET_TYPES,
-	type Asset,
-	type AssetType,
-	type EpisodeAsset,
-	type Id,
-	type MovieAsset,
-	type PersonAsset,
-	type SeasonAsset,
-	type SeriesAsset,
+import { ASSET_TYPES } from './constants';
+import type {
+	Asset,
+	AssetType,
+	EpisodeAsset,
+	Id,
+	MovieAsset,
+	PersonAsset,
+	SeasonAsset,
+	SeriesAsset,
 } from './types';
 
 export function validateMovie(asset: Asset) {
