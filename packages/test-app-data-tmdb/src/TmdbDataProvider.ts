@@ -1,13 +1,13 @@
 import { DataProvider } from '@salik1992/test-app-data/DataProvider';
-import {
-	type Asset,
-	type AssetMapping,
-	type AssetType,
+import type {
+	Asset,
+	AssetMapping,
+	AssetType,
 	BrowseItem,
-	type Id,
-	type ImageSize,
-	type ImageType,
-	type Paged,
+	Id,
+	ImageSize,
+	ImageType,
+	Paged,
 } from '@salik1992/test-app-data/types';
 import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
