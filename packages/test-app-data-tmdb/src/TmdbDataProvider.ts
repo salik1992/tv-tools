@@ -1,3 +1,4 @@
+import { toKeys } from '@salik1992/tv-tools/utils/toKeys';
 import { DataProvider } from '@salik1992/test-app-data/DataProvider';
 import type {
 	Asset,
@@ -27,6 +28,7 @@ import type {
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbConfiguration,
+	TmdbConfigurationFilters,
 	TmdbGenres,
 	TmdbMovieAsset,
 	TmdbPagedResults,
@@ -87,16 +89,21 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	public override async getPagedAssets(
-		filter: TmdbConfiguration['filter'],
+		filter: TmdbConfigurationFilters,
 		page = 0,
 	): Promise<Paged<Asset>> {
 		switch (filter.filterBy) {
 			case 'discover':
-				return this.getDiscover(filter.type, page);
+				return this.getDiscover(filter.type, { page: page + 1 });
 			case 'trending':
 				return this.getTrending(filter.type, filter.timeWindow);
 			case 'genres':
 				return this.getGenres(filter.type);
+			case 'genre':
+				return this.getDiscover(filter.type, {
+					page: page + 1,
+					with_genres: filter.id,
+				});
 			default:
 				return { pages: 0 };
 		}
@@ -133,18 +140,24 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 
 	private async getDiscover(
 		type: 'movie' | 'series',
-		page: number,
+		filter: {
+			page: number;
+			with_genres?: Id;
+		},
 	): Promise<Paged<AssetMapping[typeof type]>> {
+		const filterSearchParams = toKeys(filter)
+			.map((key) => `${key}=${filter[key]}`)
+			.join('&');
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<TmdbAssetMapping[typeof type]>
-		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?page=${page + 1}`);
+		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterSearchParams}`);
 		return type === 'movie'
 			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
-					page,
+					filter.page - 1,
 					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
 			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
-					page,
+					filter.page - 1,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
 	}

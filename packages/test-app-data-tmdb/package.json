@@ -14,7 +14,8 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "@salik1992/test-app-data": "*"
+        "@salik1992/test-app-data": "*",
+        "@salik1992/tv-tools": "*"
     },
     "author": "Vit Salomon (salik1992)",
     "license": "GNU-GPLv3",
