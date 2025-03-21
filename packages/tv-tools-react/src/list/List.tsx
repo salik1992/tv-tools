@@ -39,7 +39,7 @@ export const List = <Configuration extends Record<string, unknown>>({
 	configuration: Omit<ListSetup<Configuration>, 'id'>;
 	/* The function that renders each element. */
 	renderItem: (element: RenderDataElement) => ReactNode;
-	/* Orientation of the list that will change control keys. */
+	/* Orientation of the list that will change control keys. Default: horizontal */
 	orientation?: 'vertical' | 'horizontal';
 	/* Whether the horizontal list should render ltr even in rtl. */
 	ignoreRtl?: boolean;
@@ -66,7 +66,7 @@ export const List = <Configuration extends Record<string, unknown>>({
 				id: container.id,
 				...configuration,
 			}),
-		[Implementation, configuration, container],
+		[Implementation, container],
 	);
 
 	// Render data from the list
