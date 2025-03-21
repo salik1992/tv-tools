@@ -1,6 +1,7 @@
 import type {
 	Asset,
 	AssetImages,
+	AssetType,
 	GenreAsset,
 	MovieAsset,
 	Paged,
@@ -35,31 +36,36 @@ export const mapImages = <
 	poster: a.poster_path,
 });
 
-export const mapGenre = (g: TmdbGenre): GenreAsset => ({
-	id: `${g.id}`,
-	title: g.name,
-	type: 'genre',
-});
+export const mapGenre =
+	(relatedAssetType?: AssetType) =>
+	(g: TmdbGenre): GenreAsset => ({
+		id: `${g.id}`,
+		title: g.name,
+		type: 'genre',
+		relatedAssetType,
+	});
 
-export const mapGenres = <
-	T extends
-		| { genres: { id: number; name: string }[] }
-		| { genre_ids: number[] },
->(
-	a: T,
-) =>
-	(a as TmdbAsset).genres
-		? (a as TmdbAsset).genres.map(mapGenre)
-		: (a as TmdbBaseAsset).genre_ids
-			? (a as TmdbBaseAsset).genre_ids.map(
-					(g) =>
-						({
-							id: g.toString(),
-							title: '',
-							type: 'genre',
-						}) as GenreAsset,
-				)
-			: [];
+export const mapGenres =
+	(relatedAssetType?: AssetType) =>
+	<
+		T extends
+			| { genres: { id: number; name: string }[] }
+			| { genre_ids: number[] },
+	>(
+		a: T,
+	) =>
+		(a as TmdbAsset).genres
+			? (a as TmdbAsset).genres.map(mapGenre(relatedAssetType))
+			: (a as TmdbBaseAsset).genre_ids
+				? (a as TmdbBaseAsset).genre_ids.map(
+						(g) =>
+							({
+								id: g.toString(),
+								title: '',
+								type: 'genre',
+							}) as GenreAsset,
+					)
+				: [];
 
 export const mapOriginal = <
 	T extends { original_language: string; original_title: string },
@@ -100,9 +106,13 @@ export const mapLanguages = (a: TmdbMovieAsset) =>
 		title: l.name,
 	}));
 
-export const mapCommonAsset = (a: TmdbAsset | TmdbBaseAsset) => ({
+export const mapCommonAsset = <T extends AssetType>(
+	type: T,
+	a: TmdbAsset | TmdbBaseAsset,
+) => ({
+	type,
 	images: mapImages(a),
-	genres: mapGenres(a),
+	genres: mapGenres(type)(a),
 	id: `${a.id}`,
 	original: mapOriginal(a),
 	description: a.overview,
@@ -116,8 +126,7 @@ export const mapCommonAsset = (a: TmdbAsset | TmdbBaseAsset) => ({
 export const mapBaseMovieAsset = (
 	a: TmdbMovieAsset | TmdbBaseMovieAsset,
 ): MovieAsset => ({
-	...mapCommonAsset(a),
-	type: 'movie',
+	...mapCommonAsset('movie', a),
 	adult: a.adult,
 	title: a.title,
 	releaseDate: a.release_date,
@@ -136,8 +145,7 @@ export const mapMovieAsset = (a: TmdbMovieAsset): MovieAsset => ({
 });
 
 export const mapTvAsset = (a: TmdbBaseTvAsset): SeriesAsset => ({
-	...mapCommonAsset(a),
-	type: 'series',
+	...mapCommonAsset('series', a),
 	title: a.name,
 	releaseDate: a.first_air_date,
 	seasons: [],

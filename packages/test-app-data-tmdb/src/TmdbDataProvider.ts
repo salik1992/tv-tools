@@ -188,7 +188,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		);
 		return {
 			pages: 1,
-			[0]: response.genres.map(mapGenre),
+			[0]: response.genres.map(mapGenre(type)),
 		};
 	}
 
