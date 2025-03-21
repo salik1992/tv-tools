@@ -8,6 +8,7 @@ import { BackNavigation } from './BackNavigation';
 import { Browse } from './Browse';
 import { Detail } from './Detail';
 import { Disclaimer } from './Disclaimer';
+import { Discover } from './Discover';
 import { ModalProvider } from './Modal';
 import { NotFound } from './NotFound';
 import { ScreenCentered } from './ScreenCentered';
@@ -34,6 +35,26 @@ body {
 	overflow: hidden;
 }
 `;
+
+const BROWSE = {
+	path: '/browse/:browseId',
+	element: <Browse />,
+};
+
+const DETAIL = {
+	path: 'detail/:assetType/:assetId',
+	element: <Detail />,
+};
+
+const DISCOVER = {
+	path: '/discover/:filter',
+	element: <Discover />,
+};
+
+const NOT_FOUND = {
+	path: '*',
+	element: <NotFound />,
+};
 
 export const App = () => {
 	const [isReady, setIsReady] = useState(false);
@@ -72,15 +93,12 @@ export const App = () => {
 						<Router>
 							<BackNavigation>
 								<Routes>
-									<Route path="*" element={<NotFound />} />
-									<Route
-										path="/browse/:browseId"
-										element={<Browse />}
-									>
-										<Route
-											path="detail/:assetType/:assetId"
-											element={<Detail />}
-										/>
+									<Route {...NOT_FOUND} />
+									<Route {...BROWSE}>
+										<Route {...DETAIL} />
+									</Route>
+									<Route {...DISCOVER}>
+										<Route {...DETAIL} />
 									</Route>
 								</Routes>
 							</BackNavigation>

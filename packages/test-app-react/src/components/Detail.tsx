@@ -80,9 +80,13 @@ export const Detail = () => {
 			{asset && (
 				<VerticalFocus>
 					<BackdropImage
-						$src={dataProvider.getImageUrl(asset, ['backdrop'], {
-							width: 1920,
-						})}
+						$src={dataProvider.getImageUrl(
+							asset,
+							['backdrop', 'still', 'poster'],
+							{
+								width: 1920,
+							},
+						)}
 					/>
 					<InnerWrap>
 						<Scroller

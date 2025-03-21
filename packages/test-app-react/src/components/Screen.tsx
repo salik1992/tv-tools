@@ -26,6 +26,7 @@ const ScreenContainer = styled.div<{ $withMenu: boolean }>`
 	overflow: hidden;
 	box-sizing: border-box;
 	background-color: ${Colors.bg.primary};
+	z-index: 0; // Reset for nested routes to keep the content within
 `;
 
 export const Screen = ({

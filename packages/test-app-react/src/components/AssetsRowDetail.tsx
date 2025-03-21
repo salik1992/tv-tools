@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import type { Asset } from '@salik1992/test-app-data/types';
+import type { Asset, AssetDescription } from '@salik1992/test-app-data/types';
 import { Colors, Transition } from './Theme';
 import {
 	H4,
@@ -34,7 +34,7 @@ export const AssetsRowDetail = ({
 	asset,
 }: {
 	visible: boolean;
-	asset: Asset;
+	asset: Asset & AssetDescription;
 }) => (
 	<Wrap $visible={visible}>
 		<Title>{asset.title}</Title>

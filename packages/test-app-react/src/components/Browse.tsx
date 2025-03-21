@@ -97,7 +97,7 @@ export const Browse = () => {
 							</ScreenCentered>
 						)}
 						{data &&
-							data.map(({ title, listType, listData, id }, i) => {
+							data.map(({ listType, listData, id }, i) => {
 								const focusId = i === 0 ? topRowId : undefined;
 								const key = `${browseId}-${id}`;
 								switch (listType) {
@@ -117,7 +117,6 @@ export const Browse = () => {
 												key={key}
 												id={focusId}
 												listData={listData}
-												header={title}
 												showDetail={index === i}
 												onFocus={onFocuses[i]}
 											/>

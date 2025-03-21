@@ -2,13 +2,12 @@ import { type FocusEvent, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
-import { Performance } from '@salik1992/tv-tools/utils/Performance';
 import { List } from '@salik1992/tv-tools-react/list';
 import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { Hero } from './Hero';
 import { MouseArrows } from './MouseArrows';
-import { Transition } from './Theme';
+import { Performance, Transition } from './Theme';
 import { H3, Typography } from './Typography';
 
 const Wrap = styled.div`
@@ -67,12 +66,12 @@ export const HeroRow = ({
 }) => {
 	const { data, loading, error } = usePagedData(listData);
 
-	const hasData = useMemo(() => (data[1]?.length ?? 0) > 0, [data[1]]);
+	const hasData = useMemo(() => (data[0]?.length ?? 0) > 0, [data[0]]);
 
 	const listConfiguration = useMemo(
 		() => ({
-			performance: Performance.ANIMATED,
-			dataLength: data[1]?.length,
+			performance: Performance,
+			dataLength: data[0]?.length,
 			visibleElements: 5,
 			config: {
 				navigatableElements: 2,
@@ -82,7 +81,7 @@ export const HeroRow = ({
 				},
 			},
 		}),
-		[data[1]?.length],
+		[data[0]?.length],
 	);
 
 	const renderElement = useCallback(
@@ -90,14 +89,14 @@ export const HeroRow = ({
 			<Hero
 				id={id}
 				key={id}
-				asset={data[1][dataIndex]}
+				asset={data[0][dataIndex]}
 				style={{
 					transform: `translateX(${offset}px)`,
 				}}
 				onFocus={onFocus}
 			/>
 		),
-		[data[1]],
+		[data[0]],
 	);
 
 	return (
