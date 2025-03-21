@@ -4,4 +4,5 @@ export const ASSET_TYPES = [
 	'season',
 	'episode',
 	'person',
+	'genre',
 ] as const;
