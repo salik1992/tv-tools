@@ -121,9 +121,9 @@ export const Tile = ({
 						JSON.stringify({
 							filterBy: 'genre',
 							id: asset.id,
-							type: 'movie',
+							type: asset.relatedAssetType,
 							title: asset.title,
-							relatedPageItem: 'movie',
+							relatedPageItem: asset.relatedAssetType,
 						}),
 					)}`,
 				);
