@@ -78,17 +78,14 @@ export type TmdbPagedResults<T> = {
 };
 
 export type DiscoverTypes = 'movie' | 'series';
-export type DiscoverMapping = {
+export type TmdbAssetMapping = {
 	movie: TmdbBaseMovieAsset;
 	series: TmdbBaseTvAsset;
 	season: TmdbAsset;
 	person: TmdbAsset;
 	episode: TmdbAsset;
+	genre: TmdbGenre;
 };
 
 export type TrendingTypes = 'movie' | 'series'; // TODO: | 'people';
 export type TrendingTimeWindow = 'day' | 'week';
-export type TrendingMapping = {
-	movie: TmdbBaseMovieAsset;
-	series: TmdbBaseTvAsset;
-};

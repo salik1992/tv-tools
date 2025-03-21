@@ -1,5 +1,7 @@
 import type {
 	Asset,
+	AssetImages,
+	GenreAsset,
 	MovieAsset,
 	Paged,
 	SeriesAsset,
@@ -9,16 +11,17 @@ import type {
 	TmdbBaseAsset,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
+	TmdbGenre,
 	TmdbMovieAsset,
 	TmdbPagedResults,
 } from '../types';
 
 export const mapPage =
-	<In extends TmdbBaseAsset>(
+	<In extends TmdbBaseAsset, Out extends Asset>(
 		page: number,
-		assetMapping: (tmdbAsset: In) => Asset,
+		assetMapping: (tmdbAsset: In) => Out,
 	) =>
-	(data: TmdbPagedResults<In>): Paged<Asset> => ({
+	(data: TmdbPagedResults<In>): Paged<Out> => ({
 		pages: data.total_pages,
 		[page]: data.results.map(assetMapping),
 	});
@@ -27,9 +30,15 @@ export const mapImages = <
 	T extends { backdrop_path: string; poster_path: string },
 >(
 	a: T,
-): Asset['images'] => ({
+): AssetImages['images'] => ({
 	backdrop: a.backdrop_path,
 	poster: a.poster_path,
+});
+
+export const mapGenre = (g: TmdbGenre): GenreAsset => ({
+	id: `${g.id}`,
+	title: g.name,
+	type: 'genre',
 });
 
 export const mapGenres = <
@@ -40,15 +49,16 @@ export const mapGenres = <
 	a: T,
 ) =>
 	(a as TmdbAsset).genres
-		? (a as TmdbAsset).genres.map((g) => ({
-				id: `${g.id}`,
-				title: g.name,
-			}))
+		? (a as TmdbAsset).genres.map(mapGenre)
 		: (a as TmdbBaseAsset).genre_ids
-			? (a as TmdbBaseAsset).genre_ids.map((g) => ({
-					id: g.toString(),
-					title: '',
-				}))
+			? (a as TmdbBaseAsset).genre_ids.map(
+					(g) =>
+						({
+							id: g.toString(),
+							title: '',
+							type: 'genre',
+						}) as GenreAsset,
+				)
 			: [];
 
 export const mapOriginal = <

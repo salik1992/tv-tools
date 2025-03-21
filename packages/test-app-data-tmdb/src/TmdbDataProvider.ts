@@ -1,9 +1,11 @@
 import { DataProvider } from '@salik1992/test-app-data/DataProvider';
 import type {
 	Asset,
+	AssetImages,
 	AssetMapping,
 	AssetType,
 	BrowseItem,
+	GenreAsset,
 	Id,
 	ImageSize,
 	ImageType,
@@ -13,6 +15,7 @@ import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
 	mapBaseMovieAsset,
 	mapConfiguration,
+	mapGenre,
 	mapMovieAsset,
 	mapPage,
 	mapTvAsset,
@@ -20,10 +23,11 @@ import {
 import type {
 	Configuration,
 	ConfigurationResponse,
-	DiscoverMapping,
+	TmdbAssetMapping,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbConfiguration,
+	TmdbGenres,
 	TmdbMovieAsset,
 	TmdbPagedResults,
 	TrendingTimeWindow,
@@ -43,8 +47,8 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	public override getImageUrl(
-		asset: Asset,
-		types: (keyof Asset['images'])[],
+		asset: AssetImages,
+		types: (keyof AssetImages['images'])[],
 		imageSize: ImageSize,
 	) {
 		if (!this.configuration) {
@@ -59,6 +63,9 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 				continue;
 			}
 			const imagePath = asset.images[type];
+			if (!imagePath) {
+				continue;
+			}
 			return `${this.configuration.images.base}${size.id}${imagePath}`;
 		}
 		return null;
@@ -88,6 +95,8 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 				return this.getDiscover(filter.type, page);
 			case 'trending':
 				return this.getTrending(filter.type, filter.timeWindow);
+			case 'genres':
+				return this.getGenres(filter.type);
 			default:
 				return { pages: 0 };
 		}
@@ -97,7 +106,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		type: AssetType,
 		id: Id,
 	): Promise<AssetMapping[typeof type]> {
-		const response = await this.fetch<DiscoverMapping[typeof type]>(
+		const response = await this.fetch<TmdbAssetMapping[typeof type]>(
 			`${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${id}`,
 		);
 		return type === 'movie'
@@ -125,16 +134,16 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	private async getDiscover(
 		type: 'movie' | 'series',
 		page: number,
-	): Promise<Paged<Asset>> {
+	): Promise<Paged<AssetMapping[typeof type]>> {
 		const pagedResponse = await this.fetch<
-			TmdbPagedResults<DiscoverMapping[typeof type]>
+			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?page=${page + 1}`);
 		return type === 'movie'
-			? mapPage<DiscoverMapping[typeof type]>(
+			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
 					page,
 					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
-			: mapPage<DiscoverMapping[typeof type]>(
+			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
 					page,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
@@ -143,19 +152,31 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	private async getTrending(
 		type: 'movie' | 'series',
 		timeWindow: TrendingTimeWindow = 'day',
-	): Promise<Paged<Asset>> {
+	): Promise<Paged<AssetMapping[typeof type]>> {
 		const pagedResponse = await this.fetch<
-			TmdbPagedResults<DiscoverMapping[typeof type]>
+			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`trending/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${timeWindow}`);
 		return type === 'movie'
-			? mapPage<DiscoverMapping[typeof type]>(
-					1,
+			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
+					0,
 					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
-			: mapPage<DiscoverMapping[typeof type]>(
-					1,
+			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
+					0,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
+	}
+
+	private async getGenres(
+		type: 'movie' | 'series',
+	): Promise<Paged<GenreAsset>> {
+		const response = await this.fetch<TmdbGenres>(
+			`genre/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/list`,
+		);
+		return {
+			pages: 1,
+			[0]: response.genres.map(mapGenre),
+		};
 	}
 
 	private async fetch<T>(url: string) {

@@ -1,6 +1,6 @@
 import type {
 	EpisodeAsset,
-	Genre,
+	GenreAsset,
 	Id,
 	ImageType,
 	MovieAsset,
@@ -35,23 +35,59 @@ export type Configuration = {
 	};
 };
 
+export type TmdbConfigurationFilters =
+	| {
+			filterBy: 'seasons';
+			seriesId: Id;
+			title: string;
+			pageItemType: SeasonAsset;
+	  }
+	| {
+			filterBy: 'episodes';
+			seasonId: Id;
+			title: string;
+			pageItemType: EpisodeAsset;
+	  }
+	| {
+			filterBy: 'discover';
+			type: 'movie';
+			title: string;
+			pageItemType: MovieAsset;
+	  }
+	| {
+			filterBy: 'discover';
+			type: 'series';
+			title: string;
+			pageItemType: SeriesAsset;
+	  }
+	| {
+			filterBy: 'trending';
+			type: 'movie';
+			timeWindow?: TrendingTimeWindow;
+			title: string;
+			pageItemType: MovieAsset;
+	  }
+	| {
+			filterBy: 'trending';
+			type: 'series';
+			timeWindow?: TrendingTimeWindow;
+			title: string;
+			pageItemType: SeriesAsset;
+	  }
+	| {
+			filterBy: 'genre';
+			id: Id;
+			type: 'movie' | 'series';
+			title: string;
+			pageItemType: GenreAsset;
+	  }
+	| {
+			filterBy: 'genres';
+			type: 'movie' | 'series';
+			title: string;
+			pageItemType: GenreAsset;
+	  };
+
 export type TmdbConfiguration = {
-	filter:
-		| { filterBy: 'seasons'; seriesId: Id; pageItemType: SeasonAsset }
-		| { filterBy: 'episodes'; seasonId: Id; pageItemType: EpisodeAsset }
-		| { filterBy: 'discover'; type: 'movie'; pageItemType: MovieAsset }
-		| { filterBy: 'discover'; type: 'series'; pageItemType: SeriesAsset }
-		| {
-				filterBy: 'trending';
-				type: 'movie';
-				timeWindow?: TrendingTimeWindow;
-				pageItemType: MovieAsset;
-		  }
-		| {
-				filterBy: 'trending';
-				type: 'series';
-				timeWindow?: TrendingTimeWindow;
-				pageItemType: SeriesAsset;
-		  }
-		| { filterBy: 'genre'; id: Id; pageItemType: Genre };
+	filter: TmdbConfigurationFilters;
 };
