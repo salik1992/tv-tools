@@ -74,7 +74,7 @@ export const Screen = ({
 			return closeMenu();
 		} else if (backNavigation && !withMenu) {
 			// @ts-expect-error: backNavigation is either a string or a number
-			navigate(backNavigation, { replace: backNavigation === '..' });
+			navigate(backNavigation);
 			return true;
 		}
 		return openMenu();

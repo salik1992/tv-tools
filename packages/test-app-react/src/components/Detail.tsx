@@ -65,7 +65,7 @@ export const Detail = () => {
 	const [scroll, setScroll] = useState(0);
 
 	return (
-		<Screen backNavigation="..">
+		<Screen backNavigation={-1}>
 			{loading && (
 				<ScreenCentered>
 					<H2>Loading...</H2>
