@@ -18,7 +18,7 @@ export interface RenderDataElement {
 	 * Index of data that should be rendered by the element. Please note,
 	 * that the index may point to undefined data. It is generally required
 	 * to still render the element for positional purposes and hide it with
-	 * either visibility or opaacity to not disturb the flow of elements.
+	 * either visibility or opacity to not disturb the flow of elements.
 	 */
 	dataIndex: number;
 	/**
@@ -75,14 +75,14 @@ export interface ListBehavior
 	 * Move the focus to the index in data. This function will clamp this value
 	 * between 0 and the current known data length.
 	 * @param index - the index to move to
-	 * @returns RenderData data for rendering after the move has been calculated
+	 * @returns true if the move was successful, false otherwise
 	 */
 	moveTo(index: number): boolean;
 	/**
 	 * Move the focus by diff in the index in data. This function will clamp the
 	 * resulting index between 0 and the current known data length.
 	 * @param diff - the difference by which it should move
-	 * @returns RenderData data for rendering after the move has been calculated
+	 * @returns true if the move was successful, false otherwise
 	 */
 	moveBy(diff: number, fromId?: string): boolean;
 	/**

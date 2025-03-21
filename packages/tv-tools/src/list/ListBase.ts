@@ -48,8 +48,6 @@ export abstract class ListBase<
 		 */
 		protected c: ListSetup<ListConfiguration>,
 	) {
-		const elementsLength =
-			c.dataLength > c.visibleElements ? c.visibleElements : c.dataLength;
 		// Creates the initial render data.
 		this.renderData = {
 			listOffset: 0,
@@ -57,7 +55,7 @@ export abstract class ListBase<
 			nextArrow: c.dataLength > 0,
 			elements: (() => {
 				const array = [];
-				for (let i = 0; i < elementsLength; i++) {
+				for (let i = 0; i < c.visibleElements; i++) {
 					const id = `${c.id}-${i}`;
 					array.push({
 						id,
@@ -107,7 +105,7 @@ export abstract class ListBase<
 	 * Move the focus by diff in the index in data. This function will clamp the
 	 * resulting index between 0 and the current known data length.
 	 * @param diff - the difference by which it should move
-	 * @returns RenderData data for rendering after the move has been calculated
+	 * @returns true if the move was successful, false otherwise
 	 */
 	public moveBy(diff: number, fromId?: string) {
 		const fromDataIndexElement = this.renderData.elements.find(
@@ -123,7 +121,7 @@ export abstract class ListBase<
 	 * Move the focus to the index in data. This function will clamp this value
 	 * between 0 and the current known data length.
 	 * @param index - the index to move to
-	 * @returns RenderData data for rendering after the move has been calculated
+	 * @returns true if the move was successful, false otherwise
 	 */
 	public moveTo(index: number) {
 		const newIndex = clamp(0, index, this.c.dataLength - 1);
