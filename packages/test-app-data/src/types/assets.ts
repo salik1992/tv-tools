@@ -31,6 +31,7 @@ export type Asset = {
 	type: AssetType;
 	id: Id;
 	title: string;
+	relatedAssetType?: AssetType;
 };
 
 export type AssetDescription = {
