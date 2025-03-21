@@ -6,6 +6,7 @@
     "exports": {
         "./*": "./dist/*/index.js",
         "./list/*": "./dist/list/*.js",
+        "./grid/*": "./dist/grid/*.js",
         "./utils/*": "./dist/utils/*.js"
     },
     "scripts": {
