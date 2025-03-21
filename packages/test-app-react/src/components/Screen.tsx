@@ -36,7 +36,7 @@ export const Screen = ({
 }: PropsWithChildren<{
 	withMenu?: boolean;
 	className?: string;
-	backNavigation?: string;
+	backNavigation?: string | number;
 }>) => {
 	const { focusContextValue, container, useOnLeft, useOnRight, useOnBack } =
 		useFocusContainer();
@@ -73,7 +73,8 @@ export const Screen = ({
 		if (isMenuVisible) {
 			return closeMenu();
 		} else if (backNavigation && !withMenu) {
-			navigate(backNavigation);
+			// @ts-expect-error: backNavigation is either a string or a number
+			navigate(backNavigation, { replace: backNavigation === '..' });
 			return true;
 		}
 		return openMenu();

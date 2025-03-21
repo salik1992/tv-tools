@@ -111,7 +111,26 @@ export const Tile = ({
 	const navigate = useNavigate();
 
 	const onPress = useCallback(() => {
-		navigate(`detail/${asset?.type}/${asset?.id}`);
+		if (!asset) {
+			return false;
+		}
+		switch (asset?.type) {
+			case 'genre':
+				navigate(
+					`/discover/${btoa(
+						JSON.stringify({
+							filterBy: 'genre',
+							id: asset.id,
+							type: 'movie',
+							title: asset.title,
+							relatedPageItem: 'movie',
+						}),
+					)}`,
+				);
+				break;
+			default:
+				navigate(`detail/${asset.type}/${asset.id}`);
+		}
 		return true;
 	}, [navigate, asset]);
 

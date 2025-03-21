@@ -7,7 +7,7 @@ export const menuItemToPath = (item: MenuItem) => {
 		case ScreenType.Detail:
 			return `/detail/${item.params[0]}/${item.params[1]}`;
 		case ScreenType.Discover:
-			return '/discover/' + btoa(JSON.stringify(item.params[0]));
+			return `/discover/${btoa(JSON.stringify(item.params[0]))}`;
 		default:
 			return `/${item.screen}`;
 	}

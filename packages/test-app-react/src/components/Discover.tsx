@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { RenderDataGroup } from '@salik1992/tv-tools/grid';
 import { BasicGrid } from '@salik1992/tv-tools/grid/BasicGrid';
@@ -71,8 +72,7 @@ const validateFilter = (value: unknown): ListDataConfiguration => {
 	}
 };
 
-export const Discover = () => {
-	const { filter } = useAssertedParams({ filter: validateFilter });
+export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
 	const { data, loading, error } = usePagedData(filter);
 
 	const gridConfiguration = useMemo(
@@ -109,7 +109,7 @@ export const Discover = () => {
 	);
 
 	return (
-		<StyledScreen>
+		<StyledScreen backNavigation={-1}>
 			<Header>{filter.title}</Header>
 			{loading && (
 				<ScreenCentered>
@@ -137,4 +137,11 @@ export const Discover = () => {
 			)}
 		</StyledScreen>
 	);
+};
+
+export const Discover = () => {
+	const { filter: key } = useParams();
+	const { filter } = useAssertedParams({ filter: validateFilter });
+
+	return <DiscoverInner key={key} filter={filter} />;
 };
