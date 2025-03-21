@@ -5,7 +5,6 @@ import {
 	useCallback,
 	useEffect,
 	useMemo,
-	useRef,
 	useState,
 } from 'react';
 import type { ControlEvent } from '@salik1992/tv-tools/focus';
@@ -77,7 +76,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 		useOnRight,
 		useOnBack,
 	} = useFocusContainer(id);
-	const dataIndex = useRef(0);
+	const [dataIndex, setDataIndex] = useState(0);
 
 	// Grid instance
 	const grid = useMemo(
@@ -99,8 +98,6 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 		}
 	}, [focusOnMount]);
 
-	console.log(renderData);
-
 	const onRenderData = useCallback(
 		(newRenderData: RenderData) => {
 			setRenderData(newRenderData);
@@ -110,7 +107,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 
 	const onDataIndex = useCallback(
 		(index: number) => {
-			dataIndex.current = index;
+			setDataIndex(index);
 			outerOnDataIndex?.(index);
 		},
 		[outerOnDataIndex, dataIndex],
@@ -120,26 +117,23 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 	const backward = useThrottledCallback(
 		(e?: ControlEvent) => {
 			return moveByOneInBetweenGroups ||
-				dataIndex.current % configuration.elementsPerGroup !== 0
+				dataIndex % configuration.elementsPerGroup !== 0
 				? grid.moveBy(-1, (e?.target as HTMLElement | undefined)?.id)
 				: false;
 		},
-		[grid, renderData],
+		[grid, renderData, dataIndex],
 		{ throttledReturn: true, limitMs: throttleMs },
 	);
 	const backwardJump = useThrottledCallback(
 		(e?: ControlEvent) => {
-			return !isFirstGroup(
-				dataIndex.current,
-				configuration.elementsPerGroup,
-			)
+			return !isFirstGroup(dataIndex, configuration.elementsPerGroup)
 				? grid.moveBy(
 						-configuration.elementsPerGroup,
 						(e?.target as HTMLElement | undefined)?.id,
 					)
 				: false;
 		},
-		[grid, renderData],
+		[grid, renderData, dataIndex],
 		{ throttledReturn: true, limitMs: throttleMs },
 	);
 
@@ -147,18 +141,18 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 	const forward = useThrottledCallback(
 		(e?: ControlEvent) => {
 			return moveByOneInBetweenGroups ||
-				dataIndex.current % configuration.elementsPerGroup !==
+				dataIndex % configuration.elementsPerGroup !==
 					configuration.elementsPerGroup - 1
 				? grid.moveBy(1, (e?.target as HTMLElement | undefined)?.id)
 				: false;
 		},
-		[grid, renderData],
+		[grid, renderData, dataIndex],
 		{ throttledReturn: true, limitMs: throttleMs },
 	);
 	const forwardJump = useThrottledCallback(
 		(e?: ControlEvent) => {
 			return !isLastGroup(
-				dataIndex.current,
+				dataIndex,
 				configuration.elementsPerGroup,
 				configuration.dataLength,
 			)
@@ -168,7 +162,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 					)
 				: false;
 		},
-		[grid, renderData],
+		[grid, renderData, dataIndex],
 		{ throttledReturn: true, limitMs: throttleMs },
 	);
 
@@ -186,12 +180,15 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 	}
 
 	useOnBack(() => {
-		if (scrollToTopWithBack) {
+		if (
+			scrollToTopWithBack &&
+			!isFirstGroup(dataIndex, configuration.elementsPerGroup)
+		) {
 			grid.moveTo(0);
 			return true;
 		}
 		return false;
-	}, [grid, scrollToTopWithBack]);
+	}, [grid, scrollToTopWithBack, dataIndex]);
 
 	// Scrolling the wheel with pointer wheel.
 	const onWheel = useThrottledCallback(

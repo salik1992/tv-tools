@@ -144,7 +144,6 @@ export class BasicGrid extends GridBase<{
 			navigatableCount: this.c.config.navigatableGroups,
 			groupSize: this.c.elementsPerGroup,
 		});
-		console.log(moveResult, newIndex);
 		const isAnimated = this.isAnimated();
 		const { length } = this.getAllElements();
 		// Base page is the smallest page of data, the page means rotating
