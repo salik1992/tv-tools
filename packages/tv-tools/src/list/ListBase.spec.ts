@@ -9,6 +9,13 @@ class List extends ListBase<{}> {
 	move = jest.fn(() => this.renderData);
 }
 
+const element = (id: string, dataIndex: number, offset: number) => ({
+	dataIndex,
+	id,
+	offset,
+	onFocus: expect.any(Function),
+});
+
 describe('ListBase', () => {
 	const container = new FocusContainer();
 	const list = new List(container, {
@@ -25,36 +32,11 @@ describe('ListBase', () => {
 
 	const listData = {
 		elements: [
-			{
-				dataIndex: 0,
-				id: 'list-0',
-				offset: 0,
-				onFocus: expect.any(Function),
-			},
-			{
-				dataIndex: 1,
-				id: 'list-1',
-				offset: 0,
-				onFocus: expect.any(Function),
-			},
-			{
-				dataIndex: 2,
-				id: 'list-2',
-				offset: 0,
-				onFocus: expect.any(Function),
-			},
-			{
-				dataIndex: 3,
-				id: 'list-3',
-				offset: 0,
-				onFocus: expect.any(Function),
-			},
-			{
-				dataIndex: 4,
-				id: 'list-4',
-				offset: 0,
-				onFocus: expect.any(Function),
-			},
+			element('list-0', 0, 0),
+			element('list-1', 1, 0),
+			element('list-2', 2, 0),
+			element('list-3', 3, 0),
+			element('list-4', 4, 0),
 		],
 		listOffset: 0,
 		nextArrow: true,
@@ -90,7 +72,7 @@ describe('ListBase', () => {
 		expect(focusSpy).not.toHaveBeenCalledTimes(5);
 	});
 
-	it('should move backwards while it can', () => {
+	it('should keep moving backwards while it can', () => {
 		expect(list.moveBy(-1)).toBe(true);
 		expect(focusSpy).toHaveBeenNthCalledWith(1, 'list-3', {
 			preventScroll: true,
