@@ -138,6 +138,19 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		);
 	}
 
+	private filterToQueryParams(
+		filter: Record<string, string | number | boolean | undefined>,
+	) {
+		return toKeys(filter)
+			.map((key) =>
+				typeof filter[key] !== 'undefined'
+					? `${key}=${encodeURIComponent(filter[key])}`
+					: null,
+			)
+			.filter((s) => s !== null)
+			.join('&');
+	}
+
 	private async getDiscover(
 		type: 'movie' | 'series',
 		filter: {
@@ -145,12 +158,10 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 			with_genres?: Id;
 		},
 	): Promise<Paged<AssetMapping[typeof type]>> {
-		const filterSearchParams = toKeys(filter)
-			.map((key) => `${key}=${filter[key]}`)
-			.join('&');
+		const filterQueryParams = this.filterToQueryParams(filter);
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<TmdbAssetMapping[typeof type]>
-		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterSearchParams}`);
+		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterQueryParams}`);
 		return type === 'movie'
 			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
 					filter.page - 1,
