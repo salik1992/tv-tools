@@ -50,7 +50,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 
 	public override getImageUrl(
 		asset: AssetImages,
-		types: (keyof AssetImages['images'])[],
+		types: ImageType[],
 		imageSize: ImageSize,
 	) {
 		if (!this.configuration) {
