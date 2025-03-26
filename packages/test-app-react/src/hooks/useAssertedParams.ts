@@ -6,10 +6,15 @@ export const useAssertedParams = <
 	checks: Checks,
 ) => {
 	const params = useParams();
+	const validatedParams = {} as {
+		[K in keyof Checks]: ReturnType<Checks[K]>;
+	};
 	for (const paramName in checks) {
 		const paramValue = params[paramName];
 		const validate = checks[paramName];
-		validate(paramValue);
+		validatedParams[paramName] = validate(paramValue) as ReturnType<
+			Checks[typeof paramName]
+		>;
 	}
-	return params as { [K in keyof Checks]: ReturnType<Checks[K]> };
+	return validatedParams;
 };

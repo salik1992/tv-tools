@@ -7,6 +7,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
+import { isGenre } from '@salik1992/test-app-data/guards';
 import type { Asset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 import { ImageWithFallback } from './Image';
@@ -25,6 +26,20 @@ const Image = styled(ImageWithFallback)`
 	background-position: center center;
 	width: ${IMAGE_WIDTH}px;
 	height: ${IMAGE_HEIGHT}px;
+`;
+
+const ColorBox = styled.div`
+	background-color: ${Colors.bg.action};
+	color: ${Colors.bg.primary};
+	width: ${IMAGE_WIDTH}px;
+	height: ${IMAGE_HEIGHT}px;
+	box-sizing: border-box;
+	padding-top: ${1.5 * Typography.row}px;
+	text-align: center;
+`;
+
+const ColorBoxText = styled(P)`
+	${oneLineEllipsis}
 `;
 
 const Title = styled(P)`
@@ -47,6 +62,38 @@ const Wrap = styled(Interactable)`
 	}
 `;
 
+const TileWithImage = ({ asset }: { asset?: Asset }) => {
+	const dataProvider = useDataProvider();
+
+	return (
+		<>
+			<Image
+				src={
+					asset
+						? dataProvider.getImageUrl(
+								asset,
+								['backdrop', 'still', 'poster'],
+								{ width: WIDTH },
+							)
+						: ''
+				}
+			/>
+			<Title>{asset?.title ?? '-'}</Title>
+		</>
+	);
+};
+
+const TileWithoutImage = ({ asset }: { asset?: Asset }) => {
+	return (
+		<>
+			<ColorBox>
+				<ColorBoxText>{asset?.title.toLowerCase() ?? '-'}</ColorBoxText>
+			</ColorBox>
+			<Title>{asset?.title ?? '-'}</Title>
+		</>
+	);
+};
+
 export const Tile = ({
 	asset,
 	id,
@@ -61,11 +108,29 @@ export const Tile = ({
 	>['style'];
 	onFocus?: (event: FocusEvent) => void;
 }) => {
-	const dataProvider = useDataProvider();
 	const navigate = useNavigate();
 
 	const onPress = useCallback(() => {
-		navigate(`detail/${asset?.type}/${asset?.id}`);
+		if (!asset) {
+			return false;
+		}
+		switch (asset?.type) {
+			case 'genre':
+				navigate(
+					`/discover/${btoa(
+						JSON.stringify({
+							filterBy: 'genre',
+							id: asset.id,
+							type: asset.relatedAssetType,
+							title: asset.title,
+							relatedPageItem: asset.relatedAssetType,
+						}),
+					)}`,
+				);
+				break;
+			default:
+				navigate(`detail/${asset.type}/${asset.id}`);
+		}
 		return true;
 	}, [navigate, asset]);
 
@@ -76,18 +141,11 @@ export const Tile = ({
 			onPress={onPress}
 			onFocus={onFocus}
 		>
-			<Image
-				src={
-					asset
-						? dataProvider.getImageUrl(
-								asset,
-								['backdrop', 'still'],
-								{ width: WIDTH },
-							)
-						: ''
-				}
-			/>
-			<Title>{asset?.title ?? '-'}</Title>
+			{asset && isGenre(asset) ? (
+				<TileWithoutImage asset={asset} />
+			) : (
+				<TileWithImage asset={asset} />
+			)}
 		</Wrap>
 	);
 };

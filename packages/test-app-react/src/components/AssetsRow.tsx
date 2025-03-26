@@ -2,13 +2,12 @@ import { type FocusEvent, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
-import { Performance } from '@salik1992/tv-tools/utils/Performance';
 import { List } from '@salik1992/tv-tools-react/list';
 import { type ListDataConfiguration } from '../data';
 import { usePagedData } from '../hooks/usePagedData';
 import { AssetsRowDetail } from './AssetsRowDetail';
 import { MouseArrows } from './MouseArrows';
-import { Transition } from './Theme';
+import { Performance, Transition } from './Theme';
 import { Tile } from './Tile';
 import { H2, P, Typography } from './Typography';
 
@@ -23,7 +22,7 @@ const Wrap = styled.div`
 		position: relative;
 		white-space: nowrap;
 		overflow: hidden;
-		${MouseArrows}
+		${MouseArrows('horizontal')}
 
 		.mouse-arrow {
 			height: ${6 * Typography.row}px;
@@ -56,14 +55,12 @@ const Wrap = styled.div`
 export const AssetsRow = ({
 	id,
 	listData,
-	header,
 	showDetail,
 	focusOnMount = false,
 	onFocus,
 }: {
 	id?: string;
 	listData: ListDataConfiguration;
-	header: string;
 	showDetail: boolean;
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
@@ -79,12 +76,12 @@ export const AssetsRow = ({
 		[setFocusedIndex],
 	);
 
-	const hasData = useMemo(() => (data[1]?.length ?? 0) > 0, [data[1]]);
+	const hasData = useMemo(() => (data[0]?.length ?? 0) > 0, [data[0]]);
 
 	const listConfiguration = useMemo(
 		() => ({
-			performance: Performance.ANIMATED,
-			dataLength: data[1]?.length,
+			performance: Performance,
+			dataLength: data[0]?.length,
 			visibleElements: 9,
 			config: {
 				navigatableElements: 7,
@@ -94,7 +91,7 @@ export const AssetsRow = ({
 				},
 			},
 		}),
-		[data[1]?.length],
+		[data[0]?.length],
 	);
 
 	const renderElement = useCallback(
@@ -102,19 +99,19 @@ export const AssetsRow = ({
 			<Tile
 				id={id}
 				key={id}
-				asset={data[1][dataIndex]}
+				asset={data[0][dataIndex]}
 				style={{
 					transform: `translateX(${offset}px)`,
 				}}
 				onFocus={onFocus}
 			/>
 		),
-		[data[1]],
+		[data[0]],
 	);
 
 	return (
 		<Wrap onFocus={onFocus}>
-			<Header>{header}</Header>
+			<Header>{listData.title}</Header>
 			{loading && <P>Loading...</P>}
 			{error !== null && data.pages === 0 && (
 				<P>There was an error loading the data</P>
@@ -132,7 +129,7 @@ export const AssetsRow = ({
 					/>
 					<AssetsRowDetail
 						visible={showDetail}
-						asset={data[1][focusedIndex]}
+						asset={data[0][focusedIndex]}
 					/>
 				</>
 			)}

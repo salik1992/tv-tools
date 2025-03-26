@@ -3,14 +3,14 @@ import type { IEventListener } from '../utils/EventListener';
 import type { Performance } from '../utils/Performance';
 
 /**
- * Abstract information about elements that should be rendered by the UI.
- * The lists use render window and they reuse elements for more data.
+ * Abstract information about eleement that should be rendered by the UI.
+ * The grids use render window and they reuse elements for more data.
  */
 export interface RenderDataElement {
 	/**
 	 * ID to be passed as `id` attribute to HTMLElement. This is required
 	 * to recognize the current focused element in order to know where to
-	 * navigate in the list. It will also be used by focus management to
+	 * navigate in the grid. It will also be used by focus management to
 	 * simplify debugging.
 	 */
 	id: string;
@@ -22,29 +22,45 @@ export interface RenderDataElement {
 	 */
 	dataIndex: number;
 	/**
-	 * Offset in terms of pixels that the element should be offset by.
-	 * This is required for ANIMATED version of lists because the reused
-	 * elements are being offset behind the current elements.
-	 */
-	offset: number;
-	/**
 	 * Listener for the element for when it gains a focus.
 	 */
 	onFocus: <T extends { target: null | EventTarget }>(event: T) => void;
 }
 
 /**
- * Information of how to render the list.
+ * Abstract information about groups that should be rendered by the UI.
+ * The grids use render window and they reuse groups for more data.
  */
-export interface RenderData {
+export interface RenderDataGroup {
+	/**
+	 * ID of the group. Not necessary needed to pass to the HTMLElement.
+	 * But doing so may help with debugging and understanding the structure.
+	 */
+	id: string;
 	/**
 	 * The elements to render.
 	 */
 	elements: RenderDataElement[];
 	/**
-	 * The offset of the list to create the effect of scrolling in pixels.
+	 * Offset in terms of pixels that the group should be offset by.
+	 * This is required for ANIMATED version of grids because the reused
+	 * groups are being offset behind the current elements.
 	 */
-	listOffset: number;
+	offset: number;
+}
+
+/**
+ * Information of how to render the grid.
+ */
+export interface RenderData {
+	/**
+	 * The groups to render.
+	 */
+	groups: RenderDataGroup[];
+	/**
+	 * The offset of the grid to create the effect of scrolling in pixels.
+	 */
+	gridOffset: number;
 	/**
 	 * Whether the previous arrow for pointer navigation should be visible.
 	 */
@@ -56,15 +72,15 @@ export interface RenderData {
 }
 
 /**
- * Interface for adding/removing elements from data passed to list.
- * This will help to keep the list aligned to the same data if possible.
+ * Interface for adding/removing elements from data passed to grid.
+ * This will help to keep the grid aligned to the same data if possible.
  */
 export type DataChange = { start?: number; end?: number };
 
 /**
- * List implementation interface.
+ * Grid implementation interface.
  */
-export interface ListBehavior
+export interface GridBehavior
 	extends IEventListener<{ dataIndex: number; renderData: RenderData }> {
 	/**
 	 * Get current render data.
@@ -94,42 +110,46 @@ export interface ListBehavior
 }
 
 /**
- * Configuration of lists that is needed for calculations.
+ * Configuration of grids that is needed for calculations.
  */
-export interface ListSetup<ListConfiguration extends Record<string, unknown>> {
+export interface GridSetup<GridConfiguration extends Record<string, unknown>> {
 	/**
-	 * Id of the List - this is usually provided by the related FocusContainer.
+	 * Id of the Grid - this is usually provided by the related FocusContainer.
 	 */
 	id: string;
 	/**
-	 * The performance in which the list should run.
+	 * The performance in which the grid should run.
 	 */
 	performance: Performance;
 	/**
-	 * The length of data being rendered in the list.
+	 * The length of data being rendered in the grid.
 	 */
 	dataLength: number;
 	/**
-	 * The maximum amount of elements that are being rendered at once.
+	 * The maximum amount of groups that are being rendered at once.
 	 */
-	visibleElements: number;
+	visibleGroups: number;
+	/**
+	 * The number of elements per group.
+	 */
+	elementsPerGroup: number;
 	/**
 	 * The initial index in data to focus.
 	 */
 	initialIndex?: number;
 	/**
-	 * ListImplementation specific configuration.
+	 * GridImplementation specific configuration.
 	 */
-	config: ListConfiguration;
+	config: GridConfiguration;
 }
 
 /**
- * Interface that creates an instance of ListBehavior.
+ * Interface that creates an instance of GridBehavior.
  */
-export interface ListImplementation<
-	Configuration extends ListSetup<Record<string, unknown>> = ListSetup<
+export interface GridImplementation<
+	Configuration extends GridSetup<Record<string, unknown>> = GridSetup<
 		Record<string, unknown>
 	>,
 > {
-	new (focus: FocusContainer, configuration: Configuration): ListBehavior;
+	new (focus: FocusContainer, configuration: Configuration): GridBehavior;
 }

@@ -106,9 +106,8 @@ export const Menu = ({
 		() =>
 			menuItems.map((item) => () => {
 				const itemPath = menuItemToPath(item);
-				if (getCurrentPath() === itemPath) {
-					onMouseClose();
-				} else {
+				onMouseClose();
+				if (getCurrentPath() !== itemPath) {
 					navigate(itemPath, { replace: true });
 				}
 				return true;

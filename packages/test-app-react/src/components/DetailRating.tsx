@@ -1,8 +1,8 @@
-import { Asset } from '@salik1992/test-app-data/types';
+import { AssetRating } from '@salik1992/test-app-data/types';
 import { DetailLabel } from './DetailLabel';
 import { P } from './Typography';
 
-export const DetailRating = ({ asset }: { asset: Asset }) =>
+export const DetailRating = ({ asset }: { asset: AssetRating }) =>
 	asset.rating && (
 		<P>
 			<DetailLabel>Rating: </DetailLabel>

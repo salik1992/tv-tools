@@ -65,7 +65,7 @@ export const Detail = () => {
 	const [scroll, setScroll] = useState(0);
 
 	return (
-		<Screen backNavigation="..">
+		<Screen backNavigation={-1}>
 			{loading && (
 				<ScreenCentered>
 					<H2>Loading...</H2>
@@ -80,9 +80,13 @@ export const Detail = () => {
 			{asset && (
 				<VerticalFocus>
 					<BackdropImage
-						$src={dataProvider.getImageUrl(asset, ['backdrop'], {
-							width: 1920,
-						})}
+						$src={dataProvider.getImageUrl(
+							asset,
+							['backdrop', 'still', 'poster'],
+							{
+								width: 1920,
+							},
+						)}
 					/>
 					<InnerWrap>
 						<Scroller

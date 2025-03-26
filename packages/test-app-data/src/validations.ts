@@ -45,6 +45,13 @@ export function validatePerson(asset: Asset) {
 	return asset as PersonAsset;
 }
 
+export function validateGenre(asset: Asset) {
+	if (asset.type !== 'genre') {
+		throw new Error('Asset is not a genre.');
+	}
+	return asset;
+}
+
 export function validateId(id: unknown) {
 	if (typeof id !== 'string') {
 		throw new Error(`"${id}" is not a valid id.`);

@@ -298,7 +298,7 @@ describe('BasicList', () => {
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
 				offsets: [0, 0, 0, 0, 0, 0, 0],
 			});
-			list.moveBy(-1);
+			expect(list.moveBy(-1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
 				listOffset: 0,
@@ -307,6 +307,7 @@ describe('BasicList', () => {
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
 				offsets: [0, 0, 0, 0, 0, 0, 0],
 			});
+			expect(list.moveBy(-1)).toBe(false);
 		});
 
 		it('should manage jumps', () => {

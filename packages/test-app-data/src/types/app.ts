@@ -14,12 +14,12 @@ export enum ListType {
 
 export type ConfigurationFilter = {
 	[key: string]: unknown;
+	title: string;
 	pageItemType: unknown;
 };
 
 export type BrowseItem<ListData extends ConfigurationFilter> = {
 	id: Id;
-	title: string;
 	listType: ListType;
 	listData: ListData;
 };

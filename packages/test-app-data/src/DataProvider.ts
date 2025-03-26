@@ -6,6 +6,7 @@ import type {
 	ConfigurationFilter,
 	Id,
 	ImageSize,
+	ImageType,
 	MenuItem,
 	Paged,
 } from './types';
@@ -19,7 +20,7 @@ export abstract class DataProvider<
 
 	public abstract getImageUrl(
 		asset: Asset,
-		types: (keyof Asset['images'])[],
+		types: ImageType[],
 		size: ImageSize,
 	): string | null;
 

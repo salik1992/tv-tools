@@ -1,2 +1,2 @@
 export { TmdbDataProvider } from './TmdbDataProvider';
-export type { TmdbConfiguration } from './types';
+export type { TmdbConfiguration, TmdbConfigurationFilters } from './types';

@@ -21,7 +21,7 @@ export const usePagedData = (listData: ListDataConfiguration) => {
 		try {
 			const pageData = await dataProvider.getPagedAssets(
 				listData,
-				requestedPages.current,
+				requestedPages.current - 1,
 			);
 			if (mounted.current) {
 				setData((currentData) => ({

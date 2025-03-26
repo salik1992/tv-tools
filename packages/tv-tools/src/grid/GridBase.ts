@@ -2,14 +2,14 @@ import type { FocusContainer } from '../focus';
 import { EventListener } from '../utils/EventListener';
 import { Performance } from '../utils/Performance';
 import { clamp } from '../utils/clamp';
-import type { DataChange, ListBehavior, ListSetup, RenderData } from './types';
+import type { DataChange, GridBehavior, GridSetup, RenderData } from './types';
 
 /**
- * The base for all ListBehavior implementations.
+ * The base for all GridBehavior implementations.
  */
-export abstract class ListBase<
-	ListConfiguration extends Record<string, unknown>,
-> implements ListBehavior
+export abstract class GridBase<
+	GridConfiguration extends Record<string, unknown>,
+> implements GridBehavior
 {
 	/**
 	 * Handles listeners to events and their management.
@@ -39,32 +39,43 @@ export abstract class ListBase<
 
 	constructor(
 		/**
-		 * FocusContainer that is rendered at the base of the list and provides focus
-		 * functionality for the list.
+		 * FocusContainer that is rendered at the base of the grid and provides focus
+		 * functionality for the grid.
 		 */
 		protected focus: FocusContainer,
 		/**
-		 * Configuration of the list.
+		 * Configuration of the grid.
 		 */
-		protected c: ListSetup<ListConfiguration>,
+		protected c: GridSetup<GridConfiguration>,
 	) {
 		// Creates the initial render data.
 		this.renderData = {
-			listOffset: 0,
+			gridOffset: 0,
 			previousArrow: false,
 			nextArrow: c.dataLength > 0,
-			elements: (() => {
-				const array = [];
-				for (let i = 0; i < c.visibleElements; i++) {
-					const id = `${c.id}-${i}`;
-					array.push({
-						id,
-						dataIndex: i,
+			groups: (() => {
+				const groups = [];
+				for (let i = 0; i < c.visibleGroups; i++) {
+					const groupId = `${c.id}-g${i}`;
+					groups.push({
+						id: groupId,
 						offset: 0,
-						onFocus: this.getOnFocusForElement(id),
+						elements: (() => {
+							const elements = [];
+							for (let j = 0; j < c.elementsPerGroup; j++) {
+								const id = `${groupId}-e${j}`;
+								elements.push({
+									id,
+									dataIndex: i * c.elementsPerGroup + j,
+									offset: 0,
+									onFocus: this.getOnFocusForElement(id),
+								});
+							}
+							return elements;
+						})(),
 					});
 				}
-				return array;
+				return groups;
 			})(),
 		};
 		// Move to the initial index with a moveTo function to reuse
@@ -108,7 +119,7 @@ export abstract class ListBase<
 	 * @returns true if the move was successful, false otherwise
 	 */
 	public moveBy(diff: number, fromId?: string) {
-		const fromDataIndexElement = this.renderData.elements.find(
+		const fromDataIndexElement = this.getAllElements().find(
 			({ id }) => id === fromId,
 		);
 		if (fromDataIndexElement) {
@@ -144,7 +155,7 @@ export abstract class ListBase<
 	protected abstract move(newIndex: number): RenderData;
 
 	/**
-	 * Util to return whether the list should animate the scroll.
+	 * Util to return whether the grid should animate the scroll.
 	 * @returns boolean - true for animate, false for not
 	 */
 	protected isAnimated() {
@@ -161,7 +172,7 @@ export abstract class ListBase<
 			this.focusListeners.get(id) ??
 			(<T extends { target: null | EventTarget }>(event: T) => {
 				if ((event.target as HTMLElement).id === id) {
-					const element = this.renderData.elements.find(
+					const element = this.getAllElements().find(
 						(e) => e.id === id,
 					);
 					if (element) {
@@ -176,11 +187,19 @@ export abstract class ListBase<
 	}
 
 	/**
+	 * Get all elements that are rendered.
+	 * @returns all elements that are rendered
+	 */
+	protected getAllElements() {
+		return this.renderData.groups.flatMap((group) => group.elements);
+	}
+
+	/**
 	 * Focuses the child element based by dataIndex that is rendered.
 	 * @param dataIndexToFocus - index in data that should be focused
 	 */
 	private focusChildOfDataIndex(dataIndexToFocus: number) {
-		const element = this.renderData.elements.find(
+		const element = this.getAllElements().find(
 			({ dataIndex }) => dataIndex === dataIndexToFocus,
 		);
 		if (element) {

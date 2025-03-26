@@ -7,7 +7,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
-import { Asset } from '@salik1992/test-app-data/types';
+import { Asset, AssetDescription } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 import { ImageWithFallback } from './Image';
 import { Border, Colors, Transition } from './Theme';
@@ -62,7 +62,7 @@ export const Hero = ({
 	style,
 	onFocus,
 }: {
-	asset?: Asset;
+	asset?: Asset & AssetDescription;
 	id?: string;
 	style?: DetailedHTMLProps<
 		HTMLAttributes<HTMLDivElement>,

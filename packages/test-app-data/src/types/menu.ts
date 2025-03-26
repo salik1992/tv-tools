@@ -1,4 +1,4 @@
-import type { ScreenType } from './app';
+import type { ConfigurationFilter, ScreenType } from './app';
 import type { AssetType, Id } from './assets';
 
 export type MenuItem = {
@@ -15,7 +15,7 @@ export type MenuItem = {
 	  }
 	| {
 			screen: ScreenType.Discover;
-			params: [string];
+			params: [ConfigurationFilter];
 	  }
 	| {
 			screen: ScreenType.Search;

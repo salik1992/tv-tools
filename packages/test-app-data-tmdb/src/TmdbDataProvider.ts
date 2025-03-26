@@ -1,9 +1,12 @@
+import { toKeys } from '@salik1992/tv-tools/utils/toKeys';
 import { DataProvider } from '@salik1992/test-app-data/DataProvider';
 import type {
 	Asset,
+	AssetImages,
 	AssetMapping,
 	AssetType,
 	BrowseItem,
+	GenreAsset,
 	Id,
 	ImageSize,
 	ImageType,
@@ -13,6 +16,7 @@ import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
 	mapBaseMovieAsset,
 	mapConfiguration,
+	mapGenre,
 	mapMovieAsset,
 	mapPage,
 	mapTvAsset,
@@ -20,10 +24,12 @@ import {
 import type {
 	Configuration,
 	ConfigurationResponse,
-	DiscoverMapping,
+	TmdbAssetMapping,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbConfiguration,
+	TmdbConfigurationFilters,
+	TmdbGenres,
 	TmdbMovieAsset,
 	TmdbPagedResults,
 	TrendingTimeWindow,
@@ -43,8 +49,8 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	public override getImageUrl(
-		asset: Asset,
-		types: (keyof Asset['images'])[],
+		asset: AssetImages,
+		types: ImageType[],
 		imageSize: ImageSize,
 	) {
 		if (!this.configuration) {
@@ -59,6 +65,9 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 				continue;
 			}
 			const imagePath = asset.images[type];
+			if (!imagePath) {
+				continue;
+			}
 			return `${this.configuration.images.base}${size.id}${imagePath}`;
 		}
 		return null;
@@ -80,14 +89,21 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	public override async getPagedAssets(
-		filter: TmdbConfiguration['filter'],
+		filter: TmdbConfigurationFilters,
 		page = 0,
 	): Promise<Paged<Asset>> {
 		switch (filter.filterBy) {
 			case 'discover':
-				return this.getDiscover(filter.type, page);
+				return this.getDiscover(filter.type, { page: page + 1 });
 			case 'trending':
 				return this.getTrending(filter.type, filter.timeWindow);
+			case 'genres':
+				return this.getGenres(filter.type);
+			case 'genre':
+				return this.getDiscover(filter.type, {
+					page: page + 1,
+					with_genres: filter.id,
+				});
 			default:
 				return { pages: 0 };
 		}
@@ -97,7 +113,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		type: AssetType,
 		id: Id,
 	): Promise<AssetMapping[typeof type]> {
-		const response = await this.fetch<DiscoverMapping[typeof type]>(
+		const response = await this.fetch<TmdbAssetMapping[typeof type]>(
 			`${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${id}`,
 		);
 		return type === 'movie'
@@ -122,20 +138,37 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		);
 	}
 
+	private filterToQueryParams(
+		filter: Record<string, string | number | boolean | undefined>,
+	) {
+		return toKeys(filter)
+			.map((key) =>
+				typeof filter[key] !== 'undefined'
+					? `${key}=${encodeURIComponent(filter[key])}`
+					: null,
+			)
+			.filter((s) => s !== null)
+			.join('&');
+	}
+
 	private async getDiscover(
 		type: 'movie' | 'series',
-		page: number,
-	): Promise<Paged<Asset>> {
+		filter: {
+			page: number;
+			with_genres?: Id;
+		},
+	): Promise<Paged<AssetMapping[typeof type]>> {
+		const filterQueryParams = this.filterToQueryParams(filter);
 		const pagedResponse = await this.fetch<
-			TmdbPagedResults<DiscoverMapping[typeof type]>
-		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?page=${page + 1}`);
+			TmdbPagedResults<TmdbAssetMapping[typeof type]>
+		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterQueryParams}`);
 		return type === 'movie'
-			? mapPage<DiscoverMapping[typeof type]>(
-					page,
+			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
+					filter.page - 1,
 					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
-			: mapPage<DiscoverMapping[typeof type]>(
-					page,
+			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
+					filter.page - 1,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
 	}
@@ -143,19 +176,31 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	private async getTrending(
 		type: 'movie' | 'series',
 		timeWindow: TrendingTimeWindow = 'day',
-	): Promise<Paged<Asset>> {
+	): Promise<Paged<AssetMapping[typeof type]>> {
 		const pagedResponse = await this.fetch<
-			TmdbPagedResults<DiscoverMapping[typeof type]>
+			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`trending/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${timeWindow}`);
 		return type === 'movie'
-			? mapPage<DiscoverMapping[typeof type]>(
-					1,
+			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
+					0,
 					mapBaseMovieAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
-			: mapPage<DiscoverMapping[typeof type]>(
-					1,
+			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
+					0,
 					mapTvAsset,
 				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
+	}
+
+	private async getGenres(
+		type: 'movie' | 'series',
+	): Promise<Paged<GenreAsset>> {
+		const response = await this.fetch<TmdbGenres>(
+			`genre/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/list`,
+		);
+		return {
+			pages: 1,
+			[0]: response.genres.map(mapGenre(type)),
+		};
 	}
 
 	private async fetch<T>(url: string) {

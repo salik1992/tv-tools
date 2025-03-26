@@ -1,11 +1,14 @@
+import { ImageType } from './images';
+
 export type Id = string;
 
-export type AssetType = 'movie' | 'series' | 'season' | 'episode' | 'person';
-
-export type Genre = {
-	id: Id;
-	title: string;
-};
+export type AssetType =
+	| 'movie'
+	| 'series'
+	| 'season'
+	| 'episode'
+	| 'person'
+	| 'genre';
 
 export type Country = {
 	iso_3166_1: string;
@@ -28,15 +31,14 @@ export type Asset = {
 	type: AssetType;
 	id: Id;
 	title: string;
+	relatedAssetType?: AssetType;
+};
+
+export type AssetDescription = {
 	description: string;
-	original: {
-		language: string;
-		title: string;
-	};
-	images: {
-		backdrop: string;
-		poster: string;
-	};
+};
+
+export type AssetRating = {
 	rating?: {
 		value: number;
 		unit: string;
@@ -44,51 +46,86 @@ export type Asset = {
 	};
 };
 
-export type MovieAsset = Asset & {
-	type: 'movie';
-	genres: Genre[];
-	adult: boolean;
-	releaseDate: string;
-	hasVideo: boolean;
-	collection?: Id;
-	budget?: number;
-	productionCompanies?: ProductionCompany[];
-	countries?: Country[];
-	revenue?: number;
-	runtime?: number;
-	languages?: Language[];
+export type AssetImages = {
+	images: Partial<Record<ImageType, string>>;
 };
 
-export type SeriesAsset = Asset & {
-	type: 'series';
-	genres: Genre[];
-	releaseDate: string;
-	seasons: Id[];
-};
-
-export type SeasonAsset = Asset & {
-	type: 'season';
-	episodes: Id[];
-};
-
-export type EpisodeAsset = Asset & {
-	type: 'episode';
-	genres: Genre[];
-	adult: boolean;
-	releaseDate: string;
-	hasVideo: boolean;
-};
-
-export type PersonAsset = Asset & {
-	type: 'person';
-	birth: string;
-	death?: string;
-	knownFor: {
-		type: AssetType;
-		id: Id;
+export type AssetOriginal = {
+	original: {
+		language: string;
 		title: string;
-		role: string;
-	}[];
+	};
+};
+
+export type MovieAsset = Asset &
+	AssetDescription &
+	AssetImages &
+	AssetOriginal &
+	AssetRating & {
+		type: 'movie';
+		genres: GenreAsset[];
+		adult: boolean;
+		releaseDate: string;
+		hasVideo: boolean;
+		collection?: Id;
+		budget?: number;
+		productionCompanies?: ProductionCompany[];
+		countries?: Country[];
+		revenue?: number;
+		runtime?: number;
+		languages?: Language[];
+	};
+
+export type SeriesAsset = Asset &
+	AssetDescription &
+	AssetImages &
+	AssetOriginal &
+	AssetRating & {
+		type: 'series';
+		genres: GenreAsset[];
+		releaseDate: string;
+		seasons: Id[];
+	};
+
+export type SeasonAsset = Asset &
+	AssetDescription &
+	AssetImages &
+	AssetOriginal &
+	AssetRating & {
+		type: 'season';
+		episodes: Id[];
+	};
+
+export type EpisodeAsset = Asset &
+	AssetDescription &
+	AssetImages &
+	AssetOriginal &
+	AssetRating & {
+		type: 'episode';
+		genres: GenreAsset[];
+		adult: boolean;
+		releaseDate: string;
+		hasVideo: boolean;
+	};
+
+export type PersonAsset = Asset &
+	AssetDescription &
+	AssetImages &
+	AssetOriginal &
+	AssetRating & {
+		type: 'person';
+		birth: string;
+		death?: string;
+		knownFor: {
+			type: AssetType;
+			id: Id;
+			title: string;
+			role: string;
+		}[];
+	};
+
+export type GenreAsset = Asset & {
+	type: 'genre';
 };
 
 export type AssetMapping = {
@@ -97,6 +134,7 @@ export type AssetMapping = {
 	season: SeasonAsset;
 	episode: EpisodeAsset;
 	person: PersonAsset;
+	genre: GenreAsset;
 };
 
 export type Paged<T> = {

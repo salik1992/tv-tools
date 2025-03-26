@@ -3,6 +3,7 @@ import type {
 	Asset,
 	AssetType,
 	EpisodeAsset,
+	GenreAsset,
 	Id,
 	MovieAsset,
 	PersonAsset,
@@ -28,6 +29,10 @@ export function isEpisode(asset: Asset): asset is EpisodeAsset {
 
 export function isPerson(asset: Asset): asset is PersonAsset {
 	return asset.type === 'person';
+}
+
+export function isGenre(asset: Asset): asset is GenreAsset {
+	return asset.type === 'genre';
 }
 
 export function isId(id: unknown): id is Id {

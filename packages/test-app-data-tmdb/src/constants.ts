@@ -1,4 +1,8 @@
-import { ListType, ScreenType } from '@salik1992/test-app-data/types';
+import {
+	ListType,
+	type MenuItem,
+	ScreenType,
+} from '@salik1992/test-app-data/types';
 
 export const BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -8,9 +12,10 @@ export const GENERIC_TYPE_TO_TMDB_TYPE = {
 	season: 'season',
 	episode: 'episode',
 	person: 'people',
+	genre: 'genre',
 } as const;
 
-export const MENU = [
+export const MENU: MenuItem[] = [
 	{
 		title: 'Home',
 		glyph: '\u2302',
@@ -19,10 +24,30 @@ export const MENU = [
 	},
 	{ title: 'Search', glyph: '\u2328', screen: ScreenType.Search },
 	{
-		title: 'Genres',
+		title: 'Movies by genre',
 		glyph: '\u2388',
 		screen: ScreenType.Discover,
-		params: ['genres'],
+		params: [
+			{
+				filterBy: 'genres',
+				type: 'movie',
+				title: 'Movies by genre',
+				pageItemType: 'genre',
+			},
+		],
+	},
+	{
+		title: 'TV by genre',
+		glyph: '\u2388',
+		screen: ScreenType.Discover,
+		params: [
+			{
+				filterBy: 'genres',
+				type: 'series',
+				title: 'TV by genre',
+				pageItemType: 'genre',
+			},
+		],
 	},
 ];
 
@@ -30,35 +55,41 @@ export const BROWSE = {
 	home: [
 		{
 			id: 'trending-movies',
-			title: 'Trending Movies',
 			listType: ListType.HERO,
 			listData: {
 				filterBy: 'trending',
 				type: 'movie',
 				timeWindow: 'day',
+				title: 'Trending Movies',
 			},
 		},
 		{
 			id: 'trending-tv',
-			title: 'Trending TV',
 			listType: ListType.NORMAL,
 			listData: {
 				filterBy: 'trending',
 				type: 'series',
 				timeWindow: 'day',
+				title: 'Trending TV',
 			},
 		},
 		{
 			id: 'discover-movies',
-			title: 'Discover Movies',
 			listType: ListType.NORMAL,
-			listData: { filterBy: 'discover', type: 'movie' },
+			listData: {
+				filterBy: 'discover',
+				type: 'movie',
+				title: 'Discover Movies',
+			},
 		},
 		{
 			id: 'discover-tv',
-			title: 'Discover TV',
 			listType: ListType.NORMAL,
-			listData: { filterBy: 'discover', type: 'series' },
+			listData: {
+				filterBy: 'discover',
+				type: 'series',
+				title: 'Discover TV',
+			},
 		},
 	],
 };
