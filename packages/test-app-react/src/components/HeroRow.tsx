@@ -18,7 +18,7 @@ const Wrap = styled.div`
 		white-space: nowrap;
 		padding: 50px 0;
 		box-sizing: border-box;
-		${MouseArrows}
+		${MouseArrows('horizontal')}
 
 		.mouse-arrow {
 			height: ${22 * Typography.row}px;

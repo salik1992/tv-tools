@@ -32,19 +32,20 @@ const StyledScreen = styled(Screen)`
 	.grid {
 		position: relative;
 		white-space: nowrap;
-		${MouseArrows}
+		${MouseArrows('vertical')}
 
 		.mouse-arrow {
-			height: ${6 * Typography.row}px;
 			&.next,
 			&.previous {
-				width: ${12 * Typography.column}px;
+				width: 100%;
+				height: ${3 * Typography.row}px;
 			}
 			&.previous {
-				left: -${3 * Typography.column}px;
+				top: ${-1 * Typography.row}px;
 			}
 			&.next {
-				right: -${3 * Typography.column}px;
+				top: ${25 * Typography.row}px;
+				height: ${6 * Typography.row}px;
 			}
 		}
 

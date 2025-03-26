@@ -1,7 +1,7 @@
 import { css } from 'styled-components';
 import { Colors, Transition } from './Theme';
 
-export const MouseArrows = css`
+export const MouseArrows = (orientation: 'vertical' | 'horizontal') => css`
 	.mouse-arrow {
 		position: absolute;
 		top: 0;
@@ -32,13 +32,17 @@ export const MouseArrows = css`
 
 		&.next {
 			&::after {
-				content: '\\2192';
+				content: ${orientation === 'horizontal'
+					? "'\\2192'"
+					: "'\\2193'"};
 			}
 		}
 
 		&.previous {
 			&::after {
-				content: '\\2190';
+				content: ${orientation === 'horizontal'
+					? "'\\2190'"
+					: "'\\2191'"};
 			}
 		}
 	}
