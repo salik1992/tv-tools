@@ -16,6 +16,6 @@
         "typecheck": "tsc --noEmit"
     },
     "author": "Vit Salomon (salik1992)",
-    "license": "GNU-GPLv3",
+    "license": "MIT",
     "description": "Abstract data layer to unify multiple data providers"
 }

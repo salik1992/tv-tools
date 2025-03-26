@@ -18,6 +18,6 @@
         "@salik1992/tv-tools": "*"
     },
     "author": "Vit Salomon (salik1992)",
-    "license": "GNU-GPLv3",
+    "license": "MIT",
     "description": "TMDB API that conforms to general data provider"
 }
