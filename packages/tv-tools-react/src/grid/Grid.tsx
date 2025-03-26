@@ -212,7 +212,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 		(e: MouseEvent) => {
 			e.preventDefault();
 			e.stopPropagation();
-			backward();
+			backwardJump();
 		},
 		[backward],
 	);
@@ -221,7 +221,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 		(e: MouseEvent) => {
 			e.preventDefault();
 			e.stopPropagation();
-			forward();
+			forwardJump();
 		},
 		[forward],
 	);
@@ -249,15 +249,27 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 				>
 					{renderData.groups.map(renderGroup)}
 				</div>
-				{renderData.previousArrow && (
-					<div
-						className="mouse-arrow previous"
-						onClick={onMousePrevious}
-					/>
-				)}
-				{renderData.nextArrow && (
-					<div className="mouse-arrow next" onClick={onMouseNext} />
-				)}
+				{renderData.previousArrow &&
+					!isFirstGroup(
+						dataIndex,
+						configuration.elementsPerGroup,
+					) && (
+						<div
+							className="mouse-arrow previous"
+							onClick={onMousePrevious}
+						/>
+					)}
+				{renderData.nextArrow &&
+					!isLastGroup(
+						dataIndex,
+						configuration.elementsPerGroup,
+						configuration.dataLength,
+					) && (
+						<div
+							className="mouse-arrow next"
+							onClick={onMouseNext}
+						/>
+					)}
 			</div>
 		</FocusContext.Provider>
 	);
