@@ -3,8 +3,8 @@ This repository contains the code for the tools to simplify development of appli
 that are targeted for televisions, set-top-boxes and other devices being controlled
 primarily by directional navigation.
 
-> [!CAUTION]
-> This package is currently under active development and not yet ready for production
+> [!WARNING]
+> This package is currently under active development and there may be breaking changes
 
 **Full documentation in [WIKI](https://github.com/salik1992/tv-tools/wiki)**
 
@@ -46,9 +46,13 @@ The spatial focus management is on the roadmap but at smaller priority.
 UI Component for rendering List (vertical or horizontal) that are optimized for
 performance, using a render window and special implementation for animated vs basic
 behavior.
+
+### Grid
+UI Component for rendering Grid (vertical or horizontal) that are optimized for
+performance, using a render window and special implementation for animated vs basic
+behavior.
  
 ## Roadmap (more or less in priority order)
-- Grid - UI component for displaying data in grids
 - Device - Unified device management across platforms
 - Input management using native keyboards
 - TableFocus - defining focus where it can be think of as table
