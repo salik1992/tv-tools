@@ -3,7 +3,7 @@ import { ns } from '@salik1992/tv-tools/logger';
 import type { MenuItem } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 
-const logger = ns('useMenuItems');
+const logger = ns('[useMenuItems]');
 
 export const useMenuItems = () => {
 	const mounted = useRef(true);

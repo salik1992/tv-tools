@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
-import { ns } from '@salik1992/tv-tools/logger';
+import { device } from '@salik1992/tv-tools/device';
+import { logger as loggerGlobal, ns } from '@salik1992/tv-tools/logger';
 import { FocusRoot } from '@salik1992/tv-tools-react/focus';
 import { useDataProvider } from '../data';
 import { BackNavigation } from './BackNavigation';
@@ -15,7 +16,8 @@ import { ScreenCentered } from './ScreenCentered';
 import { Colors } from './Theme';
 import { H1 } from './Typography';
 
-const logger = ns('App');
+loggerGlobal.use(console);
+const logger = ns('[App]');
 
 const GlobalStyles = createGlobalStyle`
 html, body {
@@ -63,8 +65,12 @@ export const App = () => {
 
 	useEffect(() => {
 		(async () => {
+			logger.info('Initializing app with driver', device.driver);
 			try {
-				await dataProvider.initialize();
+				await Promise.all([
+					dataProvider.initialize(),
+					device.initialize(),
+				]);
 			} catch (e: unknown) {
 				logger.error(e);
 				setError(e);
