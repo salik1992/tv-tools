@@ -26,7 +26,7 @@ const logger = ns('[DeviceTizen]');
 
 const webapisSrc = '$WEBAPIS/webapis/webapis.js';
 
-const keysToUnregister = ['VolumeUp', 'VolumeDown', 'Mute'] as const;
+const keysToUnregister = ['VolumeUp', 'VolumeDown', 'VolumeMute'] as const;
 
 const keysToRegister = [
 	'0',
@@ -49,7 +49,7 @@ const keysToRegister = [
 	'MediaStop',
 	'MediaRewind',
 	'MediaFastForward',
-	'MediaRecor',
+	'MediaRecord',
 	'ChannelUp',
 	'ChannelDown',
 	'PreviousChannel',
