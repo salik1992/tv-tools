@@ -1,3 +1,4 @@
+import { BACK, updateKey } from '../control';
 import { noop } from '../utils/noop';
 import type {
 	Feature,
@@ -75,6 +76,7 @@ export class DeviceWebos extends DeviceBase {
 			this.deviceInfoResolver(deviceInfo);
 		});
 		document.addEventListener('visibilitychange', this.onVisibilityChange);
+		updateKey(BACK, { keyCodes: [461] });
 		await this.deviceInfoPromise;
 	}
 
