@@ -216,11 +216,15 @@ export class DeviceTizen extends DeviceBase {
 			});
 		}
 		return new Promise<void>((resolve) => {
+			logger.info('Injecting webapis script');
 			const webapisScript = document.createElement('script');
 			webapisScript.src = webapisSrc;
 			webapisScript.type = 'text/javascript';
 			webapisScript.onload = () => {
 				resolve();
+			};
+			webapisScript.onerror = () => {
+				logger.error('Failed to load webapis script');
 			};
 			document.head.appendChild(webapisScript);
 		});
