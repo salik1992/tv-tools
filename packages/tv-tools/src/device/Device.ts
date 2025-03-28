@@ -10,6 +10,18 @@ export type NetworkType = 'unknown' | 'ethernet' | 'wifi' | 'cellular';
 
 export type PlatformInfo = { name: string; version: string };
 
+export type Feature =
+	| 'volume'
+	| 'screensaver'
+	| '4k'
+	| '8k'
+	| 'multiplayer'
+	| 'widevine-ctr'
+	| 'widevine-cbc'
+	| 'playready-ctr'
+	| 'playready-cbc'
+	| 'fairplay';
+
 export type DeviceInfo = {
 	name: string;
 	model: string;
@@ -38,7 +50,7 @@ export interface Device extends IEventListener<DeviceEvents> {
 	initialize(): Promise<void>;
 
 	readonly canCloseApplication: boolean;
-	closeApplication(): void;
+	closeApplication(options?: { forceClose: boolean }): void;
 	restartApplication(): void;
 
 	getVolume(): Promise<Volume>;
@@ -48,4 +60,6 @@ export interface Device extends IEventListener<DeviceEvents> {
 	setScreenSaver(screenSaver: Partial<ScreenSaver>): Promise<void>;
 
 	getNetworkInfo(): Promise<NetworkInfo>;
+
+	isSupported(feature: Feature): Promise<boolean>;
 }

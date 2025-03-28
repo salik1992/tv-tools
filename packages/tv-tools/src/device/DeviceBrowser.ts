@@ -1,6 +1,7 @@
 import { ns } from '../logger';
 import type {
 	DeviceInfo,
+	Feature,
 	NetworkInfo,
 	PlatformInfo,
 	ScreenSaver,
@@ -68,6 +69,16 @@ export class DeviceBrowser extends DeviceBase {
 			localIp: '0.0.0.0',
 			macAddress: '00:00:00:00:00:00',
 		};
+	}
+
+	public async isSupported(feature: Feature): Promise<boolean> {
+		switch (feature) {
+			case 'volume':
+			case 'screensaver':
+				return false;
+			default:
+				return true;
+		}
 	}
 
 	private onOnLine = () => {

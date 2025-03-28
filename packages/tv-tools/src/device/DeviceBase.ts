@@ -4,6 +4,7 @@ import type {
 	Device,
 	DeviceEvents,
 	DeviceInfo,
+	Feature,
 	NetworkInfo,
 	PlatformInfo,
 	ScreenSaver,
@@ -43,4 +44,6 @@ export abstract class DeviceBase implements Device {
 	abstract setScreenSaver(screenSaver: Partial<ScreenSaver>): Promise<void>;
 
 	abstract getNetworkInfo(): Promise<NetworkInfo>;
+
+	abstract isSupported(feature: Feature): Promise<boolean>;
 }

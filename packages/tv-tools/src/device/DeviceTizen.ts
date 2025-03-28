@@ -2,6 +2,7 @@ import * as Key from '../control';
 import { ns } from '../logger';
 import type {
 	DeviceInfo,
+	Feature,
 	NetworkInfo,
 	NetworkType,
 	PlatformInfo,
@@ -166,6 +167,38 @@ export class DeviceTizen extends DeviceBase {
 			localIp: webapis.network.getIp(),
 			macAddress: webapis.network.getMac(),
 		};
+	}
+
+	public closeApplication({ forceClose = false } = {}) {
+		if (forceClose) {
+			tizen.application.getCurrentApplication().exit();
+		} else {
+			tizen.application.getCurrentApplication().hide();
+		}
+	}
+
+	public async isSupported(feature: Feature): Promise<boolean> {
+		switch (feature) {
+			case 'volume':
+			case 'multiplayer':
+				return false;
+			case 'screensaver':
+				return true;
+			case 'widevine-ctr':
+			case 'playready-ctr':
+			case 'fairplay':
+				return true;
+			case 'widevine-cbc':
+				return parseFloat(this.platformInfo.version) >= 6.5;
+			case 'playready-cbc':
+				return false;
+			case '8k':
+				return webapis.productinfo.is8kPanelSupported();
+			case '4k':
+				return webapis.productinfo.isUdPanelSupported();
+			default:
+				return false;
+		}
 	}
 
 	private injectPlatformScripts(): Promise<void> {
