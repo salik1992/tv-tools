@@ -12,16 +12,16 @@ import { DeviceBase } from './DeviceBase';
 const logger = ns('[DeviceBrowser]');
 
 export class DeviceBrowser extends DeviceBase {
-	driver = 'browser';
+	override driver = 'browser';
 
-	public async platform(): Promise<PlatformInfo> {
+	public override async platform(): Promise<PlatformInfo> {
 		return {
 			name: window.navigator.vendor || 'unknown',
 			version: '',
 		};
 	}
 
-	public async deviceInfo(): Promise<DeviceInfo> {
+	public override async deviceInfo(): Promise<DeviceInfo> {
 		return {
 			name: window.navigator.platform || 'unknown',
 			model: 'unknown',
@@ -30,13 +30,13 @@ export class DeviceBrowser extends DeviceBase {
 		};
 	}
 
-	public async initialize(): Promise<void> {
+	public override async initialize(): Promise<void> {
 		window.addEventListener('online', this.onOnLine);
 		window.addEventListener('offline', this.onOffLine);
 		document.addEventListener('visibilitychange', this.onVisibilityChange);
 	}
 
-	public async getVolume(): Promise<Volume> {
+	public override async getVolume(): Promise<Volume> {
 		logger.warn('getVolume not supported');
 		return {
 			level: 1,
@@ -44,11 +44,11 @@ export class DeviceBrowser extends DeviceBase {
 		};
 	}
 
-	public async setVolume(_volume: Partial<Volume>): Promise<void> {
+	public override async setVolume(_volume: Partial<Volume>): Promise<void> {
 		logger.warn('setVolume not supported');
 	}
 
-	public async getScreenSaver(): Promise<ScreenSaver> {
+	public override async getScreenSaver(): Promise<ScreenSaver> {
 		logger.warn('getScreenSaver not supported');
 		return {
 			enabled: false,
@@ -56,13 +56,13 @@ export class DeviceBrowser extends DeviceBase {
 		};
 	}
 
-	public async setScreenSaver(
+	public override async setScreenSaver(
 		_screenSaver: Partial<ScreenSaver>,
 	): Promise<void> {
 		logger.warn('setScreenSaver not supported');
 	}
 
-	public async getNetworkInfo(): Promise<NetworkInfo> {
+	public override async getNetworkInfo(): Promise<NetworkInfo> {
 		return {
 			connected: window.navigator.onLine,
 			networkType: 'unknown',
@@ -71,7 +71,7 @@ export class DeviceBrowser extends DeviceBase {
 		};
 	}
 
-	public async isSupported(feature: Feature): Promise<boolean> {
+	public override async isSupported(feature: Feature): Promise<boolean> {
 		switch (feature) {
 			case 'volume':
 			case 'screensaver':

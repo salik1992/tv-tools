@@ -59,7 +59,7 @@ const keysToRegister = [
 ] as const;
 
 export class DeviceTizen extends DeviceBase {
-	readonly driver = 'tizen';
+	override readonly driver = 'tizen';
 
 	private scriptsInjected: Promise<void>;
 
@@ -79,7 +79,7 @@ export class DeviceTizen extends DeviceBase {
 			'unknown',
 	};
 
-	public async platform(): Promise<PlatformInfo> {
+	public override async platform(): Promise<PlatformInfo> {
 		return this.platformInfo;
 	}
 
@@ -99,7 +99,7 @@ export class DeviceTizen extends DeviceBase {
 		return this.screenSize;
 	}
 
-	public async deviceInfo(): Promise<DeviceInfo> {
+	public override async deviceInfo(): Promise<DeviceInfo> {
 		return {
 			name: `${webapis.productinfo.getRealModel()} (${webapis.productinfo.getModelCode()})`,
 			model: webapis.productinfo.getRealModel(),
@@ -108,7 +108,7 @@ export class DeviceTizen extends DeviceBase {
 		};
 	}
 
-	public async initialize(): Promise<void> {
+	public override async initialize(): Promise<void> {
 		await this.scriptsInjected;
 		document.addEventListener('visibilitychange', this.onVisibilityChange);
 		webapis.network.addNetworkStateChangeListener(
@@ -117,14 +117,14 @@ export class DeviceTizen extends DeviceBase {
 		this.initializeKeys();
 	}
 
-	public async getVolume(): Promise<Volume> {
+	public override async getVolume(): Promise<Volume> {
 		return {
 			level: tizen.tvaudiocontrol.getVolume() / 100,
 			muted: tizen.tvaudiocontrol.isMute(),
 		};
 	}
 
-	public async setVolume({ level, muted }: Partial<Volume>) {
+	public override async setVolume({ level, muted }: Partial<Volume>) {
 		if (level !== undefined) {
 			tizen.tvaudiocontrol.setVolume(level * 100);
 		}
@@ -133,14 +133,14 @@ export class DeviceTizen extends DeviceBase {
 		}
 	}
 
-	public async getScreenSaver() {
+	public override async getScreenSaver() {
 		return {
 			enabled: this.screenSaverEnabled,
 			timeout: -1,
 		};
 	}
 
-	public async setScreenSaver({ enabled }: Partial<ScreenSaver>) {
+	public override async setScreenSaver({ enabled }: Partial<ScreenSaver>) {
 		return new Promise<void>((resolve) => {
 			if (enabled !== undefined) {
 				this.screenSaverEnabled = enabled;
@@ -158,7 +158,7 @@ export class DeviceTizen extends DeviceBase {
 		});
 	}
 
-	public async getNetworkInfo(): Promise<NetworkInfo> {
+	public override async getNetworkInfo(): Promise<NetworkInfo> {
 		return {
 			connected: this.isNetworkConnected(this.networkState),
 			networkType: this.getNetworkType(
@@ -169,7 +169,7 @@ export class DeviceTizen extends DeviceBase {
 		};
 	}
 
-	public closeApplication({ forceClose = false } = {}) {
+	public override closeApplication({ forceClose = false } = {}) {
 		if (forceClose) {
 			tizen.application.getCurrentApplication().exit();
 		} else {
@@ -177,7 +177,7 @@ export class DeviceTizen extends DeviceBase {
 		}
 	}
 
-	public async isSupported(feature: Feature): Promise<boolean> {
+	public override async isSupported(feature: Feature): Promise<boolean> {
 		switch (feature) {
 			case 'volume':
 			case 'multiplayer':
