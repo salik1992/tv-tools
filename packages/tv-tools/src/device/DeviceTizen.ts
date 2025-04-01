@@ -136,7 +136,7 @@ export class DeviceTizen extends DeviceBase {
 	public override async getScreenSaver() {
 		return {
 			enabled: this.screenSaverEnabled,
-			timeout: -1,
+			timeout: 0,
 		};
 	}
 
