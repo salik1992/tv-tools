@@ -1,6 +1,6 @@
-import { BACK, updateKey } from '../control';
-import { ns } from '../logger';
-import { noop } from '../utils/noop';
+import { BACK, updateKey } from '../../control';
+import { ns } from '../../logger';
+import { noop } from '../../utils/noop';
 import type {
 	Feature,
 	NetworkInfo,
@@ -8,16 +8,16 @@ import type {
 	ScreenSaver,
 	ScreenSize,
 	Volume,
-} from './Device';
-import { DeviceBase } from './DeviceBase';
-import { initializeWebosTvJs } from './DeviceWebos.lib';
+} from '../base';
+import { DeviceBase } from '../base';
+import { initializeWebosTvJs } from './lib';
 import {
 	type ConnectionManagerResponse,
 	type DeviceInfo,
 	type PalmSystem as IPalmSystem,
 	RequestUrls,
 	type WebOS,
-} from './DeviceWebos.types';
+} from './types';
 
 const logger = ns('[DeviceWebos]');
 

@@ -1,5 +1,5 @@
 import { resolveDevice } from './resolveDevice';
 
-export * from './Device';
+export * from './base';
 
 export const device = resolveDevice();

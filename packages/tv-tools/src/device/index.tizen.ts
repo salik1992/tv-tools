@@ -1,6 +1,6 @@
-import type { Device } from './Device';
-import { DeviceTizen } from './DeviceTizen';
+import type { Device } from './base';
+import { DeviceTizen } from './tizen';
 
-export * from './Device';
+export * from './base/Device';
 
 export const device: Device = new DeviceTizen();

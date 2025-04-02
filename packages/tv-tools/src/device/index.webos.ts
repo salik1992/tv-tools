@@ -1,6 +1,6 @@
-import type { Device } from './Device';
-import { DeviceWebos } from './DeviceWebos';
+import type { Device } from './base';
+import { DeviceWebos } from './webos';
 
-export * from './Device';
+export * from './base/Device';
 
 export const device: Device = new DeviceWebos();

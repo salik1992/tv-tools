@@ -1,7 +1,7 @@
-import { logger } from '../logger';
-import { Feature } from './Device';
+import { logger } from '../../logger';
+import { Feature } from '../base';
+import { Features } from '../mocks';
 import { DeviceBrowser } from './DeviceBrowser';
-import { Features } from './mocks';
 
 const prefix = '[DeviceBrowser]';
 

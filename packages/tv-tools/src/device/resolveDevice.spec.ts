@@ -1,7 +1,7 @@
-import { DeviceBrowser } from './DeviceBrowser';
-import { DeviceTizen } from './DeviceTizen';
-import { DeviceWebos } from './DeviceWebos';
+import { DeviceBrowser } from './browser';
 import { resolveDevice } from './resolveDevice';
+import { DeviceTizen } from './tizen';
+import { DeviceWebos } from './webos';
 
 describe('resolveDevice', () => {
 	it.each([

@@ -1,5 +1,5 @@
-import { ns } from '../logger';
-import { EventListener } from '../utils/EventListener';
+import { ns } from '../../logger';
+import { EventListener } from '../../utils/EventListener';
 import type {
 	Device,
 	DeviceEvents,

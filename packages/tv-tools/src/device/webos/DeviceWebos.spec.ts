@@ -1,13 +1,13 @@
-import { BACK } from '../control';
-import { logger } from '../logger';
-import { Feature } from './Device';
+import { BACK } from '../../control';
+import { logger } from '../../logger';
+import { Feature } from '../base';
+import { Features } from '../mocks';
 import { DeviceWebos } from './DeviceWebos';
-import { DeviceInfo } from './DeviceWebos.types';
-import { Features } from './mocks';
+import { DeviceInfo } from './types';
 
 const prefix = '[DeviceWebos]';
 
-jest.mock('./DeviceWebos.lib', () => ({
+jest.mock('./lib', () => ({
 	initializeWebosTvJs: jest.fn(() => {
 		// @ts-expect-error: mock
 		window.webOS = {

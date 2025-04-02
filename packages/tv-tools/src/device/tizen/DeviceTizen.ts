@@ -1,5 +1,5 @@
-import * as Key from '../control';
-import { ns } from '../logger';
+import * as Key from '../../control';
+import { ns } from '../../logger';
 import type {
 	DeviceInfo,
 	Feature,
@@ -9,15 +9,15 @@ import type {
 	ScreenSaver,
 	ScreenSize,
 	Volume,
-} from './Device';
-import { DeviceBase } from './DeviceBase';
+} from '../base';
+import { DeviceBase } from '../base';
 import {
 	AppCommonScreenSaverState,
 	NetworkConnectionType,
 	NetworkState,
 	type Tizen,
 	type Webapis,
-} from './DeviceTizen.types';
+} from './types';
 
 declare const webapis: Webapis;
 declare const tizen: Tizen;

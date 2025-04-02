@@ -1,0 +1,1 @@
+export { DeviceTizen } from './DeviceTizen';

@@ -1,4 +1,4 @@
-import { ns } from '../logger';
+import { ns } from '../../logger';
 import type {
 	DeviceInfo,
 	Feature,
@@ -6,8 +6,8 @@ import type {
 	PlatformInfo,
 	ScreenSaver,
 	Volume,
-} from './Device';
-import { DeviceBase } from './DeviceBase';
+} from '../base';
+import { DeviceBase } from '../base';
 
 const logger = ns('[DeviceBrowser]');
 

@@ -1,4 +1,4 @@
-import type { Feature } from './Device';
+import type { Feature } from './base';
 
 export const Features: Feature[] = [
 	'volume',

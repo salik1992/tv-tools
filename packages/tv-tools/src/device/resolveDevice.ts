@@ -1,7 +1,7 @@
-import type { Device } from './Device';
-import { DeviceBrowser } from './DeviceBrowser';
-import { DeviceTizen } from './DeviceTizen';
-import { DeviceWebos } from './DeviceWebos';
+import type { Device } from './base';
+import { DeviceBrowser } from './browser';
+import { DeviceTizen } from './tizen';
+import { DeviceWebos } from './webos';
 
 export const resolveDevice = (): Device => {
 	if (/Tizen/.test(navigator.userAgent)) {

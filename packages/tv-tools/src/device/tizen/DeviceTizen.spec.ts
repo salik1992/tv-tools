@@ -1,12 +1,12 @@
-import { BACK } from '../control';
-import { Feature } from './Device';
+import { BACK } from '../../control';
+import { Feature } from '../base';
+import { Features } from '../mocks';
 import { DeviceTizen } from './DeviceTizen';
 import {
 	AppCommonScreenSaverState,
 	NetworkConnectionType,
 	NetworkState,
-} from './DeviceTizen.types';
-import { Features } from './mocks';
+} from './types';
 
 const webapis = {
 	productinfo: {
