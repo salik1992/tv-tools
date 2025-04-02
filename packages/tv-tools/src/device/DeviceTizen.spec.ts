@@ -8,8 +8,6 @@ import {
 } from './DeviceTizen.types';
 import { Features } from './mocks';
 
-const prefix = 'tizen';
-
 const webapis = {
 	productinfo: {
 		is8kPanelSupported: jest.fn(() => false),
@@ -85,7 +83,7 @@ describe('DeviceTizen', () => {
 	window.tizen = tizen;
 
 	it('should have the correct driver', () => {
-		expect(device.driver).toBe(prefix);
+		expect(device.driver).toBe('tizen');
 	});
 
 	it('should return platform info', async () => {

@@ -1,4 +1,5 @@
 import { BACK, updateKey } from '../control';
+import { ns } from '../logger';
 import { noop } from '../utils/noop';
 import type {
 	Feature,
@@ -17,6 +18,8 @@ import {
 	RequestUrls,
 	type WebOS,
 } from './DeviceWebos.types';
+
+const logger = ns('[DeviceWebos]');
 
 declare const webOS: WebOS;
 declare const PalmSystem: IPalmSystem;
@@ -82,12 +85,14 @@ export class DeviceWebos extends DeviceBase {
 
 	public override async getVolume(): Promise<Volume> {
 		return {
-			level: 0,
+			level: 1,
 			muted: false,
 		};
 	}
 
-	public override async setVolume(_volume: Partial<Volume>) {}
+	public override async setVolume(_volume: Partial<Volume>) {
+		logger.warn('setVolume not supported');
+	}
 
 	public override async getScreenSaver(): Promise<ScreenSaver> {
 		return {
@@ -96,7 +101,9 @@ export class DeviceWebos extends DeviceBase {
 		};
 	}
 
-	public override async setScreenSaver(_screenSaver: Partial<ScreenSaver>) {}
+	public override async setScreenSaver(_screenSaver: Partial<ScreenSaver>) {
+		logger.warn('setScreenSaver not supported');
+	}
 
 	public override async getNetworkInfo(): Promise<NetworkInfo> {
 		const manager = await this.getConnectionManager();

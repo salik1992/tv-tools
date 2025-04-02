@@ -43,7 +43,7 @@ describe('DeviceBrowser', () => {
 	});
 
 	it('should return volume', async () => {
-		const spy = jest.spyOn(logger, 'warn').mockImplementation(() => {});
+		const spy = jest.spyOn(logger, 'warn');
 		const volume = await device.getVolume();
 		expect(volume).toEqual({
 			level: 1,
