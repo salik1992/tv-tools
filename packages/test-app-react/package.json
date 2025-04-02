@@ -7,7 +7,7 @@
         "build": "webpack --mode production",
         "lintcheck": "eslint ./src",
         "test": "jest",
-        "typecheck": "tsc --noEmit --project tsconfig.app.json"
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@salik1992/test-app-data": "*",
