@@ -51,9 +51,12 @@ behavior.
 UI Component for rendering Grid (vertical or horizontal) that are optimized for
 performance, using a render window and special implementation for animated vs basic
 behavior.
+
+### Device
+Unifying layer between native APIs of various device platforms. Takes care of assigning
+correct keyCodes to logical keys, device info, network info, etc.
  
 ## Roadmap (more or less in priority order)
-- Device - Unified device management across platforms
 - Input management using native keyboards
 - TableFocus - defining focus where it can be think of as table
 - Virtual Keyboard
