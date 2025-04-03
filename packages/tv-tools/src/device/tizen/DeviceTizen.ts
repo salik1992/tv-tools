@@ -169,6 +169,8 @@ export class DeviceTizen extends DeviceBase {
 		};
 	}
 
+	public override readonly canCloseApplication = true;
+
 	public override closeApplication({ forceClose = false } = {}) {
 		if (forceClose) {
 			tizen.application.getCurrentApplication().exit();

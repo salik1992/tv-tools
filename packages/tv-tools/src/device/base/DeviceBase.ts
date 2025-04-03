@@ -27,7 +27,7 @@ export abstract class DeviceBase implements Device {
 
 	abstract initialize(): Promise<void>;
 
-	public readonly canCloseApplication = false;
+	public readonly canCloseApplication: boolean = false;
 
 	public closeApplication(): void {
 		logger.warn('closeApplication not supported');

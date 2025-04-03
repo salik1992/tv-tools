@@ -115,6 +115,8 @@ export class DeviceWebos extends DeviceBase {
 		};
 	}
 
+	public override readonly canCloseApplication = true;
+
 	public override closeApplication(): void {
 		PalmSystem.deactivate();
 	}
