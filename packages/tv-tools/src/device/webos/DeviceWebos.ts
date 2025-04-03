@@ -84,6 +84,7 @@ export class DeviceWebos extends DeviceBase {
 	}
 
 	public override async getVolume(): Promise<Volume> {
+		logger.warn('getVolume not supported');
 		return {
 			level: 1,
 			muted: false,
@@ -95,6 +96,7 @@ export class DeviceWebos extends DeviceBase {
 	}
 
 	public override async getScreenSaver(): Promise<ScreenSaver> {
+		logger.warn('getScreenSaver not supported');
 		return {
 			enabled: false,
 			timeout: 0,
@@ -174,29 +176,29 @@ export class DeviceWebos extends DeviceBase {
 	}
 
 	private getConnectionType(manager: ConnectionManagerResponse): NetworkType {
-		if (manager.wired.state === CONNECTED) {
-			return 'ethernet';
+		switch (CONNECTED) {
+			case manager.wired.state:
+				return 'ethernet';
+			case manager.wifi.state:
+				return 'wifi';
+			case manager.wifiDirect.state:
+				return 'wifi';
+			default:
+				return 'unknown';
 		}
-		if (manager.wifi.state === CONNECTED) {
-			return 'wifi';
-		}
-		if (manager.wifiDirect.state === CONNECTED) {
-			return 'wifi';
-		}
-		return 'unknown';
 	}
 
 	private getLocalIp(manager: ConnectionManagerResponse): string {
-		if (manager.wired.state === CONNECTED) {
-			return manager.wired.ipAddress ?? UNKNOWN_IP;
+		switch (CONNECTED) {
+			case manager.wired.state:
+				return manager.wired.ipAddress ?? UNKNOWN_IP;
+			case manager.wifi.state:
+				return manager.wifi.ipAddress ?? UNKNOWN_IP;
+			case manager.wifiDirect.state:
+				return manager.wifiDirect.ipAddress ?? UNKNOWN_IP;
+			default:
+				return UNKNOWN_IP;
 		}
-		if (manager.wifi.state === CONNECTED) {
-			return manager.wifi.ipAddress ?? UNKNOWN_IP;
-		}
-		if (manager.wifiDirect.state === CONNECTED) {
-			return manager.wifiDirect.ipAddress ?? UNKNOWN_IP;
-		}
-		return UNKNOWN_IP;
 	}
 
 	private onVisibilityChange = () => {
