@@ -109,11 +109,8 @@ export class Interactable {
 	 * Listener for pointer click events.
 	 * It will call onPress if clicked with left mouse button or touched.
 	 */
-	private onPointerDown = (event: PointerEvent) => {
-		if (
-			(event.pointerType !== 'mouse' || event.button === 0) &&
-			this.onPress?.()
-		) {
+	private onClick = (event: MouseEvent) => {
+		if (event.button === 0 && this.onPress?.()) {
 			event.preventDefault();
 			event.stopPropagation();
 		}
@@ -122,7 +119,7 @@ export class Interactable {
 	/**
 	 * Focus itself when the pointer is over the component.
 	 */
-	private onPointerMove = () => {
+	private onMouseOver = () => {
 		focus.focus(this.id, { preventScroll: true });
 	};
 
@@ -135,15 +132,15 @@ export class Interactable {
 		}
 		this.element.id = this.id;
 		this.element.tabIndex = this.tabIndex;
-		this.element.addEventListener('pointerdown', this.onPointerDown);
-		this.element.addEventListener('pointermove', this.onPointerMove);
+		this.element.addEventListener('click', this.onClick);
+		this.element.addEventListener('mouseover', this.onMouseOver);
 	}
 
 	/**
 	 * Remove event listeners when the element is removed.
 	 */
 	private cleanElement() {
-		this.element?.removeEventListener('pointerdown', this.onPointerDown);
-		this.element?.removeEventListener('pointermove', this.onPointerMove);
+		this.element?.removeEventListener('click', this.onClick);
+		this.element?.removeEventListener('mouseover', this.onMouseOver);
 	}
 }

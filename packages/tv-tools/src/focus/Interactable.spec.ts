@@ -2,21 +2,6 @@ import { BACK, ENTER, type Key } from '../control';
 import { Interactable } from './Interactable';
 import { focus } from './focus';
 
-// @ts-expect-error: mock
-global.PointerEvent = class {
-	constructor(
-		type: string,
-		init: { pointerType: 'mouse' | 'touch'; button?: number } = {
-			pointerType: 'mouse',
-		},
-	) {
-		const event = new MouseEvent(type, { button: init.button });
-		// @ts-expect-error: mock
-		event.pointerType = init.pointerType;
-		return event;
-	}
-};
-
 const keyEvent = (key: Key) => ({
 	target: (() => {
 		const div = document.createElement('div');
@@ -54,8 +39,8 @@ describe('Interactable', () => {
 			expect(element.id).toBe('interactable');
 			expect(element.tabIndex).toBe(1);
 			expect(addEventListener.mock.calls).toEqual([
-				['pointerdown', expect.any(Function)],
-				['pointermove', expect.any(Function)],
+				['click', expect.any(Function)],
+				['mouseover', expect.any(Function)],
 			]);
 			expect(removeEventListener).not.toHaveBeenCalled();
 			expect(focusSpy).toHaveBeenCalled();
@@ -89,51 +74,21 @@ describe('Interactable', () => {
 
 	describe('pointer events', () => {
 		it('should call onPress on left mouse button', () => {
-			const event = new PointerEvent('pointerdown', {
-				pointerType: 'mouse',
-				button: 0,
-			});
+			const event = new MouseEvent('click', { button: 0 });
 			element.dispatchEvent(event);
 			expect(onPress).toHaveBeenCalled();
 		});
 
 		it('should not call onPress for any other mouse button', () => {
-			element.dispatchEvent(
-				new PointerEvent('pointerdown', {
-					pointerType: 'mouse',
-					button: 1,
-				}),
-			);
-			element.dispatchEvent(
-				new PointerEvent('pointerdown', {
-					pointerType: 'mouse',
-					button: 2,
-				}),
-			);
-			element.dispatchEvent(
-				new PointerEvent('pointerdown', {
-					pointerType: 'mouse',
-					button: 3,
-				}),
-			);
-			element.dispatchEvent(
-				new PointerEvent('pointerdown', {
-					pointerType: 'mouse',
-					button: 4,
-				}),
-			);
+			element.dispatchEvent(new MouseEvent('click', { button: 1 }));
+			element.dispatchEvent(new MouseEvent('click', { button: 2 }));
+			element.dispatchEvent(new MouseEvent('click', { button: 3 }));
+			element.dispatchEvent(new MouseEvent('click', { button: 4 }));
 			expect(onPress).not.toHaveBeenCalled();
 		});
 
-		it('should call onPress for touch', () => {
-			element.dispatchEvent(
-				new PointerEvent('pointerdown', { pointerType: 'touch' }),
-			);
-			expect(onPress).toHaveBeenCalled();
-		});
-
 		it('should focus itself on pointer move', () => {
-			element.dispatchEvent(new PointerEvent('pointermove'));
+			element.dispatchEvent(new MouseEvent('mouseover'));
 			expect(focusSpy).toHaveBeenCalled();
 		});
 	});
@@ -148,8 +103,8 @@ describe('Interactable', () => {
 		it('should clear old element when new one is passed', () => {
 			interactable.setElement(newElement);
 			expect(removeEventListener.mock.calls).toEqual([
-				['pointerdown', expect.any(Function)],
-				['pointermove', expect.any(Function)],
+				['click', expect.any(Function)],
+				['mouseover', expect.any(Function)],
 			]);
 		});
 
@@ -158,8 +113,8 @@ describe('Interactable', () => {
 			interactable.destroy();
 			expect(removeSpy).toHaveBeenCalled();
 			expect(newRemoveEventListener.mock.calls).toEqual([
-				['pointerdown', expect.any(Function)],
-				['pointermove', expect.any(Function)],
+				['click', expect.any(Function)],
+				['mouseover', expect.any(Function)],
 			]);
 		});
 	});
