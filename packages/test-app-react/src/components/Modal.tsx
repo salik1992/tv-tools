@@ -17,8 +17,10 @@ import { Typography } from './Typography';
 
 const noop = () => false;
 
+type ModalSize = 'small' | 'large';
+
 export const ModalContext = createContext<{
-	open: (content: ReactNode) => boolean;
+	open: (content: ReactNode, size?: ModalSize) => boolean;
 	close: () => boolean;
 }>({
 	open: noop,
@@ -35,12 +37,20 @@ const Wrap = styled.div`
 	background-color: ${Colors.bg.opaque};
 `;
 
-const InnerWrap = styled.div`
+const PADDING = {
+	small: [12, 40],
+	large: [5, 20],
+} as const;
+
+const InnerWrap = styled.div.attrs<{ $size: ModalSize }>(({ $size }) => ({
+	style: {
+		top: `${PADDING[$size][0] * Typography.row}px`,
+		bottom: `${PADDING[$size][0] * Typography.row}px`,
+		left: `${PADDING[$size][1] * Typography.column}px`,
+		right: `${PADDING[$size][1] * Typography.column}px`,
+	},
+}))`
 	position: absolute;
-	top: ${5 * Typography.row}px;
-	bottom: ${5 * Typography.row}px;
-	left: ${20 * Typography.column}px;
-	right: ${20 * Typography.column}px;
 	padding: ${3 * Typography.column}px ${6 * Typography.column}px;
 	background-color: ${Colors.bg.primary};
 	${Border}
@@ -65,8 +75,9 @@ const blockEvent = () => true;
 
 const Modal = ({
 	children,
+	size,
 	onClose,
-}: PropsWithChildren<{ onClose: () => boolean }>) => {
+}: PropsWithChildren<{ size: ModalSize; onClose: () => boolean }>) => {
 	const {
 		focusContextValue,
 		useOnBack,
@@ -95,7 +106,7 @@ const Modal = ({
 		<FocusContext.Provider value={focusContextValue}>
 			<Wrap>
 				<Backdrop onClick={onClick} />
-				<InnerWrap>
+				<InnerWrap $size={size}>
 					<Content>{children}</Content>
 				</InnerWrap>
 			</Wrap>
@@ -105,11 +116,13 @@ const Modal = ({
 
 export const ModalProvider = ({ children }: PropsWithChildren) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [size, setSize] = useState<ModalSize>('large');
 	const [content, setContent] = useState<ReactNode | null>(null);
 
 	const open = useCallback(
-		(newContent: ReactNode) => {
+		(newContent: ReactNode, size: ModalSize = 'large') => {
 			setIsOpen(true);
+			setSize(size);
 			setContent(newContent);
 			return true;
 		},
@@ -125,7 +138,11 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
 	return (
 		<ModalContext.Provider value={{ open, close }}>
 			{children}
-			{isOpen && <Modal onClose={close}>{content}</Modal>}
+			{isOpen && (
+				<Modal onClose={close} size={size}>
+					{content}
+				</Modal>
+			)}
 		</ModalContext.Provider>
 	);
 };

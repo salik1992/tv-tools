@@ -1,6 +1,7 @@
 import { type PropsWithChildren, useCallback, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { device } from '@salik1992/tv-tools/device';
 import {
 	FocusContext,
 	useFocusContainer,
@@ -8,6 +9,7 @@ import {
 import { useMenuItems } from '../hooks/useMenuItems';
 import { getCurrentPath } from '../utils/getCurrentPath';
 import { menuItemToPath } from '../utils/menuItemToPath';
+import { useConfirm } from './Confirm';
 import { Menu } from './Menu';
 import { Colors } from './Theme';
 import { Typography } from './Typography';
@@ -47,6 +49,7 @@ export const Screen = ({
 	const withMenu = !!menuItems.find(
 		(item) => menuItemToPath(item) === currentPath,
 	);
+	const confirm = useConfirm();
 
 	const openMenu = useCallback(() => {
 		if (withMenu && !isMenuVisible) {
@@ -65,12 +68,21 @@ export const Screen = ({
 		return false;
 	}, [withMenu, isMenuVisible, setIsMenuVisible]);
 
+	const closeApplication = useCallback(async () => {
+		if (await confirm('Do you really want to close the application?')) {
+			device.closeApplication();
+		}
+	}, [confirm]);
+
 	useOnLeft(openMenu);
 
 	useOnRight(closeMenu);
 
 	useOnBack(() => {
 		if (isMenuVisible) {
+			if (device.canCloseApplication) {
+				closeApplication();
+			}
 			return closeMenu();
 		} else if (backNavigation && !withMenu) {
 			// @ts-expect-error: backNavigation is either a string or a number
