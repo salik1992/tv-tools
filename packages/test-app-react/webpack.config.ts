@@ -19,7 +19,7 @@ const babelLoader = {
 };
 
 const config: webpack.Configuration = {
-	target: ['web', 'es3'],
+	target: 'web',
 	entry: './src/main.tsx',
 	output: {
 		filename: 'bundle.js',
