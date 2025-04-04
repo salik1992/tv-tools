@@ -25,7 +25,11 @@ export const FocusRoot = ({
 
 	const keyDownBubble = useCallback((event: KeyboardEvent<HTMLElement>) => {
 		focus.handleKeyEvent('keydown', 'bubble', event);
-		if (alwaysPreventNavigationalEvents && isDirectional(event)) {
+		if (
+			alwaysPreventNavigationalEvents &&
+			isDirectional(event) &&
+			document.activeElement?.tagName !== 'INPUT'
+		) {
 			event.preventDefault();
 			event.stopPropagation();
 		}
@@ -37,7 +41,11 @@ export const FocusRoot = ({
 
 	const keyUpBubble = useCallback((event: KeyboardEvent<HTMLElement>) => {
 		focus.handleKeyEvent('keyup', 'bubble', event);
-		if (alwaysPreventNavigationalEvents && isDirectional(event)) {
+		if (
+			alwaysPreventNavigationalEvents &&
+			isDirectional(event) &&
+			document.activeElement?.tagName !== 'INPUT'
+		) {
 			event.preventDefault();
 			event.stopPropagation();
 		}

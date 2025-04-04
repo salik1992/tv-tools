@@ -18,7 +18,9 @@ import { FocusContext } from './context';
  * can pass all usual props that you could use for the div.
  *
  * @prop onPress - action that should happen when user presses ENTER or clicks on
- * the element.
+ * the element. When given the Interactable works in uncontrolled mode.
+ * @prop interactableBase - optional interactable base that will be used for this
+ * Interactable. This is will make Interactable controlled.
  * @prop focusOnMount - optional mark to tell the component to focus itself when mounted
  * If controlled you can also force focus on update. Please note, if there are other
  * components using focusOnMount later in the document, they will take over.
@@ -41,19 +43,31 @@ import { FocusContext } from './context';
  */
 export const Interactable = ({
 	onPress,
+	interactableBase,
 	focusOnMount,
 	id,
 	tabIndex,
 	disabled = false,
 	...props
-}: {
-	onPress: () => boolean;
+}: (
+	| {
+			onPress?: undefined;
+			interactableBase: InteractableBase;
+	  }
+	| {
+			onPress: () => boolean;
+			interactableBase?: undefined;
+	  }
+) & {
 	focusOnMount?: boolean;
 	disabled?: boolean;
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
 	const interactable = useMemo(
-		() => (disabled ? null : new InteractableBase(id, tabIndex)),
-		[id, disabled],
+		() =>
+			disabled
+				? null
+				: (interactableBase ?? new InteractableBase(id, tabIndex)),
+		[id, disabled, interactableBase],
 	);
 	const { addChild } = useContext(FocusContext);
 	const ref = useRef<HTMLDivElement>(null);
@@ -83,7 +97,7 @@ export const Interactable = ({
 	);
 
 	useEffect(() => {
-		if (interactable) {
+		if (interactable && onPress) {
 			interactable.setOnPress(onPress);
 		}
 	}, [interactable, onPress]);
