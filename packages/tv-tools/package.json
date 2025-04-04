@@ -4,8 +4,9 @@
     "version": "0.0.0",
     "exports": {
         "./*": "./dist/*/index.js",
-        "./list/*": "./dist/list/*.js",
         "./grid/*": "./dist/grid/*.js",
+        "./input/*": "./dist/input/*.js",
+        "./list/*": "./dist/list/*.js",
         "./utils/*": "./dist/utils/*.js"
     },
     "scripts": {

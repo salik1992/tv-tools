@@ -1,12 +1,5 @@
+import { isRtl } from '../utils/isRtl';
 import type { Key, KeyInformation, KeyOption } from './types';
-
-/**
- * Returns whether the document is in right to left layout.
- * @returns true for 'rtl', false otherwise
- */
-function isRtl() {
-	return document.documentElement.dir === 'rtl';
-}
 
 /**
  * Implementation of the Key class for easier manipulation with key and their

@@ -47,3 +47,5 @@ export const CHANNEL_DOWN = Keys.CHANNEL_DOWN as Key;
 
 export const VOLUME_UP = Keys.VOLUME_UP as Key;
 export const VOLUME_DOWN = Keys.VOLUME_DOWN as Key;
+
+export const INPUT_DONE = Keys.INPUT_DONE as Key;
