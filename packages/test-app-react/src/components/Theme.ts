@@ -43,6 +43,7 @@ export const Border = css`
 	border-width: 3px;
 	border-style: dashed;
 	border-color: transparent;
+	outline: none;
 
 	${Transition('border-color')}
 
