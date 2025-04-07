@@ -1,6 +1,7 @@
 import type {
 	Asset,
 	AssetImages,
+	AssetMapping,
 	AssetType,
 	GenreAsset,
 	MovieAsset,
@@ -16,16 +17,6 @@ import type {
 	TmdbMovieAsset,
 	TmdbPagedResults,
 } from '../types';
-
-export const mapPage =
-	<In extends TmdbBaseAsset, Out extends Asset>(
-		page: number,
-		assetMapping: (tmdbAsset: In) => Out,
-	) =>
-	(data: TmdbPagedResults<In>): Paged<Out> => ({
-		pages: data.total_pages,
-		[page]: data.results.map(assetMapping),
-	});
 
 export const mapImages = <
 	T extends { backdrop_path: string; poster_path: string },
@@ -150,3 +141,36 @@ export const mapTvAsset = (a: TmdbBaseTvAsset): SeriesAsset => ({
 	releaseDate: a.first_air_date,
 	seasons: [],
 });
+
+export const mapPage =
+	<In extends TmdbBaseAsset, Out extends Asset>(
+		page: number,
+		assetMapping: (tmdbAsset: In) => Out,
+	) =>
+	(data: TmdbPagedResults<In>): Paged<Out> => ({
+		pages: data.total_pages,
+		[page]: data.results.map(assetMapping),
+	});
+
+const mappingFunctionByType = (type: AssetType) => {
+	switch (type) {
+		case 'movie':
+			return mapBaseMovieAsset;
+		case 'series':
+			return mapTvAsset;
+		default:
+			return (_: TmdbBaseAsset) => ({}) as Asset;
+	}
+};
+
+export const mapPageByAssetType =
+	<In extends TmdbBaseAsset, Type extends AssetType>(
+		page: number,
+		assetType: Type,
+	) =>
+	// @ts-expect-error: difficult mapping between types
+	(data: TmdbPagedResults<In>): Paged<AssetMapping[typeof assetType]> => ({
+		pages: data.total_pages,
+		// @ts-expect-error: difficult mapping between types
+		[page]: data.results.map(mappingFunctionByType(assetType)),
+	});

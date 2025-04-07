@@ -14,18 +14,16 @@ import type {
 } from '@salik1992/test-app-data/types';
 import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
-	mapBaseMovieAsset,
 	mapConfiguration,
 	mapGenre,
 	mapMovieAsset,
-	mapPage,
+	mapPageByAssetType,
 	mapTvAsset,
 } from './mapping';
 import type {
 	Configuration,
 	ConfigurationResponse,
 	TmdbAssetMapping,
-	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbConfiguration,
 	TmdbConfigurationFilters,
@@ -104,6 +102,11 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 					page: page + 1,
 					with_genres: filter.id,
 				});
+			case 'search':
+				return this.getSearch(filter.type, {
+					page: page + 1,
+					query: filter.query,
+				});
 			default:
 				return { pages: 0 };
 		}
@@ -162,15 +165,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`discover/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterQueryParams}`);
-		return type === 'movie'
-			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
-					filter.page - 1,
-					mapBaseMovieAsset,
-				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
-			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
-					filter.page - 1,
-					mapTvAsset,
-				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
+		return mapPageByAssetType(filter.page - 1, type)(pagedResponse);
 	}
 
 	private async getTrending(
@@ -180,15 +175,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`trending/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${timeWindow}`);
-		return type === 'movie'
-			? mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
-					0,
-					mapBaseMovieAsset,
-				)(pagedResponse as TmdbPagedResults<TmdbBaseMovieAsset>)
-			: mapPage<TmdbAssetMapping[typeof type], AssetMapping[typeof type]>(
-					0,
-					mapTvAsset,
-				)(pagedResponse as TmdbPagedResults<TmdbBaseTvAsset>);
+		return mapPageByAssetType(0, type)(pagedResponse);
 	}
 
 	private async getGenres(
@@ -201,6 +188,17 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 			pages: 1,
 			[0]: response.genres.map(mapGenre(type)),
 		};
+	}
+
+	private async getSearch(
+		type: 'movie' | 'series',
+		filter: { page: number; query: string },
+	) {
+		const filterQueryParams = this.filterToQueryParams(filter);
+		const pagedResponse = await this.fetch<
+			TmdbPagedResults<TmdbAssetMapping[typeof type]>
+		>(`search/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterQueryParams}`);
+		return mapPageByAssetType(filter.page - 1, type)(pagedResponse);
 	}
 
 	private async fetch<T>(url: string) {

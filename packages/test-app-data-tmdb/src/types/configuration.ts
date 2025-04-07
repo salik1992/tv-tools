@@ -86,6 +86,20 @@ export type TmdbConfigurationFilters =
 			type: 'movie' | 'series';
 			title: string;
 			pageItemType: GenreAsset;
+	  }
+	| {
+			filterBy: 'search';
+			type: 'movie';
+			query: string;
+			title: string;
+			pageItemType: MovieAsset;
+	  }
+	| {
+			filterBy: 'search';
+			type: 'series';
+			query: string;
+			title: string;
+			pageItemType: SeriesAsset;
 	  };
 
 export type TmdbConfiguration = {
