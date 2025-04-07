@@ -44,9 +44,6 @@ export const Input = ({
 	);
 
 	const onRenderData = (renderData: CharRenderData) => {
-		if (textRef.current && textRef.current.firstChild) {
-			textRef.current.firstChild.textContent = renderData.value;
-		}
 		setRenderData(
 			charRenderDataToPxRenderData(
 				renderData,

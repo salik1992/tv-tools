@@ -5,6 +5,7 @@ import { Screen } from './Screen';
 import { Typography } from './Typography';
 
 const SearchInput = styled(Input)`
+	width: 1590px;
 	margin-top: ${2 * Typography.row}px;
 `;
 

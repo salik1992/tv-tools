@@ -22,7 +22,7 @@ export const Input = styled(InputBase)`
 
 	input {
 		position: absolute;
-		opacity: 1;
+		opacity: 0;
 	}
 
 	.text {
@@ -56,10 +56,9 @@ export const Input = styled(InputBase)`
 	}
 
 	.selection {
-		display: none;
 		display: block;
 		background-color: ${Colors.bg.focus};
-		height: ${Typography.row}px;
+		height: ${1.3 * Typography.row}px;
 		z-index: -1;
 	}
 
