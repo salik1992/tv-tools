@@ -1,4 +1,4 @@
-import { INPUT_DONE } from '../control';
+import { ENTER, INPUT_DONE } from '../control';
 import { type Interactable, focus } from '../focus';
 import { EventListener, type IEventListener } from '../utils/EventListener';
 import { runAsync } from '../utils/runAsync';
@@ -119,6 +119,12 @@ export class Input implements IEventListener<InputEvents> {
 		return value;
 	}
 
+	private inputDone(event: KeyboardEvent) {
+		this.focusInteractable();
+		event.preventDefault();
+		event.stopPropagation();
+	}
+
 	private onBlur = () => {
 		this.focusInteractable();
 	};
@@ -127,15 +133,16 @@ export class Input implements IEventListener<InputEvents> {
 		this.updateRenderData();
 	};
 
-	private onKeyDown = () => {
+	private onKeyDown = (event: KeyboardEvent) => {
 		runAsync(() => this.updateRenderData());
+		if (ENTER.is(event) && document.activeElement === this.element) {
+			this.inputDone(event);
+		}
 	};
 
 	private onKeyUp = (event: KeyboardEvent) => {
 		if (INPUT_DONE.is(event)) {
-			this.focusInteractable();
-			event.preventDefault();
-			event.stopPropagation();
+			this.inputDone(event);
 		}
 		this.updateRenderData();
 	};
