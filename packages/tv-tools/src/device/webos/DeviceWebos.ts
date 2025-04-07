@@ -1,4 +1,4 @@
-import { BACK, updateKey } from '../../control';
+import { BACK, INPUT_DONE, updateKey } from '../../control';
 import { ns } from '../../logger';
 import { noop } from '../../utils/noop';
 import type {
@@ -15,6 +15,7 @@ import {
 	type ConnectionManagerResponse,
 	type DeviceInfo,
 	type PalmSystem as IPalmSystem,
+	type KeyboardStateChangeEvent,
 	RequestUrls,
 	type WebOS,
 } from './types';
@@ -23,6 +24,11 @@ const logger = ns('[DeviceWebos]');
 
 declare const webOS: WebOS;
 declare const PalmSystem: IPalmSystem;
+declare global {
+	interface DocumentEventMap {
+		keyboardStateChange: KeyboardStateChangeEvent;
+	}
+}
 
 const CONNECTED = 'connected';
 const UNKNOWN_IP = '0.0.0.0';
@@ -79,6 +85,10 @@ export class DeviceWebos extends DeviceBase {
 			this.deviceInfoResolver(deviceInfo);
 		});
 		document.addEventListener('visibilitychange', this.onVisibilityChange);
+		document.addEventListener(
+			'keyboardStateChange',
+			this.onKeyboadStateChange,
+		);
 		updateKey(BACK, { keyCodes: [461] });
 		await this.deviceInfoPromise;
 	}
@@ -206,5 +216,16 @@ export class DeviceWebos extends DeviceBase {
 			'visibilitychange',
 			document.visibilityState === 'visible',
 		);
+	};
+
+	private onKeyboadStateChange = (event: KeyboardStateChangeEvent) => {
+		if (
+			!event.detail?.visibility &&
+			document.activeElement?.tagName === 'INPUT'
+		) {
+			(document.activeElement as HTMLInputElement).dispatchEvent(
+				INPUT_DONE.toKeyboardEvent('keyup'),
+			);
+		}
 	};
 }

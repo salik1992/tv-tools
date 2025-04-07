@@ -30,6 +30,7 @@ export function charRenderDataToPxRenderData(
 				: null,
 		};
 	}
+	textNode.textContent = renderData.value;
 	const range = document.createRange();
 	range.selectNode(textNode);
 	const wholeText = range.getBoundingClientRect();
@@ -41,11 +42,7 @@ export function charRenderDataToPxRenderData(
 		: wholeText.left + caret.width - caret.left;
 	range.setStart(textNode, renderData.selection?.[0] ?? renderData.caret);
 	range.setEnd(textNode, renderData.selection?.[1] ?? renderData.caret);
-	console.log('selection', renderData.selection, renderData.caret);
 	const selection = range.getBoundingClientRect();
-	const selectionLeft = isRtl()
-		? wholeText.left - selection.left
-		: wholeText.left + selection.width - selection.left;
 	return {
 		type: 'px',
 		active: renderData.active,
@@ -53,7 +50,7 @@ export function charRenderDataToPxRenderData(
 		value: renderData.value,
 		caret: caretPosition,
 		selection: renderData.selection
-			? [selectionLeft, selection.width]
+			? [wholeText.left - selection.left, selection.width]
 			: null,
 	};
 }

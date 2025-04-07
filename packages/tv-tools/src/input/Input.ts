@@ -22,10 +22,6 @@ export class Input implements IEventListener<InputEvents> {
 
 	constructor(public interactable: Interactable) {
 		this.interactable.setOnPress(this.onInteractablePress);
-		document.addEventListener(
-			'keyboardStateChange',
-			this.onKeyboadStateChange,
-		);
 	}
 
 	public setInputElement(element: HTMLInputElement | null) {
@@ -40,10 +36,6 @@ export class Input implements IEventListener<InputEvents> {
 
 	public destroy() {
 		this.cleanElement();
-		document.removeEventListener(
-			'keyboardStateChange',
-			this.onKeyboadStateChange,
-		);
 	}
 
 	private prepareElement() {
@@ -52,6 +44,8 @@ export class Input implements IEventListener<InputEvents> {
 			this.element.addEventListener('select', this.onSelect);
 			this.element.addEventListener('keyup', this.onKeyUp);
 			this.element.addEventListener('keydown', this.onKeyDown);
+			this.element.addEventListener('change', this.onChange);
+			this.element.addEventListener('input', this.onChange);
 			this.updateRenderData();
 		}
 	}
@@ -62,6 +56,8 @@ export class Input implements IEventListener<InputEvents> {
 			this.element.removeEventListener('select', this.onSelect);
 			this.element.removeEventListener('keyup', this.onKeyUp);
 			this.element.removeEventListener('keydown', this.onKeyDown);
+			this.element.removeEventListener('change', this.onChange);
+			this.element.removeEventListener('input', this.onChange);
 		}
 	}
 
@@ -74,7 +70,10 @@ export class Input implements IEventListener<InputEvents> {
 
 	private updateRenderData() {
 		if (this.element) {
-			const caret = this.element.selectionStart ?? 0;
+			const caret =
+				this.element.selectionDirection === 'backward'
+					? (this.element.selectionStart ?? 0)
+					: (this.element.selectionEnd ?? 0);
 			const start = this.element.selectionStart ?? 0;
 			const end = this.element.selectionEnd ?? 0;
 			const value = this.element.value;
@@ -93,7 +92,8 @@ export class Input implements IEventListener<InputEvents> {
 				this.renderData.placeholder !== !!placeholder ||
 				this.renderData.value !== value ||
 				this.renderData.caret !== caret ||
-				this.renderData.selection !== selection
+				JSON.stringify(this.renderData.selection) !==
+					JSON.stringify(selection)
 			) {
 				this.renderData.active = active;
 				this.renderData.value = this.getVisualValue();
@@ -137,14 +137,11 @@ export class Input implements IEventListener<InputEvents> {
 			event.preventDefault();
 			event.stopPropagation();
 		}
+		this.updateRenderData();
 	};
 
-	private onKeyboadStateChange = (event: {
-		detail?: { visibility: boolean };
-	}) => {
-		if (!event.detail?.visibility) {
-			this.focusInteractable();
-		}
+	private onChange = () => {
+		this.updateRenderData();
 	};
 
 	private onInteractablePress = () => {

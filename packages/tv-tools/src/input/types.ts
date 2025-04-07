@@ -1,9 +1,3 @@
-declare global {
-	interface DocumentEventMap {
-		keyboardStateChange: { detail?: { visibility: boolean } };
-	}
-}
-
 export interface RenderData {
 	active: boolean;
 	placeholder: boolean;
