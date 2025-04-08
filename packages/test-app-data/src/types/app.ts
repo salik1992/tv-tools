@@ -1,4 +1,4 @@
-import { Id } from './assets';
+import type { AssetType, Id } from './assets';
 
 export enum ScreenType {
 	Browse = 'browse',
@@ -13,10 +13,48 @@ export enum ListType {
 }
 
 export type ConfigurationFilter = {
-	[key: string]: unknown;
+	filterBy: string;
+	type?: string;
+	query?: string;
+	id?: Id;
 	title: string;
-	pageItemType: unknown;
+	pageItemType: AssetType;
 };
+
+export type DefaultFilter =
+	| {
+			filterBy: 'seasons';
+			seriesId: Id;
+			title: string;
+			pageItemType: 'season';
+	  }
+	| {
+			filterBy: 'episodes';
+			seasonId: Id;
+			title: string;
+			pageItemType: 'episode';
+	  }
+	| {
+			filterBy: 'search';
+			type: 'movie';
+			query: string;
+			title: string;
+			pageItemType: 'movie';
+	  }
+	| {
+			filterBy: 'search';
+			type: 'series';
+			query: string;
+			title: string;
+			pageItemType: 'series';
+	  }
+	| {
+			filterBy: 'search';
+			type: 'person';
+			query: string;
+			title: string;
+			pageItemType: 'series';
+	  };
 
 export type BrowseItem<ListData extends ConfigurationFilter> = {
 	id: Id;

@@ -1,11 +1,7 @@
 import type {
-	EpisodeAsset,
-	GenreAsset,
+	DefaultFilter,
 	Id,
 	ImageType,
-	MovieAsset,
-	SeasonAsset,
-	SeriesAsset,
 } from '@salik1992/test-app-data/types';
 import type { TrendingTimeWindow } from './asset';
 
@@ -36,77 +32,45 @@ export type Configuration = {
 };
 
 export type TmdbConfigurationFilters =
-	| {
-			filterBy: 'seasons';
-			seriesId: Id;
-			title: string;
-			pageItemType: SeasonAsset;
-	  }
-	| {
-			filterBy: 'episodes';
-			seasonId: Id;
-			title: string;
-			pageItemType: EpisodeAsset;
-	  }
+	| DefaultFilter
 	| {
 			filterBy: 'discover';
 			type: 'movie';
 			title: string;
-			pageItemType: MovieAsset;
+			pageItemType: 'movie';
 	  }
 	| {
 			filterBy: 'discover';
 			type: 'series';
 			title: string;
-			pageItemType: SeriesAsset;
+			pageItemType: 'series';
 	  }
 	| {
 			filterBy: 'trending';
 			type: 'movie';
 			timeWindow?: TrendingTimeWindow;
 			title: string;
-			pageItemType: MovieAsset;
+			pageItemType: 'movie';
 	  }
 	| {
 			filterBy: 'trending';
 			type: 'series';
 			timeWindow?: TrendingTimeWindow;
 			title: string;
-			pageItemType: SeriesAsset;
+			pageItemType: 'series';
 	  }
 	| {
 			filterBy: 'genre';
 			id: Id;
 			type: 'movie' | 'series';
 			title: string;
-			pageItemType: GenreAsset;
+			pageItemType: 'genre';
 	  }
 	| {
 			filterBy: 'genres';
 			type: 'movie' | 'series';
 			title: string;
-			pageItemType: GenreAsset;
-	  }
-	| {
-			filterBy: 'search';
-			type: 'movie';
-			query: string;
-			title: string;
-			pageItemType: MovieAsset;
-	  }
-	| {
-			filterBy: 'search';
-			type: 'series';
-			query: string;
-			title: string;
-			pageItemType: SeriesAsset;
-	  }
-	| {
-			filterBy: 'search';
-			type: 'person';
-			query: string;
-			title: string;
-			pageItemType: SeriesAsset;
+			pageItemType: 'genre';
 	  };
 
 export type TmdbConfiguration = {
