@@ -21,6 +21,7 @@ export const Colors = {
 		focus: '#66666f',
 		disabled: '#99999f',
 		opaque: 'rgba(0, 0, 0, 0.75)',
+		shade: 'rgba(0, 0, 0, 0.6)',
 		danger: '#ff0000',
 	},
 } as const;

@@ -28,6 +28,7 @@ const Centered = styled.div`
 
 const Text = styled(P)`
 	width: ${73 * Typography.column}px;
+	line-height: ${1.5 * Typography.row}px;
 	text-align: justify;
 	${Transition('transform')}
 `;

@@ -2,27 +2,21 @@ import { type Dispatch, useCallback } from 'react';
 import styled from 'styled-components';
 import type { PersonAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
+import { AssetsRow } from './AssetsRow';
 import { DetailLabel } from './DetailLabel';
+import { DetailPoster } from './DetailPoster';
 import { Overview } from './Overview';
 import { Colors } from './Theme';
 import { H1, P, Typography } from './Typography';
-
-const Poster = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
-	style: { backgroundImage: `url(${$src})` },
-}))`
-	position: absolute;
-	top: ${Typography.row}px;
-	right: ${Typography.row}px;
-	width: ${13 * Typography.column}px;
-	height: ${12 * Typography.row}px;
-	background-size: cover;
-	background-position: center center;
-`;
 
 const Profession = styled.span`
 	color: ${Colors.fg.secondary};
 	font-weight: 400;
 `;
+
+const indexToScroll = (index: number) => {
+	return (index + 1) * (7 * Typography.row);
+};
 
 export const DetailPerson = ({
 	asset,
@@ -35,9 +29,16 @@ export const DetailPerson = ({
 
 	const onOverviewFocus = useCallback(() => setScroll(0), [setScroll]);
 
+	const onListFocus = useCallback(
+		(listIndex: number) => () => {
+			setScroll(indexToScroll(listIndex));
+		},
+		[setScroll],
+	);
+
 	return (
 		<>
-			<Poster
+			<DetailPoster
 				$src={dataProvider.getImageUrl(asset, ['profile'], {
 					width: 200,
 				})}
@@ -59,7 +60,9 @@ export const DetailPerson = ({
 							</>
 						)}
 						{asset.birth ? asset.birth.toLocaleDateString() : ''}
-						{asset.death ? asset.death.toLocaleDateString() : ''}
+						{asset.death
+							? ` - ${asset.death.toLocaleDateString()}`
+							: ''}
 					</DetailLabel>
 				)}
 			</P>
@@ -68,6 +71,28 @@ export const DetailPerson = ({
 				overview={asset.description}
 				onFocus={onOverviewFocus}
 				focusOnMount
+			/>
+			<AssetsRow
+				key={`knownFor-${asset.id}`}
+				listData={{
+					filterBy: 'knownFor',
+					type: 'movie',
+					title: 'Movies',
+					id: asset.id,
+				}}
+				showDetail={false}
+				onFocus={onListFocus(0)}
+			/>
+			<AssetsRow
+				key={`knownFor-${asset.id}`}
+				listData={{
+					filterBy: 'knownFor',
+					type: 'series',
+					title: 'Series',
+					id: asset.id,
+				}}
+				showDetail={false}
+				onFocus={onListFocus(1)}
 			/>
 		</>
 	);

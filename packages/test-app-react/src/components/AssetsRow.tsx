@@ -51,6 +51,10 @@ const Wrap = styled.div`
 	}
 `;
 
+const Placeholder = styled(P)`
+	height: ${Tile.height}px;
+`;
+
 export const AssetsRow = ({
 	id,
 	listData,
@@ -115,7 +119,9 @@ export const AssetsRow = ({
 			{error !== null && data.pages === 0 && (
 				<P>There was an error loading the data</P>
 			)}
-			{!loading && !hasData && <P>Nothing was found.</P>}
+			{!loading && !hasData && (
+				<Placeholder>Nothing was found.</Placeholder>
+			)}
 			{hasData && (
 				<>
 					<List

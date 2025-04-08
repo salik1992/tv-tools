@@ -51,11 +51,11 @@ const InnerWrap = styled.div`
 	left: ${Typography.row}px;
 	right: ${Typography.row}px;
 	bottom: ${Typography.row}px;
-	height: ${15 * Typography.row}px;
+	height: ${21 * Typography.row}px;
 	${Border}
 	border-style: solid;
 	border-color: ${Colors.fg.primary};
-	background-color: ${Colors.bg.opaque};
+	background-color: ${Colors.bg.shade};
 	overflow: hidden;
 `;
 
@@ -106,6 +106,7 @@ export const Detail = () => {
 					/>
 					<InnerWrap>
 						<Scroller
+							key={assetId}
 							style={{ transform: `translateY(-${scroll}px)` }}
 						>
 							{isMovie(asset) && (
