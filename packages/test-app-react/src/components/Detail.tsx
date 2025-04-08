@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
-import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
-import type { MovieAsset, SeriesAsset } from '@salik1992/test-app-data/types';
+import { isMovie, isPerson, isSeries } from '@salik1992/test-app-data/guards';
+import type {
+	MovieAsset,
+	PersonAsset,
+	SeriesAsset,
+} from '@salik1992/test-app-data/types';
 import {
 	validateAssetType,
 	validateId,
@@ -10,7 +15,9 @@ import {
 import { useDataProvider } from '../data';
 import { useAssertedParams } from '../hooks/useAssertedParams';
 import { useDetailAsset } from '../hooks/useDetailAsset';
+import { Button } from './Button';
 import { DetailMovie } from './DetailMovie';
+import { DetailPerson } from './DetailPerson';
 import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
 import { ScreenCentered } from './ScreenCentered';
@@ -64,6 +71,12 @@ export const Detail = () => {
 
 	const [scroll, setScroll] = useState(0);
 
+	const navigate = useNavigate();
+	const back = useCallback(() => {
+		navigate(-1);
+		return true;
+	}, [navigate]);
+
 	return (
 		<Screen backNavigation={-1}>
 			{loading && (
@@ -75,6 +88,9 @@ export const Detail = () => {
 				<ScreenCentered>
 					<H2>There was an error loading the data.</H2>
 					<P>Error: {(error as Error)?.message}</P>
+					<Button onPress={back} focusOnMount>
+						Back
+					</Button>
 				</ScreenCentered>
 			)}
 			{asset && (
@@ -82,7 +98,7 @@ export const Detail = () => {
 					<BackdropImage
 						$src={dataProvider.getImageUrl(
 							asset,
-							['backdrop', 'still', 'poster'],
+							['backdrop', 'still', 'poster', 'profile'],
 							{
 								width: 1920,
 							},
@@ -101,6 +117,12 @@ export const Detail = () => {
 							{isSeries(asset) && (
 								<DetailSeries
 									asset={asset as SeriesAsset}
+									setScroll={setScroll}
+								/>
+							)}
+							{isPerson(asset) && (
+								<DetailPerson
+									asset={asset as PersonAsset}
 									setScroll={setScroll}
 								/>
 							)}

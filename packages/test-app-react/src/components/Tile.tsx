@@ -72,7 +72,7 @@ const TileWithImage = ({ asset }: { asset?: Asset }) => {
 					asset
 						? dataProvider.getImageUrl(
 								asset,
-								['backdrop', 'still', 'poster'],
+								['backdrop', 'still', 'poster', 'profile'],
 								{ width: WIDTH },
 							)
 						: ''

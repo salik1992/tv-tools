@@ -21,7 +21,6 @@ const Wrap = styled.div`
 	.list {
 		position: relative;
 		white-space: nowrap;
-		overflow: hidden;
 		${MouseArrows('horizontal')}
 
 		.mouse-arrow {

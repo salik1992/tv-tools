@@ -10,7 +10,6 @@ import { H3, Typography } from './Typography';
 const SEARCH_DEBOUNCE_MS = 2000;
 
 const SearchInput = styled(Input)`
-	width: 1590px;
 	margin-top: ${2 * Typography.row}px;
 `;
 
@@ -67,6 +66,15 @@ export const Search = () => {
 								filterBy: 'search',
 								type: 'series',
 								title: `TV matching "${searchQuery}"`,
+								query: searchQuery,
+							}}
+							showDetail={false}
+						/>
+						<AssetsRow
+							listData={{
+								filterBy: 'search',
+								type: 'person',
+								title: `People matching "${searchQuery}"`,
 								query: searchQuery,
 							}}
 							showDetail={false}
