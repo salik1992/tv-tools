@@ -53,6 +53,41 @@ export type DefaultFilter =
 			type: 'person';
 			query: string;
 			title: string;
+			pageItemType: 'person';
+	  }
+	| {
+			filterBy: 'castAndCrew';
+			type: 'movie' | 'series';
+			id: Id;
+			title: string;
+			pageItemType: 'person';
+	  }
+	| {
+			filterBy: 'related';
+			type: 'movie';
+			id: Id;
+			title: string;
+			pageItemType: 'movie';
+	  }
+	| {
+			filterBy: 'related';
+			type: 'series';
+			id: Id;
+			title: string;
+			pageItemType: 'series';
+	  }
+	| {
+			filterBy: 'knownFor';
+			type: 'movie';
+			id: Id;
+			title: string;
+			pageItemType: 'movie';
+	  }
+	| {
+			filterBy: 'knownFor';
+			type: 'series';
+			id: Id;
+			title: string;
 			pageItemType: 'series';
 	  };
 

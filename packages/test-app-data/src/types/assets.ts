@@ -117,12 +117,7 @@ export type PersonAsset = Asset &
 		death?: Date;
 		origin?: string;
 		profession?: string;
-		knownFor: {
-			type: AssetType;
-			id: Id;
-			title: string;
-			role?: string;
-		}[];
+		role?: string;
 	};
 
 export type GenreAsset = Asset & {
