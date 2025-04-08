@@ -81,6 +81,8 @@ export type TmdbPeopleAsset = {
 	known_for_department: string;
 	known_for?: TmdbBaseMovieAsset[];
 	popularity: number;
+	character?: string;
+	job?: string;
 };
 
 export type TmdbBaseAsset = TmdbBaseMovieAsset | TmdbBaseTvAsset;
@@ -105,3 +107,9 @@ export type TmdbAssetMapping = {
 
 export type TrendingTypes = 'movie' | 'series'; // TODO: | 'people';
 export type TrendingTimeWindow = 'day' | 'week';
+
+export type TmdbCreditsResults = {
+	id: number;
+	cast: TmdbPeopleAsset[];
+	crew: TmdbPeopleAsset[];
+};

@@ -11,6 +11,7 @@ import type {
 	ImageSize,
 	ImageType,
 	Paged,
+	PersonAsset,
 } from '@salik1992/test-app-data/types';
 import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
@@ -25,6 +26,7 @@ import type {
 	TmdbAssetMapping,
 	TmdbConfiguration,
 	TmdbConfigurationFilters,
+	TmdbCreditsResults,
 	TmdbGenres,
 	TmdbPagedResults,
 	TrendingTimeWindow,
@@ -104,6 +106,14 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 					page: page + 1,
 					query: filter.query,
 				});
+			case 'castAndCrew':
+				return this.getCredits(filter.type, filter.id);
+			case 'related':
+				return this.getSimilar(filter.type, filter.id, {
+					page: page + 1,
+				});
+			case 'knownFor':
+				return this.getPersonCredits(filter.type, filter.id);
 			default:
 				return { pages: 0 };
 		}
@@ -193,6 +203,53 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`search/${GENERIC_TYPE_TO_TMDB_TYPE[type]}?${filterQueryParams}`);
+		return mapPageByAssetType(filter.page - 1, type)(pagedResponse);
+	}
+
+	private async getCredits(
+		type: 'movie' | 'series',
+		id: Id,
+	): Promise<Paged<PersonAsset>> {
+		const response = await this.fetch<TmdbCreditsResults>(
+			`${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${id}/credits`,
+		);
+		return mapPageByAssetType(
+			0,
+			'person',
+		)({
+			page: 1,
+			results: [...response.cast, ...response.crew],
+			total_pages: 1,
+			total_results: response.cast.length + response.crew.length,
+		});
+	}
+
+	private async getPersonCredits(type: 'movie' | 'series', id: Id) {
+		const response = await this.fetch<TmdbCreditsResults>(
+			`${GENERIC_TYPE_TO_TMDB_TYPE['person']}/${id}/${GENERIC_TYPE_TO_TMDB_TYPE[type]}_credits`,
+		);
+		return mapPageByAssetType(
+			0,
+			type,
+		)({
+			page: 1,
+			results: [...response.cast, ...response.crew],
+			total_pages: 1,
+			total_results: response.cast.length + response.crew.length,
+		});
+	}
+
+	private async getSimilar(
+		type: 'movie' | 'series',
+		id: Id,
+		filter: { page: number },
+	) {
+		const filterQueryParams = this.filterToQueryParams(filter);
+		const pagedResponse = await this.fetch<
+			TmdbPagedResults<TmdbAssetMapping[typeof type]>
+		>(
+			`${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${id}/similar?${filterQueryParams}`,
+		);
 		return mapPageByAssetType(filter.page - 1, type)(pagedResponse);
 	}
 

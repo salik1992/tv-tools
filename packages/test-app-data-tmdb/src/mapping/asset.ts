@@ -164,12 +164,7 @@ export const mapPeopleAsset = (a: TmdbPeopleAsset): PersonAsset => ({
 	profession: a.known_for_department,
 	birth: a.birthday ? new Date(a.birthday) : undefined,
 	death: a.deathday ? new Date(a.deathday) : undefined,
-	knownFor:
-		a.known_for?.map((k) => ({
-			id: `${k.id}`,
-			title: k.title,
-			type: 'movie',
-		})) ?? [],
+	role: a.job ?? a.character,
 });
 
 export const mapPage =
