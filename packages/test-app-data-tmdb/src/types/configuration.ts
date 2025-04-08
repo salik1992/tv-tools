@@ -100,6 +100,13 @@ export type TmdbConfigurationFilters =
 			query: string;
 			title: string;
 			pageItemType: SeriesAsset;
+	  }
+	| {
+			filterBy: 'search';
+			type: 'person';
+			query: string;
+			title: string;
+			pageItemType: SeriesAsset;
 	  };
 
 export type TmdbConfiguration = {

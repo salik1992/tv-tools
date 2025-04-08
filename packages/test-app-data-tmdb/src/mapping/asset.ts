@@ -6,25 +6,33 @@ import type {
 	GenreAsset,
 	MovieAsset,
 	Paged,
+	PersonAsset,
 	SeriesAsset,
 } from '@salik1992/test-app-data/types';
 import type {
 	TmdbAsset,
+	TmdbAssetMapping,
 	TmdbBaseAsset,
 	TmdbBaseMovieAsset,
 	TmdbBaseTvAsset,
 	TmdbGenre,
 	TmdbMovieAsset,
 	TmdbPagedResults,
+	TmdbPeopleAsset,
 } from '../types';
 
 export const mapImages = <
-	T extends { backdrop_path: string; poster_path: string },
+	T extends {
+		backdrop_path?: string;
+		poster_path?: string;
+		profile_path?: string;
+	},
 >(
 	a: T,
 ): AssetImages['images'] => ({
 	backdrop: a.backdrop_path,
 	poster: a.poster_path,
+	profile: a.profile_path,
 });
 
 export const mapGenre =
@@ -142,6 +150,28 @@ export const mapTvAsset = (a: TmdbBaseTvAsset): SeriesAsset => ({
 	seasons: [],
 });
 
+export const mapPeopleAsset = (a: TmdbPeopleAsset): PersonAsset => ({
+	id: `${a.id}`,
+	type: 'person',
+	title: a.name,
+	description: (a.biography?.length ?? 0 > 0) ? a.biography : undefined,
+	images: mapImages(a),
+	original: {
+		language: a.place_of_birth ?? '',
+		title: a.original_name,
+	},
+	origin: a.place_of_birth ?? '',
+	profession: a.known_for_department,
+	birth: a.birthday ? new Date(a.birthday) : undefined,
+	death: a.deathday ? new Date(a.deathday) : undefined,
+	knownFor:
+		a.known_for?.map((k) => ({
+			id: `${k.id}`,
+			title: k.title,
+			type: 'movie',
+		})) ?? [],
+});
+
 export const mapPage =
 	<In extends TmdbBaseAsset, Out extends Asset>(
 		page: number,
@@ -158,13 +188,15 @@ const mappingFunctionByType = (type: AssetType) => {
 			return mapBaseMovieAsset;
 		case 'series':
 			return mapTvAsset;
+		case 'person':
+			return mapPeopleAsset;
 		default:
 			return (_: TmdbBaseAsset) => ({}) as Asset;
 	}
 };
 
 export const mapPageByAssetType =
-	<In extends TmdbBaseAsset, Type extends AssetType>(
+	<In extends TmdbBaseAsset | TmdbPeopleAsset, Type extends AssetType>(
 		page: number,
 		assetType: Type,
 	) =>
@@ -174,3 +206,22 @@ export const mapPageByAssetType =
 		// @ts-expect-error: difficult mapping between types
 		[page]: data.results.map(mappingFunctionByType(assetType)),
 	});
+
+export const mapFullAssetByType = <Type extends AssetType>(
+	type: Type,
+	asset: TmdbAssetMapping[typeof type],
+): AssetMapping[typeof type] => {
+	switch (type) {
+		case 'movie':
+			// @ts-expect-error: difficult mapping between types
+			return mapMovieAsset(asset as TmdbMovieAsset);
+		case 'series':
+			// @ts-expect-error: difficult mapping between types
+			return mapTvAsset(asset as TmdbBaseTvAsset);
+		case 'person':
+			// @ts-expect-error: difficult mapping between types
+			return mapPeopleAsset(asset as TmdbPeopleAsset);
+		default:
+			return {} as AssetMapping[typeof type];
+	}
+};

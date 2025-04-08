@@ -67,6 +67,22 @@ export type TmdbBaseTvAsset = TmdbAssetBase & {
 	origin_country: string;
 };
 
+export type TmdbPeopleAsset = {
+	id: number;
+	name: string;
+	original_name: string;
+	biography?: string;
+	birthday?: string;
+	deathday?: string;
+	place_of_birth?: string;
+	adult: boolean;
+	gender: number;
+	profile_path: string;
+	known_for_department: string;
+	known_for?: TmdbBaseMovieAsset[];
+	popularity: number;
+};
+
 export type TmdbBaseAsset = TmdbBaseMovieAsset | TmdbBaseTvAsset;
 export type TmdbAsset = TmdbMovieAsset;
 
@@ -82,7 +98,7 @@ export type TmdbAssetMapping = {
 	movie: TmdbBaseMovieAsset;
 	series: TmdbBaseTvAsset;
 	season: TmdbAsset;
-	person: TmdbAsset;
+	person: TmdbPeopleAsset;
 	episode: TmdbAsset;
 	genre: TmdbGenre;
 };

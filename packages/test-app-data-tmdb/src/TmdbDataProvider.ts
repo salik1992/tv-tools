@@ -15,20 +15,17 @@ import type {
 import { BASE_URL, BROWSE, GENERIC_TYPE_TO_TMDB_TYPE, MENU } from './constants';
 import {
 	mapConfiguration,
+	mapFullAssetByType,
 	mapGenre,
-	mapMovieAsset,
 	mapPageByAssetType,
-	mapTvAsset,
 } from './mapping';
 import type {
 	Configuration,
 	ConfigurationResponse,
 	TmdbAssetMapping,
-	TmdbBaseTvAsset,
 	TmdbConfiguration,
 	TmdbConfigurationFilters,
 	TmdbGenres,
-	TmdbMovieAsset,
 	TmdbPagedResults,
 	TrendingTimeWindow,
 } from './types';
@@ -119,9 +116,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		const response = await this.fetch<TmdbAssetMapping[typeof type]>(
 			`${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${id}`,
 		);
-		return type === 'movie'
-			? mapMovieAsset(response as unknown as TmdbMovieAsset)
-			: mapTvAsset(response as TmdbBaseTvAsset);
+		return mapFullAssetByType(type, response);
 	}
 
 	private getImageSizeForType(type: ImageType, { width, height }: ImageSize) {
@@ -179,7 +174,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	private async getGenres(
-		type: 'movie' | 'series',
+		type: 'movie' | 'series' | 'person',
 	): Promise<Paged<GenreAsset>> {
 		const response = await this.fetch<TmdbGenres>(
 			`genre/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/list`,
@@ -191,7 +186,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	private async getSearch(
-		type: 'movie' | 'series',
+		type: 'movie' | 'series' | 'person',
 		filter: { page: number; query: string },
 	) {
 		const filterQueryParams = this.filterToQueryParams(filter);
