@@ -59,7 +59,7 @@ export const DetailPerson = ({
 				focusOnMount
 			/>
 			<AssetsRow
-				key={`knownFor-${asset.id}`}
+				key={`knownFor-movies-${asset.id}`}
 				listData={{
 					filterBy: 'knownFor',
 					type: 'movie',
@@ -70,7 +70,7 @@ export const DetailPerson = ({
 				onFocus={scroll(7 * Typography.row)}
 			/>
 			<AssetsRow
-				key={`knownFor-${asset.id}`}
+				key={`knownFor-series-${asset.id}`}
 				listData={{
 					filterBy: 'knownFor',
 					type: 'series',
