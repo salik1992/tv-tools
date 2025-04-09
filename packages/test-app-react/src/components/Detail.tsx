@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
@@ -69,7 +69,14 @@ export const Detail = () => {
 
 	const { asset, loading, error } = useDetailAsset(assetType, assetId);
 
-	const [scroll, setScroll] = useState(0);
+	const [scrollPx, setScrollPx] = useState(0);
+	const scrollFunctions = useRef<Record<number, () => void>>({});
+	const scroll = useCallback((px: number) => {
+		if (!scrollFunctions.current[px]) {
+			scrollFunctions.current[px] = () => setScrollPx(px);
+		}
+		return scrollFunctions.current[px];
+	}, []);
 
 	const navigate = useNavigate();
 	const back = useCallback(() => {
@@ -107,24 +114,24 @@ export const Detail = () => {
 					<InnerWrap>
 						<Scroller
 							key={assetId}
-							style={{ transform: `translateY(-${scroll}px)` }}
+							style={{ transform: `translateY(-${scrollPx}px)` }}
 						>
 							{isMovie(asset) && (
 								<DetailMovie
 									asset={asset as MovieAsset}
-									setScroll={setScroll}
+									scroll={scroll}
 								/>
 							)}
 							{isSeries(asset) && (
 								<DetailSeries
 									asset={asset as SeriesAsset}
-									setScroll={setScroll}
+									scroll={scroll}
 								/>
 							)}
 							{isPerson(asset) && (
 								<DetailPerson
 									asset={asset as PersonAsset}
-									setScroll={setScroll}
+									scroll={scroll}
 								/>
 							)}
 						</Scroller>

@@ -1,4 +1,3 @@
-import { type Dispatch, useCallback } from 'react';
 import type { MovieAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 import { AssetsRow } from './AssetsRow';
@@ -8,27 +7,14 @@ import { DetailRating } from './DetailRating';
 import { Overview } from './Overview';
 import { H1, P, Typography } from './Typography';
 
-const indexToScroll = (index: number) => {
-	return (index + 1) * (7 * Typography.row);
-};
-
 export const DetailMovie = ({
 	asset,
-	setScroll,
+	scroll,
 }: {
 	asset: MovieAsset;
-	setScroll: Dispatch<number>;
+	scroll: (px: number) => () => void;
 }) => {
 	const dataProvider = useDataProvider();
-
-	const onOverviewFocus = useCallback(() => setScroll(0), [setScroll]);
-
-	const onListFocus = useCallback(
-		(listIndex: number) => () => {
-			setScroll(indexToScroll(listIndex));
-		},
-		[setScroll],
-	);
 
 	return (
 		<>
@@ -55,7 +41,7 @@ export const DetailMovie = ({
 			<br />
 			<Overview
 				overview={asset.description}
-				onFocus={onOverviewFocus}
+				onFocus={scroll(0)}
 				focusOnMount
 			/>
 			<AssetsRow
@@ -67,7 +53,7 @@ export const DetailMovie = ({
 					id: asset.id,
 				}}
 				showDetail={false}
-				onFocus={onListFocus(0)}
+				onFocus={scroll(7 * Typography.row)}
 			/>
 			<AssetsRow
 				key={`related-${asset.id}`}
@@ -78,7 +64,7 @@ export const DetailMovie = ({
 					id: asset.id,
 				}}
 				showDetail={false}
-				onFocus={onListFocus(1)}
+				onFocus={scroll(14 * Typography.row)}
 			/>
 		</>
 	);

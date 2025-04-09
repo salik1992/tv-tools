@@ -1,4 +1,3 @@
-import { type Dispatch, useCallback } from 'react';
 import styled from 'styled-components';
 import type { SeriesAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
@@ -13,27 +12,14 @@ const Label = styled.span`
 	color: ${Colors.fg.secondary};
 `;
 
-const indexToScroll = (index: number) => {
-	return (index + 1) * (7 * Typography.row);
-};
-
 export const DetailSeries = ({
 	asset,
-	setScroll,
+	scroll,
 }: {
 	asset: SeriesAsset;
-	setScroll: Dispatch<number>;
+	scroll: (px: number) => () => void;
 }) => {
 	const dataProvider = useDataProvider();
-
-	const onOverviewFocus = useCallback(() => setScroll(0), [setScroll]);
-
-	const onListFocus = useCallback(
-		(listIndex: number) => () => {
-			setScroll(indexToScroll(listIndex));
-		},
-		[setScroll],
-	);
 
 	return (
 		<>
@@ -51,7 +37,7 @@ export const DetailSeries = ({
 			<br />
 			<Overview
 				overview={asset.description}
-				onFocus={onOverviewFocus}
+				onFocus={scroll(0)}
 				focusOnMount
 			/>
 			<AssetsRow
@@ -63,7 +49,7 @@ export const DetailSeries = ({
 					id: asset.id,
 				}}
 				showDetail={false}
-				onFocus={onListFocus(0)}
+				onFocus={scroll(7 * Typography.row)}
 			/>
 			<AssetsRow
 				key={`related-${asset.id}`}
@@ -74,7 +60,7 @@ export const DetailSeries = ({
 					id: asset.id,
 				}}
 				showDetail={false}
-				onFocus={onListFocus(1)}
+				onFocus={scroll(14 * Typography.row)}
 			/>
 		</>
 	);
