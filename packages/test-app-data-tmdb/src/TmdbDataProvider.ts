@@ -184,7 +184,7 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	}
 
 	private async getGenres(
-		type: 'movie' | 'series' | 'person',
+		type: 'movie' | 'series',
 	): Promise<Paged<GenreAsset>> {
 		const response = await this.fetch<TmdbGenres>(
 			`genre/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/list`,
