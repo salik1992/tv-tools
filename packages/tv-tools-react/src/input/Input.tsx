@@ -45,6 +45,12 @@ export const Input = ({
 		() => (!interactable ? null : new InputBase(interactable)),
 		[interactable],
 	);
+	useEffect(
+		() => () => {
+			input?.destroy();
+		},
+		[input],
+	);
 
 	// References to the input and text elements
 	const inputRef = useRef<HTMLInputElement>(null);
