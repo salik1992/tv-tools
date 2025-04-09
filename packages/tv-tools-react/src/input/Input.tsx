@@ -136,12 +136,7 @@ export const Input = ({
 			focusOnMount={focusOnMount}
 		>
 			{visualText}
-			<input
-				{...props}
-				id={`${interactable.id}-input`}
-				tabIndex={tabIndex}
-				ref={inputRef}
-			/>
+			<input {...props} id={`${interactable.id}-input`} ref={inputRef} />
 		</Interactable>
 	);
 };
