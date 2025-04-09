@@ -13,6 +13,7 @@ import { Discover } from './Discover';
 import { ModalProvider } from './Modal';
 import { NotFound } from './NotFound';
 import { ScreenCentered } from './ScreenCentered';
+import { Search } from './Search';
 import { Colors } from './Theme';
 import { H1 } from './Typography';
 
@@ -51,6 +52,11 @@ const DETAIL = {
 const DISCOVER = {
 	path: '/discover/:filter',
 	element: <Discover />,
+};
+
+const SEARCH = {
+	path: '/search',
+	element: <Search />,
 };
 
 const NOT_FOUND = {
@@ -104,6 +110,9 @@ export const App = () => {
 										<Route {...DETAIL} />
 									</Route>
 									<Route {...DISCOVER}>
+										<Route {...DETAIL} />
+									</Route>
+									<Route {...SEARCH}>
 										<Route {...DETAIL} />
 									</Route>
 								</Routes>

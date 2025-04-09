@@ -52,4 +52,7 @@ export const Keys = {
 	// Volume keys
 	VOLUME_UP: new Key([175], ['AudioVolumeUp']),
 	VOLUME_DOWN: new Key([174], ['AudioVolumeDown']),
+
+	// Text input
+	INPUT_DONE: new Key([27], ['Escape']),
 };

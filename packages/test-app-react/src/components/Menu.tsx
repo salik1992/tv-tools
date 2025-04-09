@@ -31,7 +31,6 @@ const Item = styled(Interactable).attrs<{ $isOpen: boolean }>(
 )`
 	color: ${Colors.fg.secondary};
 	padding: ${Typography.column}px 0;
-	outline: none;
 	cursor: pointer;
 	white-space: nowrap;
 	${Border}

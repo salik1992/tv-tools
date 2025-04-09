@@ -11,7 +11,7 @@ export const GENERIC_TYPE_TO_TMDB_TYPE = {
 	series: 'tv',
 	season: 'season',
 	episode: 'episode',
-	person: 'people',
+	person: 'person',
 	genre: 'genre',
 } as const;
 

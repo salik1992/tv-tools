@@ -53,14 +53,9 @@ export const useConfirm = () => {
 	const confirm = useCallback(
 		(question: string, yes?: string, no?: string) =>
 			new Promise<boolean>((resolve) => {
-				const onYes = () => {
+				const onButtonPress = (result: boolean) => () => {
 					close();
-					runAsync(() => resolve(true));
-					return true;
-				};
-				const onNo = () => {
-					close();
-					runAsync(() => resolve(false));
+					runAsync(() => resolve(result));
 					return true;
 				};
 				open(
@@ -68,8 +63,8 @@ export const useConfirm = () => {
 						question={question}
 						yes={yes}
 						no={no}
-						onYes={onYes}
-						onNo={onNo}
+						onYes={onButtonPress(true)}
+						onNo={onButtonPress(false)}
 					/>,
 					'small',
 				);

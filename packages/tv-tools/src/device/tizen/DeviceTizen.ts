@@ -287,6 +287,7 @@ export class DeviceTizen extends DeviceBase {
 			{} as Record<string, number>,
 		);
 		Key.updateKey(Key.BACK, { keyCodes: [10009] });
+		Key.updateKey(Key.INPUT_DONE, { keyCodes: [65376] });
 		Key.updateKey(Key.NUMBER_0, { keyCodes: [keyCodeMap['0']] });
 		Key.updateKey(Key.NUMBER_1, { keyCodes: [keyCodeMap['1']] });
 		Key.updateKey(Key.NUMBER_2, { keyCodes: [keyCodeMap['2']] });

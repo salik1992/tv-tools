@@ -21,7 +21,6 @@ const Wrap = styled.div`
 	.list {
 		position: relative;
 		white-space: nowrap;
-		overflow: hidden;
 		${MouseArrows('horizontal')}
 
 		.mouse-arrow {
@@ -50,6 +49,10 @@ const Wrap = styled.div`
 	.list-inner-wrap {
 		${Transition('transform')}
 	}
+`;
+
+const Placeholder = styled(P)`
+	height: ${Tile.height}px;
 `;
 
 export const AssetsRow = ({
@@ -116,7 +119,9 @@ export const AssetsRow = ({
 			{error !== null && data.pages === 0 && (
 				<P>There was an error loading the data</P>
 			)}
-			{!loading && !hasData && <P>Nothing was found.</P>}
+			{!loading && !hasData && (
+				<Placeholder>Nothing was found.</Placeholder>
+			)}
 			{hasData && (
 				<>
 					<List

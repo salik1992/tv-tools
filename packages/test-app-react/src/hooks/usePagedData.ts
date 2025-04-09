@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ns } from '@salik1992/tv-tools/logger';
 import type { Paged } from '@salik1992/test-app-data/types';
 import { type ListDataConfiguration, useDataProvider } from '../data';
+
+const logger = ns('[usePagedData]');
 
 export const usePagedData = (listData: ListDataConfiguration) => {
 	const mounted = useRef(true);
@@ -30,6 +33,7 @@ export const usePagedData = (listData: ListDataConfiguration) => {
 				}));
 			}
 		} catch (e: unknown) {
+			logger.error(e);
 			if (mounted.current) {
 				setError(e);
 			}

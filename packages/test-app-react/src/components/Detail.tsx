@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { VerticalFocus } from '@salik1992/tv-tools-react/focus';
-import { isMovie, isSeries } from '@salik1992/test-app-data/guards';
-import type { MovieAsset, SeriesAsset } from '@salik1992/test-app-data/types';
+import { isMovie, isPerson, isSeries } from '@salik1992/test-app-data/guards';
+import type {
+	MovieAsset,
+	PersonAsset,
+	SeriesAsset,
+} from '@salik1992/test-app-data/types';
 import {
 	validateAssetType,
 	validateId,
@@ -10,7 +15,9 @@ import {
 import { useDataProvider } from '../data';
 import { useAssertedParams } from '../hooks/useAssertedParams';
 import { useDetailAsset } from '../hooks/useDetailAsset';
+import { Button } from './Button';
 import { DetailMovie } from './DetailMovie';
+import { DetailPerson } from './DetailPerson';
 import { DetailSeries } from './DetailSeries';
 import { Screen } from './Screen';
 import { ScreenCentered } from './ScreenCentered';
@@ -44,11 +51,11 @@ const InnerWrap = styled.div`
 	left: ${Typography.row}px;
 	right: ${Typography.row}px;
 	bottom: ${Typography.row}px;
-	height: ${15 * Typography.row}px;
+	height: ${21 * Typography.row}px;
 	${Border}
 	border-style: solid;
 	border-color: ${Colors.fg.primary};
-	background-color: ${Colors.bg.opaque};
+	background-color: ${Colors.bg.shade};
 	overflow: hidden;
 `;
 
@@ -62,7 +69,20 @@ export const Detail = () => {
 
 	const { asset, loading, error } = useDetailAsset(assetType, assetId);
 
-	const [scroll, setScroll] = useState(0);
+	const [scrollPx, setScrollPx] = useState(0);
+	const scrollFunctions = useRef<Record<number, () => void>>({});
+	const scroll = useCallback((px: number) => {
+		if (!scrollFunctions.current[px]) {
+			scrollFunctions.current[px] = () => setScrollPx(px);
+		}
+		return scrollFunctions.current[px];
+	}, []);
+
+	const navigate = useNavigate();
+	const back = useCallback(() => {
+		navigate(-1);
+		return true;
+	}, [navigate]);
 
 	return (
 		<Screen backNavigation={-1}>
@@ -75,6 +95,9 @@ export const Detail = () => {
 				<ScreenCentered>
 					<H2>There was an error loading the data.</H2>
 					<P>Error: {(error as Error)?.message}</P>
+					<Button onPress={back} focusOnMount>
+						Back
+					</Button>
 				</ScreenCentered>
 			)}
 			{asset && (
@@ -82,7 +105,7 @@ export const Detail = () => {
 					<BackdropImage
 						$src={dataProvider.getImageUrl(
 							asset,
-							['backdrop', 'still', 'poster'],
+							['backdrop', 'still', 'poster', 'profile'],
 							{
 								width: 1920,
 							},
@@ -90,18 +113,25 @@ export const Detail = () => {
 					/>
 					<InnerWrap>
 						<Scroller
-							style={{ transform: `translateY(-${scroll}px)` }}
+							key={assetId}
+							style={{ transform: `translateY(-${scrollPx}px)` }}
 						>
 							{isMovie(asset) && (
 								<DetailMovie
 									asset={asset as MovieAsset}
-									setScroll={setScroll}
+									scroll={scroll}
 								/>
 							)}
 							{isSeries(asset) && (
 								<DetailSeries
 									asset={asset as SeriesAsset}
-									setScroll={setScroll}
+									scroll={scroll}
+								/>
+							)}
+							{isPerson(asset) && (
+								<DetailPerson
+									asset={asset as PersonAsset}
+									scroll={scroll}
 								/>
 							)}
 						</Scroller>

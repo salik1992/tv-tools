@@ -1,38 +1,24 @@
-import { type Dispatch, useCallback } from 'react';
-import styled from 'styled-components';
 import type { MovieAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
+import { AssetsRow } from './AssetsRow';
 import { DetailLabel } from './DetailLabel';
+import { DetailPoster } from './DetailPoster';
 import { DetailRating } from './DetailRating';
 import { Overview } from './Overview';
 import { H1, P, Typography } from './Typography';
 
-const Poster = styled.div.attrs<{ $src: string | null }>(({ $src }) => ({
-	style: { backgroundImage: `url(${$src})` },
-}))`
-	position: absolute;
-	top: ${Typography.row}px;
-	right: ${Typography.row}px;
-	width: ${13 * Typography.column}px;
-	height: ${12 * Typography.row}px;
-	background-size: cover;
-	background-position: center center;
-`;
-
 export const DetailMovie = ({
 	asset,
-	setScroll,
+	scroll,
 }: {
 	asset: MovieAsset;
-	setScroll: Dispatch<number>;
+	scroll: (px: number) => () => void;
 }) => {
 	const dataProvider = useDataProvider();
 
-	const onOverviewFocus = useCallback(() => setScroll(0), [setScroll]);
-
 	return (
 		<>
-			<Poster
+			<DetailPoster
 				$src={dataProvider.getImageUrl(asset, ['poster'], {
 					width: 200,
 				})}
@@ -54,9 +40,32 @@ export const DetailMovie = ({
 			<DetailRating asset={asset} />
 			<br />
 			<Overview
+				key={`overview-${asset.type}-${asset.id}`}
 				overview={asset.description}
-				onFocus={onOverviewFocus}
+				onFocus={scroll(0)}
 				focusOnMount
+			/>
+			<AssetsRow
+				key={`castAndCrew-${asset.id}`}
+				listData={{
+					filterBy: 'castAndCrew',
+					type: 'movie',
+					title: 'Cast & Crew',
+					id: asset.id,
+				}}
+				showDetail={false}
+				onFocus={scroll(7 * Typography.row)}
+			/>
+			<AssetsRow
+				key={`related-${asset.id}`}
+				listData={{
+					filterBy: 'related',
+					type: 'movie',
+					title: 'You might also like',
+					id: asset.id,
+				}}
+				showDetail={false}
+				onFocus={scroll(14 * Typography.row)}
 			/>
 		</>
 	);

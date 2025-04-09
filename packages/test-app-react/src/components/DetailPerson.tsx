@@ -1,22 +1,23 @@
 import styled from 'styled-components';
-import type { SeriesAsset } from '@salik1992/test-app-data/types';
+import type { PersonAsset } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 import { AssetsRow } from './AssetsRow';
+import { DetailLabel } from './DetailLabel';
 import { DetailPoster } from './DetailPoster';
-import { DetailRating } from './DetailRating';
 import { Overview } from './Overview';
 import { Colors } from './Theme';
 import { H1, P, Typography } from './Typography';
 
-const Label = styled.span`
+const Profession = styled.span`
 	color: ${Colors.fg.secondary};
+	font-weight: 400;
 `;
 
-export const DetailSeries = ({
+export const DetailPerson = ({
 	asset,
 	scroll,
 }: {
-	asset: SeriesAsset;
+	asset: PersonAsset;
 	scroll: (px: number) => () => void;
 }) => {
 	const dataProvider = useDataProvider();
@@ -24,16 +25,33 @@ export const DetailSeries = ({
 	return (
 		<>
 			<DetailPoster
-				$src={dataProvider.getImageUrl(asset, ['poster'], {
+				$src={dataProvider.getImageUrl(asset, ['profile'], {
 					width: 200,
 				})}
 			/>
-			<H1>{asset.title}</H1>
+			<H1>
+				{asset.title}
+				{asset.profession && (
+					<Profession> known for {asset.profession}</Profession>
+				)}
+			</H1>
+			<br />
 			<P>
-				<Label>First aired: </Label>
-				{new Date(asset.releaseDate).getFullYear()}
+				{asset.birth && (
+					<DetailLabel>
+						{asset.origin && (
+							<>
+								{asset.origin}
+								<br />
+							</>
+						)}
+						{asset.birth ? asset.birth.toLocaleDateString() : ''}
+						{asset.death
+							? ` - ${asset.death.toLocaleDateString()}`
+							: ''}
+					</DetailLabel>
+				)}
 			</P>
-			<DetailRating asset={asset} />
 			<br />
 			<Overview
 				key={`overview-${asset.type}-${asset.id}`}
@@ -42,22 +60,22 @@ export const DetailSeries = ({
 				focusOnMount
 			/>
 			<AssetsRow
-				key={`castAndCrew-${asset.id}`}
+				key={`knownFor-movies-${asset.id}`}
 				listData={{
-					filterBy: 'castAndCrew',
-					type: 'series',
-					title: 'Cast & Crew',
+					filterBy: 'knownFor',
+					type: 'movie',
+					title: 'Movies',
 					id: asset.id,
 				}}
 				showDetail={false}
 				onFocus={scroll(7 * Typography.row)}
 			/>
 			<AssetsRow
-				key={`related-${asset.id}`}
+				key={`knownFor-series-${asset.id}`}
 				listData={{
-					filterBy: 'related',
+					filterBy: 'knownFor',
 					type: 'series',
-					title: 'You might also like',
+					title: 'Series',
 					id: asset.id,
 				}}
 				showDetail={false}

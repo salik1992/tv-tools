@@ -165,3 +165,7 @@ export interface WebOS {
 export interface PalmSystem {
 	deactivate(): void;
 }
+
+export interface KeyboardStateChangeEvent {
+	detail?: { visibility: boolean };
+}

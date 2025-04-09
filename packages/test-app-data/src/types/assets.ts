@@ -109,19 +109,15 @@ export type EpisodeAsset = Asset &
 	};
 
 export type PersonAsset = Asset &
-	AssetDescription &
+	Partial<AssetDescription> &
 	AssetImages &
-	AssetOriginal &
-	AssetRating & {
+	AssetOriginal & {
 		type: 'person';
-		birth: string;
-		death?: string;
-		knownFor: {
-			type: AssetType;
-			id: Id;
-			title: string;
-			role: string;
-		}[];
+		birth?: Date;
+		death?: Date;
+		origin?: string;
+		profession?: string;
+		role?: string;
 	};
 
 export type GenreAsset = Asset & {
