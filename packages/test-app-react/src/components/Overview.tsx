@@ -14,7 +14,6 @@ const Text = styled(Interactable)`
 	padding: ${Typography.column}px ${Typography.column}px;
 	max-width: ${50 * Typography.column}px;
 	cursor: pointer;
-	outline: none;
 	${Border}
 
 	${P} {

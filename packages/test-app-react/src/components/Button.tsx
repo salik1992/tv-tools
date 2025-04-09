@@ -16,7 +16,6 @@ const InteractableButton = styled(Interactable)<
 	padding: ${Typography.column}px ${Typography.column}px;
 	${Border}
 	background-color: ${({ type }) => COLORS[type]};
-	outline: none;
 	cursor: pointer;
 `;
 

@@ -49,7 +49,6 @@ const Wrap = styled(Interactable)`
 	margin-right: ${MARGIN}px;
 	padding: ${Typography.column}px ${Typography.column}px;
 	${Border}
-	outline: none;
 	cursor: pointer;
 	&:focus ${Title}, &:focus ${Description} {
 		color: ${Colors.fg.primary};
