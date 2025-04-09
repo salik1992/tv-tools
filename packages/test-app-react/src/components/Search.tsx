@@ -22,7 +22,7 @@ export const Search = () => {
 	const [searchValue, setSearchValue] = useState('');
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const defferedSetSearchQuery = useDebouncedCallback(
+	const deferredSetSearchQuery = useDebouncedCallback(
 		setSearchQuery,
 		[setSearchQuery],
 		{ limitMs: SEARCH_DEBOUNCE_MS },
@@ -31,7 +31,7 @@ export const Search = () => {
 	const onChange = useCallback(
 		(e: ChangeEvent<HTMLInputElement>) => {
 			setSearchValue(e.target.value);
-			defferedSetSearchQuery(e.target.value);
+			deferredSetSearchQuery(e.target.value);
 		},
 		[setSearchValue],
 	);
