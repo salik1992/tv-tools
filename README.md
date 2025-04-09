@@ -55,9 +55,13 @@ behavior.
 ### Device
 Unifying layer between native APIs of various device platforms. Takes care of assigning
 correct keyCodes to logical keys, device info, network info, etc.
+
+### Input
+Input component for inputting text using platforms native keyboards and hw keyboards,
+where supported. Visual input component reimplements the UI with basic divs for a full
+support of custom styling to match your application.
  
 ## Roadmap (more or less in priority order)
-- Input management using native keyboards
 - TableFocus - defining focus where it can be think of as table
 - Virtual Keyboard
 - More List and Grid behaviors - list/grid behavior decides when focus moves vs 
