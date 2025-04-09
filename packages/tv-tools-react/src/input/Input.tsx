@@ -14,6 +14,17 @@ import {
 } from '@salik1992/tv-tools/input';
 import { Interactable } from '../focus';
 
+/**
+ * Input component that wraps the Interactable and Input classes from tv-tools.
+ *
+ * @prop id - optional id that will be assigned to div and also used for focus management.
+ * @prop className - optional class name for the wrapping element.
+ * @prop style - optional style for the wrapping element.
+ * @prop tabIndex - optional tab index for the Interactable component.
+ * @prop focusOnMount - optional mark to tell the component to focus itself when mounted.
+ * @prop disabled - optional flag to disable the input.
+ * @prop other props - other props that will be passed to the input element.
+ */
 export const Input = ({
 	id: passedId,
 	className,
@@ -25,6 +36,7 @@ export const Input = ({
 }: {
 	focusOnMount?: boolean;
 } & InputHTMLAttributes<HTMLInputElement>) => {
+	// Instance of Interactable and Input classes
 	const interactable = useMemo(
 		() => (disabled ? null : new InteractableBase(passedId, tabIndex)),
 		[passedId, disabled],
@@ -34,8 +46,11 @@ export const Input = ({
 		[interactable],
 	);
 
+	// References to the input and text elements
 	const inputRef = useRef<HTMLInputElement>(null);
 	const textRef = useRef<HTMLDivElement>(null);
+
+	// Render data handling
 	const [renderData, setRenderData] = useState<PxRenderData>(
 		charRenderDataToPxRenderData(
 			input?.getRenderData(),
@@ -63,10 +78,12 @@ export const Input = ({
 		};
 	}, [input]);
 
+	// Pass element to the tv-tools Input class
 	useEffect(() => {
 		input?.setInputElement(inputRef.current);
 	}, [inputRef.current]);
 
+	// Text, caret and selection rendering
 	const visualText = (
 		<>
 			<div className="text" ref={textRef}>
@@ -88,6 +105,7 @@ export const Input = ({
 		</>
 	);
 
+	// If there is no Interactable (disabled), return the visual text only.
 	if (!interactable) {
 		return (
 			<div className={className} style={style}>
