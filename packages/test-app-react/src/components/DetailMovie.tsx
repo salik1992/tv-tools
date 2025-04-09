@@ -40,6 +40,7 @@ export const DetailMovie = ({
 			<DetailRating asset={asset} />
 			<br />
 			<Overview
+				key={`overview-${asset.type}-${asset.id}`}
 				overview={asset.description}
 				onFocus={scroll(0)}
 				focusOnMount
