@@ -2,11 +2,14 @@ import {
 	type ComponentProps,
 	type ComponentType,
 	type PropsWithChildren,
+	type ReactNode,
 	createContext,
 	useCallback,
 	useContext,
+	useEffect,
 	useMemo,
 } from 'react';
+import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import { FocusContext } from './context';
 import { useTableFocusContainer } from './useTableFocusContainer';
 
@@ -15,6 +18,7 @@ const ChildrenOnlyComponent = ({ children }: PropsWithChildren) => {
 };
 
 const TableContext = createContext<{
+	container?: TableFocusContainer;
 	TrComponent: ComponentType<PropsWithChildren<unknown>>;
 	TdComponent: ComponentType<PropsWithChildren<unknown>>;
 }>({
@@ -22,7 +26,7 @@ const TableContext = createContext<{
 	TdComponent: ChildrenOnlyComponent,
 });
 
-export const FocusTd = ({
+const FocusTd = ({
 	rowSpan,
 	colSpan,
 	children,
@@ -54,9 +58,26 @@ export const FocusTd = ({
 };
 
 const FocusTr = (props: PropsWithChildren<unknown>) => {
-	const { TrComponent } = useContext(TableContext);
+	const { TrComponent, container } = useContext(TableContext);
+
+	useEffect(() => {
+		container?.addRow();
+	});
 
 	return <TrComponent {...props} />;
+};
+
+export type FocusTableRenderComponents<
+	TrComponent extends ComponentType,
+	TdComponent extends ComponentType,
+> = {
+	FocusTr: (props: ComponentProps<TrComponent>) => ReactNode;
+	FocusTd: (
+		props: {
+			colSpan?: number;
+			rowSpan?: number;
+		} & ComponentProps<TdComponent>,
+	) => ReactNode;
 };
 
 export const FocusTable = ({
@@ -68,12 +89,12 @@ export const FocusTable = ({
 	TdComponent = ChildrenOnlyComponent,
 	...tableProps
 }: {
-	children: (components: {
-		FocusTr: ComponentProps<typeof TrComponent>;
-		FocusTd: { colSpan?: number; rowSpan?: number } & ComponentProps<
+	children: (
+		components: FocusTableRenderComponents<
+			typeof TrComponent,
 			typeof TdComponent
-		>;
-	}) => React.ReactNode;
+		>,
+	) => ReactNode;
 	id?: string;
 	TableComponent?: ComponentType;
 	TrComponent?: ComponentType;
@@ -114,6 +135,7 @@ export const FocusTable = ({
 
 	const tableContextValue = useMemo(
 		() => ({
+			container,
 			TrComponent,
 			TdComponent,
 		}),

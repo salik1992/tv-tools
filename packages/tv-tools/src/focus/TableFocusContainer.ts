@@ -105,7 +105,7 @@ export class TableFocusContainer {
 			this.insertionCoord = [-1, -1];
 		}
 		if (this.renderProgress === RenderProgress.FINISHED) {
-			this.focusTable = this.wipFocusTable;
+			this.focusTable = this.trim(this.wipFocusTable);
 			this.focusTable.forEach((row) => {
 				row.forEach((childId) => {
 					focus.addParentChild(this.id, childId);
@@ -215,6 +215,9 @@ export class TableFocusContainer {
 		childId: string,
 		{ colSpan = 1, rowSpan = 1 }: Spans = {},
 	) {
+		if (this.insertionCoord[0] === -1) {
+			this.addRow();
+		}
 		const startAt = this.moveToEmptyCoord(this.insertionCoord);
 		for (let y = 0; y < rowSpan; y++) {
 			for (let x = 0; x < colSpan; x++) {
@@ -305,5 +308,16 @@ export class TableFocusContainer {
 			},
 			{ distance: Infinity, coord: [0, 0] as Coord },
 		).coord;
+	}
+
+	/**
+	 * Trims the table to remove empty rows and columns.
+	 * @param table - the table to trim
+	 * @returns the trimmed table
+	 */
+	private trim(table: string[][]): string[][] {
+		return table
+			.filter((row) => row.length > 0)
+			.map((row) => row.filter((id) => typeof id === 'string'));
 	}
 }
