@@ -1,5 +1,6 @@
 node_modules
 dist
 .localrc.vim
+.nvim.lua
 mprocs.yaml
 coverage

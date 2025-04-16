@@ -1,8 +1,8 @@
-import { FocusContainer } from '@salik1992/tv-tools/focus';
+import { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import { useContainer } from './useContainer';
 
 /**
- * Hook containing common functionality for focus containers (HorizontalFocus,
+ * Hook containing common functionality for table focus containers (HorizontalFocus,
  * VerticalFocus, List, Grid, etc.)
  * It takes care of pairing the direct focus children to this container.
  * It also provides hooks for attaching key event listeners and allows access
@@ -14,39 +14,39 @@ import { useContainer } from './useContainer';
  * @example
  * ```typescriptreact
  * // SIMPLIFIED
- * const Grid = ({ columns, data, renderItem }) => {
+ * const Keyboard = ({ columns, data, renderItem }) => {
  *     const {
  *         focusContextValue, container,
  *         useOnLeft, useOnRight, useOnUp, useOnDown,
- *     } = useFocusContainer();
+ *     } = useTableFocusContainer();
  *
  *     useOnLeft(
- *         (event) => container.moveFocus(-1, event.target.id),
+ *         (event) => container.moveFocus({ x: -1 }, event.target.id),
  *         [container],
  *     )
  *     useOnRight(
- *         (event) => container.moveFocus(1, event.target.id),
+ *         (event) => container.moveFocus({ x: 1 }, event.target.id),
  *         [container],
  *     )
  *     useOnUp(
- *         (event) => container.moveFocus(-columns, event.target.id),
+ *         (event) => container.moveFocus({ y: -1 }, event.target.id),
  *         [container, columns],
  *     )
  *     useOnDown(
- *         (event) => container.moveFocus(columns, event.target.id),
+ *         (event) => container.moveFocus({ y: 1 }, event.target.id),
  *         [container, columns],
  *     )
  *
  *     return (
- *         <div className="grid">
+ *         <div className="keyboard">
  *             <FocusContext.Provider value={focusContextValue}>
- *                 {data.map(renderItem)}
+ *                 // render layout
  *              </FocusContext.Provider>
  *          </div>
  *     )
  * }
  * ```
  */
-export function useFocusContainer(id?: string) {
-	return useContainer(FocusContainer, id);
+export function useTableFocusContainer(id?: string) {
+	return useContainer(TableFocusContainer, id);
 }

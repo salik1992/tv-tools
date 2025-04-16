@@ -1,3 +1,6 @@
 export type Focus = {
-	addChild: (childId: string) => void;
+	addChild: (
+		childId: string,
+		spans?: { colSpan?: number; rowSpan?: number },
+	) => void;
 };
