@@ -94,6 +94,7 @@ export const FocusTable = ({
 			typeof TrComponent,
 			typeof TdComponent
 		>,
+		container: TableFocusContainer,
 	) => ReactNode;
 	id?: string;
 	TableComponent?: ComponentType;
@@ -145,8 +146,8 @@ export const FocusTable = ({
 	return (
 		<TableContext.Provider value={tableContextValue}>
 			<FocusContext.Provider value={focusContextValue}>
-				<TableComponent id={id} {...tableProps}>
-					{children({ FocusTr, FocusTd })}
+				<TableComponent {...tableProps}>
+					{children({ FocusTr, FocusTd }, container)}
 				</TableComponent>
 			</FocusContext.Provider>
 		</TableContext.Provider>
