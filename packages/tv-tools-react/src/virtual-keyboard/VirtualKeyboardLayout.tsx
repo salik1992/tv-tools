@@ -53,7 +53,7 @@ export const VirtualKeyboardLayout = ({
 
 	const className = useMemo(() => {
 		let className = 'virtual-keyboard';
-		className += ` ${renderData.layoutName}`;
+		className += ` layout-${renderData.layoutName}`;
 		if (renderData.effect !== undefined) {
 			className += ` effect-${renderData.effect}`;
 		}

@@ -61,11 +61,14 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.input = undefined;
 	}
 
-	public getRenderData() {
+	public getRenderData(triggeredByKey?: string) {
 		return {
 			effect: this.effectToString(),
 			layoutName: this.currentLayout as string,
-			layout: this.layouts[this.currentLayout],
+			layout: this.adjustFocusOnMount(
+				this.layouts[this.currentLayout],
+				triggeredByKey,
+			),
 		};
 	}
 
@@ -92,6 +95,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 								: typeof key.action === 'function'
 									? key.action
 									: add(key.char ?? key.key),
+							typeof key === 'string' ? key : key.key,
 						),
 						focusOnMount:
 							typeof key === 'string'
@@ -104,50 +108,51 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		);
 	}
 
-	private onKey = (actionCreator: InternalAction<string>) => (): true => {
-		const { action, payload } = actionCreator();
-		switch (action) {
-			case ADD:
-				this.onChar(payload as string);
-				break;
-			case SHIFT:
-				this.onShift();
-				break;
-			case CAPS:
-				this.onCaps();
-				break;
-			case SHIFT_AND_CAPS:
-				this.onShiftAndCaps();
-				break;
-			case BACKSPACE:
-				this.onBackspace();
-				break;
-			case DEL:
-				this.onDelete();
-				break;
-			case LEFT:
-				this.onLeft();
-				break;
-			case RIGHT:
-				this.onRight();
-				break;
-			case HOME:
-				this.onHome();
-				break;
-			case END:
-				this.onEnd();
-				break;
-			case DONE:
-				this.onDone();
-				break;
-			case LAYOUT:
-				this.onLayout(payload as string);
-				break;
-		}
-		return true;
-	};
+	private onKey =
+		(actionCreator: InternalAction<string>, keyId: string) => (): true => {
+			const { action, payload } = actionCreator();
+			switch (action) {
+				case ADD:
+					this.onChar(payload as string, keyId);
+					break;
+				case SHIFT:
+					this.onShift(keyId);
+					break;
+				case CAPS:
+					this.onCaps(keyId);
+					break;
+				case SHIFT_AND_CAPS:
+					this.onShiftAndCaps(keyId);
+					break;
+				case BACKSPACE:
+					this.onBackspace(keyId);
+					break;
+				case DEL:
+					this.onDelete(keyId);
+					break;
+				case LEFT:
+					this.onLeft();
+					break;
+				case RIGHT:
+					this.onRight();
+					break;
+				case HOME:
+					this.onHome();
+					break;
+				case END:
+					this.onEnd();
+					break;
+				case DONE:
+					this.onDone();
+					break;
+				case LAYOUT:
+					this.onLayout(payload as string, keyId);
+					break;
+			}
+			return true;
+		};
 
-	private onChar(rawChar: string) {
+	private onChar(rawChar: string, triggeredByKey: string) {
 		const char =
 			this.effect === Effect.CAPS || this.effect === Effect.SHIFT
 				? rawChar.toUpperCase()
@@ -161,30 +166,30 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 			this.input.dispatchEvent(new InputEvent('input'));
 		}
 		this.events.triggerEvent('addChar', char);
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
-	private onShift() {
+	private onShift(triggeredByKey: string) {
 		this.effect = this.effect === Effect.SHIFT ? Effect.NONE : Effect.SHIFT;
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
-	private onCaps() {
+	private onCaps(triggeredByKey: string) {
 		this.effect = this.effect === Effect.CAPS ? Effect.NONE : Effect.CAPS;
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
-	private onShiftAndCaps() {
+	private onShiftAndCaps(triggeredByKey: string) {
 		this.effect =
 			this.effect === Effect.SHIFT
 				? Effect.CAPS
 				: this.effect === Effect.CAPS
 					? Effect.NONE
 					: Effect.SHIFT;
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
-	private onBackspace() {
+	private onBackspace(triggeredByKey: string) {
 		if (this.input) {
 			const oldValue = this.input.value;
 			const start = this.input.selectionStart ?? oldValue.length;
@@ -193,10 +198,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 			this.input.dispatchEvent(new InputEvent('input'));
 		}
 		this.events.triggerEvent('removeChar');
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
-	private onDelete() {
+	private onDelete(triggeredByKey: string) {
 		if (this.input) {
 			const oldValue = this.input.value;
 			const start = this.input.selectionStart ?? oldValue.length;
@@ -204,7 +209,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 				oldValue.slice(0, start) + oldValue.slice(start + 1);
 			this.input.dispatchEvent(new InputEvent('input'));
 		}
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
 	private onLeft() {
@@ -245,10 +250,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.events.triggerEvent('done');
 	}
 
-	private onLayout(layoutName: string) {
+	private onLayout(layoutName: string, triggeredByKey: string) {
 		this.currentLayout = layoutName;
 		this.effect = Effect.NONE;
-		this.triggerRenderData();
+		this.triggerRenderData(triggeredByKey);
 	}
 
 	private cancelShift() {
@@ -268,7 +273,31 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		}
 	}
 
-	private triggerRenderData() {
-		this.events.triggerEvent('renderData', this.getRenderData());
+	private triggerRenderData(triggeredByKey?: string) {
+		this.events.triggerEvent(
+			'renderData',
+			this.getRenderData(triggeredByKey),
+		);
+	}
+
+	private adjustFocusOnMount(
+		layout: FullVirtualKeyboardLayouts[string],
+		triggeredByKey?: string,
+	) {
+		if (!triggeredByKey) {
+			return layout;
+		}
+		const newLayoutHasKey = layout.some((row) =>
+			row.some((key) => key.key === triggeredByKey),
+		);
+		if (!newLayoutHasKey) {
+			return layout;
+		}
+		return layout.map((row) =>
+			row.map((key) => ({
+				...key,
+				focusOnMount: key.key === triggeredByKey,
+			})),
+		);
 	}
 }

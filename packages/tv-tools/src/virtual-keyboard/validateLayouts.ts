@@ -128,7 +128,9 @@ export function validateLayouts(layouts: VirtualKeyboardLayouts) {
 								);
 							}
 							if (
-								Object.keys(layouts).includes(payload as string)
+								!Object.keys(layouts).includes(
+									payload as string,
+								)
 							) {
 								throw new Error(
 									`The layout "${payload}" is not defined in the layouts object`,
@@ -139,7 +141,10 @@ export function validateLayouts(layouts: VirtualKeyboardLayouts) {
 				}
 			}
 		}
-		if (!getAllKeys(layout.keys).includes(layout.initialKey)) {
+		if (
+			layout.initialKey &&
+			!getAllKeys(layout.keys).includes(layout.initialKey)
+		) {
 			throw new Error(
 				`The initial key "${layout.initialKey}" is not defined in the layout ${layoutName}`,
 			);

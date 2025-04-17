@@ -51,7 +51,7 @@ type GetKeyId<K extends string | Key<string>> =
 
 type Layout<Keys extends (string | Key<string>)[][]> = {
 	keys: Keys;
-	initialKey: GetKeyId<Keys[number][number]>;
+	initialKey?: GetKeyId<Keys[number][number]>;
 };
 
 export type VirtualKeyboardLayouts = {
