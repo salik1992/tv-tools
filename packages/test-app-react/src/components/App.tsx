@@ -1,4 +1,10 @@
-import { useEffect, useState } from 'react';
+import {
+	type ComponentType,
+	type PropsWithChildren,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import { device } from '@salik1992/tv-tools/device';
@@ -16,6 +22,7 @@ import { ScreenCentered } from './ScreenCentered';
 import { Search } from './Search';
 import { Colors } from './Theme';
 import { H1 } from './Typography';
+import { VirtualKeyboardProvider } from './VirtualKeyboardProvider';
 
 loggerGlobal.use(console);
 const logger = ns('[App]');
@@ -64,6 +71,25 @@ const NOT_FOUND = {
 	element: <NotFound />,
 };
 
+const Providers = ({
+	providers,
+	children,
+}: PropsWithChildren<{ providers: ComponentType<PropsWithChildren>[] }>) => {
+	const OrderedProviders = useMemo(() => {
+		return [...providers].reverse().reduce(
+			/* eslint-disable react/display-name */
+			(acc, Provider) =>
+				({ children }: PropsWithChildren) => (
+					<Provider>{acc({ children })}</Provider>
+				),
+			/* eslint-enable react/display-name */
+			({ children }: PropsWithChildren) => <>{children}</>,
+		);
+	}, [providers]);
+
+	return <OrderedProviders>{children}</OrderedProviders>;
+};
+
 export const App = () => {
 	const [isReady, setIsReady] = useState(false);
 	const [error, setError] = useState<unknown | null>(null);
@@ -101,24 +127,26 @@ export const App = () => {
 					</ScreenCentered>
 				)}
 				{isReady && !error && (
-					<ModalProvider>
-						<Router>
-							<BackNavigation>
-								<Routes>
-									<Route {...NOT_FOUND} />
-									<Route {...BROWSE}>
-										<Route {...DETAIL} />
-									</Route>
-									<Route {...DISCOVER}>
-										<Route {...DETAIL} />
-									</Route>
-									<Route {...SEARCH}>
-										<Route {...DETAIL} />
-									</Route>
-								</Routes>
-							</BackNavigation>
-						</Router>
-					</ModalProvider>
+					<Providers
+						providers={[
+							ModalProvider,
+							VirtualKeyboardProvider,
+							Router,
+							BackNavigation,
+							Routes,
+						]}
+					>
+						<Route {...NOT_FOUND} />
+						<Route {...BROWSE}>
+							<Route {...DETAIL} />
+						</Route>
+						<Route {...DISCOVER}>
+							<Route {...DETAIL} />
+						</Route>
+						<Route {...SEARCH}>
+							<Route {...DETAIL} />
+						</Route>
+					</Providers>
 				)}
 			</FocusRoot>
 			<Disclaimer />

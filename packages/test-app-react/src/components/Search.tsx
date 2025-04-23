@@ -6,6 +6,7 @@ import { AssetsRow } from './AssetsRow';
 import { Input } from './Input';
 import { Screen } from './Screen';
 import { H3, Typography } from './Typography';
+import { GenericKeyboard } from './VirtualKeyboard';
 
 const SEARCH_DEBOUNCE_MS = 2000;
 
@@ -44,6 +45,7 @@ export const Search = () => {
 					placeholder="Search..."
 					value={searchValue}
 					onChange={onChange}
+					VirtualKeyboard={GenericKeyboard}
 					focusOnMount
 				/>
 				{searchValue === '' && searchQuery === '' && (
