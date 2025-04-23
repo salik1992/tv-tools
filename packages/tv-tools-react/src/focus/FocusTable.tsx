@@ -84,7 +84,7 @@ export type FocusTableRenderComponents<
 export const FocusTable = ({
 	id,
 	children,
-	// @ts-expect-error: TODO
+	// @ts-expect-error: Circular type definition
 	TableComponent = ChildrenOnlyComponent,
 	TrComponent = ChildrenOnlyComponent,
 	TdComponent = ChildrenOnlyComponent,

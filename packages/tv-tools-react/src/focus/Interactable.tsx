@@ -1,6 +1,5 @@
 import {
-	type DetailedHTMLProps,
-	type HTMLAttributes,
+	type ComponentProps,
 	useContext,
 	useEffect,
 	useLayoutEffect,
@@ -61,7 +60,7 @@ export const Interactable = ({
 ) & {
 	focusOnMount?: boolean;
 	disabled?: boolean;
-} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+} & ComponentProps<'div'>) => {
 	const interactable = useMemo(
 		() =>
 			disabled
