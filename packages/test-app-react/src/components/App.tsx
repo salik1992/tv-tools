@@ -1,12 +1,5 @@
-import {
-	type ComponentType,
-	type PropsWithChildren,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
 import { device } from '@salik1992/tv-tools/device';
 import { logger as loggerGlobal, ns } from '@salik1992/tv-tools/logger';
 import { FocusRoot } from '@salik1992/tv-tools-react/focus';
@@ -16,35 +9,17 @@ import { Browse } from './Browse';
 import { Detail } from './Detail';
 import { Disclaimer } from './Disclaimer';
 import { Discover } from './Discover';
+import { GlobalStyles } from './GlobalStyles';
 import { ModalProvider } from './Modal';
 import { NotFound } from './NotFound';
+import { Providers } from './Providers';
 import { ScreenCentered } from './ScreenCentered';
 import { Search } from './Search';
-import { Colors } from './Theme';
 import { H1 } from './Typography';
 import { VirtualKeyboardProvider } from './VirtualKeyboardProvider';
 
 loggerGlobal.use(console);
 const logger = ns('[App]');
-
-const GlobalStyles = createGlobalStyle`
-html, body {
-	margin: 0;
-	padding: 0;
-}
-body {
-	background-color: #000000;
-	font-family: Fira Code, monospace;
-	color: #ffffff;
-}
-#root {
-	position: relative;
-	background-color: ${Colors.bg.primary};
-	width: 1920px;
-	height: 1080px;
-	overflow: hidden;
-}
-`;
 
 const BROWSE = {
 	path: '/browse/:browseId',
@@ -69,25 +44,6 @@ const SEARCH = {
 const NOT_FOUND = {
 	path: '*',
 	element: <NotFound />,
-};
-
-const Providers = ({
-	providers,
-	children,
-}: PropsWithChildren<{ providers: ComponentType<PropsWithChildren>[] }>) => {
-	const OrderedProviders = useMemo(() => {
-		return [...providers].reverse().reduce(
-			/* eslint-disable react/display-name */
-			(acc, Provider) =>
-				({ children }: PropsWithChildren) => (
-					<Provider>{acc({ children })}</Provider>
-				),
-			/* eslint-enable react/display-name */
-			({ children }: PropsWithChildren) => <>{children}</>,
-		);
-	}, [providers]);
-
-	return <OrderedProviders>{children}</OrderedProviders>;
 };
 
 export const App = () => {
