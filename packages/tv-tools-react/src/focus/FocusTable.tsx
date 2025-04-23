@@ -61,6 +61,7 @@ const FocusTr = (props: PropsWithChildren<unknown>) => {
 	const { TrComponent, container } = useContext(TableContext);
 
 	useEffect(() => {
+		// Needs to run every time to maintain children order.
 		container?.addRow();
 	});
 
