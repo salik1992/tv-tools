@@ -31,18 +31,18 @@ enum Effect {
 }
 
 export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
-	private events = new EventListener<VirtualKeyboardEvents>();
+	protected events = new EventListener<VirtualKeyboardEvents>();
 
 	public addEventListener = this.events.addEventListener;
 	public removeEventListener = this.events.removeEventListener;
 
-	private layouts: FullVirtualKeyboardLayouts;
+	protected layouts: FullVirtualKeyboardLayouts;
 
-	private currentLayout: string;
+	protected currentLayout: string;
 
-	private effect: Effect = Effect.NONE;
+	protected effect: Effect = Effect.NONE;
 
-	private input: HTMLInputElement | undefined;
+	protected input: HTMLInputElement | undefined;
 
 	constructor(
 		layouts: VirtualKeyboardLayouts,
@@ -53,12 +53,8 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.currentLayout = Object.keys(this.layouts)[0];
 	}
 
-	public assignInput(input: HTMLInputElement) {
+	public assignInput(input: HTMLInputElement | undefined) {
 		this.input = input;
-	}
-
-	public unassignInput() {
-		this.input = undefined;
 	}
 
 	public getRenderData(triggeredByKey?: string) {
@@ -72,7 +68,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		};
 	}
 
-	private prepareLayouts(
+	protected prepareLayouts(
 		layouts: VirtualKeyboardLayouts,
 	): FullVirtualKeyboardLayouts {
 		return toEntries(layouts).reduce(
@@ -161,9 +157,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		if (this.input) {
 			const oldValue = this.input.value;
 			const start = this.input.selectionStart ?? oldValue.length;
-			this.input.value =
-				oldValue.slice(0, start) + char + oldValue.slice(start);
-			this.input.dispatchEvent(new InputEvent('input'));
+			this.setInputValue(
+				oldValue.slice(0, start) + char + oldValue.slice(start),
+			);
+			this.triggerInput();
 		}
 		this.events.triggerEvent('addChar', char);
 		this.triggerRenderData(triggeredByKey);
@@ -193,9 +190,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		if (this.input) {
 			const oldValue = this.input.value;
 			const start = this.input.selectionStart ?? oldValue.length;
-			this.input.value =
-				oldValue.slice(0, start - 1) + oldValue.slice(start);
-			this.input.dispatchEvent(new InputEvent('input'));
+			this.setInputValue(
+				oldValue.slice(0, start - 1) + oldValue.slice(start),
+			);
+			this.triggerInput();
 		}
 		this.events.triggerEvent('removeChar');
 		this.triggerRenderData(triggeredByKey);
@@ -205,9 +203,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		if (this.input) {
 			const oldValue = this.input.value;
 			const start = this.input.selectionStart ?? oldValue.length;
-			this.input.value =
-				oldValue.slice(0, start) + oldValue.slice(start + 1);
-			this.input.dispatchEvent(new InputEvent('input'));
+			this.setInputValue(
+				oldValue.slice(0, start) + oldValue.slice(start + 1),
+			);
+			this.triggerInput();
 		}
 		this.triggerRenderData(triggeredByKey);
 	}
@@ -218,7 +217,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 				0,
 				(this.input.selectionStart ?? this.input.value.length) - 1,
 			);
-			this.input.dispatchEvent(new InputEvent('select'));
+			this.triggerInput('select');
 		}
 	}
 
@@ -228,21 +227,21 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 				this.input.value.length,
 				(this.input.selectionStart ?? 0) + 1,
 			);
-			this.input.dispatchEvent(new InputEvent('select'));
+			this.triggerInput('select');
 		}
 	}
 
 	private onHome() {
 		if (this.input) {
 			this.input.selectionStart = 0;
-			this.input.dispatchEvent(new InputEvent('select'));
+			this.triggerInput('select');
 		}
 	}
 
 	private onEnd() {
 		if (this.input) {
 			this.input.selectionStart = this.input.value.length;
-			this.input.dispatchEvent(new InputEvent('select'));
+			this.triggerInput('select');
 		}
 	}
 
@@ -299,5 +298,19 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 				focusOnMount: key.key === triggeredByKey,
 			})),
 		);
+	}
+
+	protected setInputValue(value: string) {
+		if (this.input) {
+			this.input.value = value;
+		}
+	}
+
+	protected triggerInput(eventName = 'input') {
+		if (this.input) {
+			this.input.dispatchEvent(
+				new InputEvent(eventName, { bubbles: true }),
+			);
+		}
 	}
 }
