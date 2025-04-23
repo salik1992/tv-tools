@@ -1,4 +1,4 @@
-import { type ComponentType, Fragment } from 'react';
+import { type ComponentType, Fragment, type RefObject } from 'react';
 import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import type { VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
 import { FocusTable, type FocusTableRenderComponents } from '../focus';
@@ -14,6 +14,7 @@ export const VirtualKeyboard = ({
 	onAddChar,
 	onRemoveChar,
 	onDone,
+	inputRef,
 }: {
 	layouts: VirtualKeyboardLayouts;
 	Keyboard: ComponentType;
@@ -23,6 +24,7 @@ export const VirtualKeyboard = ({
 	onAddChar?: (char: string) => void;
 	onRemoveChar?: () => void;
 	onDone?: () => void;
+	inputRef?: RefObject<HTMLInputElement | null>;
 }) => {
 	const Blocker = blockNavigation ? BlockNavigation : Fragment;
 	return (
@@ -48,6 +50,7 @@ export const VirtualKeyboard = ({
 						onAddChar={onAddChar}
 						onRemoveChar={onRemoveChar}
 						onDone={onDone}
+						inputRef={inputRef}
 					/>
 				)}
 			</FocusTable>

@@ -2,14 +2,14 @@ import {
 	type CSSProperties,
 	type ComponentType,
 	type PropsWithChildren,
+	type RefObject,
+	useEffect,
 	useMemo,
 	useState,
 } from 'react';
 import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
-import {
-	VirtualKeyboard,
-	type VirtualKeyboardLayouts,
-} from '@salik1992/tv-tools/virtual-keyboard';
+import { type VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
+import { VirtualKeyboardBase } from './VirtualKeyboardBase';
 import { bindListener } from './bindListener';
 
 export const VirtualKeyboardLayout = ({
@@ -21,6 +21,7 @@ export const VirtualKeyboardLayout = ({
 	onAddChar,
 	onRemoveChar,
 	onDone,
+	inputRef,
 }: {
 	layouts: VirtualKeyboardLayouts;
 	container: TableFocusContainer;
@@ -39,9 +40,10 @@ export const VirtualKeyboardLayout = ({
 	onAddChar?: (char: string) => void;
 	onRemoveChar?: () => void;
 	onDone?: () => void;
+	inputRef?: RefObject<HTMLInputElement | null>;
 }) => {
 	const keyboard = useMemo(
-		() => new VirtualKeyboard(layouts, container),
+		() => new VirtualKeyboardBase(layouts, container),
 		[container, layouts],
 	);
 	const [renderData, setRenderData] = useState(keyboard.getRenderData());
@@ -50,6 +52,10 @@ export const VirtualKeyboardLayout = ({
 	bindListener('addChar', keyboard, onAddChar);
 	bindListener('removeChar', keyboard, onRemoveChar);
 	bindListener('done', keyboard, onDone);
+
+	useEffect(() => {
+		keyboard.assignInput(inputRef?.current ?? undefined);
+	}, [keyboard, inputRef?.current]);
 
 	const className = useMemo(() => {
 		let className = 'virtual-keyboard';
