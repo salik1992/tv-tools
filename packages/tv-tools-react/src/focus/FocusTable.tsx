@@ -141,7 +141,7 @@ export const FocusTable = ({
 			TrComponent,
 			TdComponent,
 		}),
-		[TrComponent, TdComponent],
+		[container, TrComponent, TdComponent],
 	);
 
 	return (

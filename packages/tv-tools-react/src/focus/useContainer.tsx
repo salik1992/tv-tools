@@ -6,9 +6,9 @@ import {
 	useMemo,
 } from 'react';
 import {
-	FocusContainer,
+	type FocusContainer,
 	RenderProgress,
-	TableFocusContainer,
+	type TableFocusContainer,
 } from '@salik1992/tv-tools/focus';
 import { FocusContext } from './context';
 import {

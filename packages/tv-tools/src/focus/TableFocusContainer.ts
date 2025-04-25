@@ -238,7 +238,7 @@ export class TableFocusContainer {
 		}
 		if (this.wipFocusTable[coord[0]][coord[1]] !== undefined) {
 			throw new Error(
-				`Cannot set focus at [${coord[0]}, ${coord[1]}] because it is already occupied by "${this.wipFocusTable[coord[0]][coord[1]]}"`,
+				`Cannot set focus "${id}" at [${coord[0]}, ${coord[1]}] because it is already occupied by "${this.wipFocusTable[coord[0]][coord[1]]}"`,
 			);
 		}
 		this.wipFocusTable[coord[0]][coord[1]] = id;
@@ -253,7 +253,7 @@ export class TableFocusContainer {
 		const coord = startAt;
 		while (this.wipFocusTable[coord[0]] !== undefined) {
 			if (this.wipFocusTable[coord[0]][coord[1]] === undefined) {
-				return coord;
+				break;
 			}
 			coord[1] += 1;
 		}

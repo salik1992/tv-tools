@@ -2,8 +2,8 @@ import { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import { useContainer } from './useContainer';
 
 /**
- * Hook containing common functionality for table focus containers (HorizontalFocus,
- * VerticalFocus, List, Grid, etc.)
+ * Hook containing common functionality for table focus containers (e.g.
+ * VirtualKeyboard).
  * It takes care of pairing the direct focus children to this container.
  * It also provides hooks for attaching key event listeners and allows access
  * to underlying FocusContainer instance from the core tv-tools package.

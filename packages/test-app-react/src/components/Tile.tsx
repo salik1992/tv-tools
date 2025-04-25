@@ -1,4 +1,4 @@
-import { ComponentProps, type FocusEvent, useCallback } from 'react';
+import { type ComponentProps, type FocusEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';

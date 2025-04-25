@@ -1,8 +1,11 @@
 import { type ComponentType, Fragment, type RefObject } from 'react';
 import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import type { VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
-import { FocusTable, type FocusTableRenderComponents } from '../focus';
-import { BlockNavigation } from '../utils/BlockNavigation';
+import {
+	BlockNavigation,
+	FocusTable,
+	type FocusTableRenderComponents,
+} from '../focus';
 import { VirtualKeyboardLayout } from './VirtualKeyboardLayout';
 
 export const VirtualKeyboard = ({

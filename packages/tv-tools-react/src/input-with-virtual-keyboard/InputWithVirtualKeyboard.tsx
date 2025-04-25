@@ -7,7 +7,7 @@ import {
 	useRef,
 } from 'react';
 import { Input } from '../input';
-import { VKCContext } from './VirtualKeyboardContainer';
+import { VirtualKeyboardContainerContext } from './VirtualKeyboardContainer';
 
 export const InputWithVirtualKeyboard = ({
 	VirtualKeyboard,
@@ -18,7 +18,7 @@ export const InputWithVirtualKeyboard = ({
 		inputRef: RefObject<HTMLInputElement | null>;
 	}>;
 }) => {
-	const { open, close } = useContext(VKCContext);
+	const { open, close } = useContext(VirtualKeyboardContainerContext);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const onInteractablePress = useCallback(() => {

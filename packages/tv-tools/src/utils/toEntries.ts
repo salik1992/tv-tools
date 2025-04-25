@@ -1,5 +1,5 @@
 /**
- * Shorthand for Object.keys which also keeps the typing correctly.
+ * Shorthand for Object.entries which also keeps the typing correctly.
  * @param o - object which keys to convert to Array
  * @returns keys as array typed to (keyof typeof o)[]
  */

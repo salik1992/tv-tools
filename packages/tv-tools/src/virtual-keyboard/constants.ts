@@ -1,3 +1,15 @@
+export enum Effect {
+	NONE,
+	SHIFT,
+	CAPS,
+}
+
+export const NEXT_EFFECT = {
+	[Effect.NONE]: Effect.SHIFT,
+	[Effect.SHIFT]: Effect.CAPS,
+	[Effect.CAPS]: Effect.NONE,
+} as const;
+
 export const ADD = 'add';
 export const SHIFT = 'shift';
 export const CAPS = 'caps';

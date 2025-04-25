@@ -8,9 +8,11 @@ import {
 	DEL,
 	DONE,
 	END,
+	Effect,
 	HOME,
 	LAYOUT,
 	LEFT,
+	NEXT_EFFECT,
 	RIGHT,
 	SHIFT,
 	SHIFT_AND_CAPS,
@@ -23,12 +25,6 @@ import type {
 	VirtualKeyboardLayouts,
 } from './types';
 import { validateLayouts } from './validateLayouts';
-
-enum Effect {
-	NONE,
-	SHIFT,
-	CAPS,
-}
 
 export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 	protected events = new EventListener<VirtualKeyboardEvents>();
@@ -177,12 +173,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 	}
 
 	private onShiftAndCaps(triggeredByKey: string) {
-		this.effect =
-			this.effect === Effect.SHIFT
-				? Effect.CAPS
-				: this.effect === Effect.CAPS
-					? Effect.NONE
-					: Effect.SHIFT;
+		this.effect = NEXT_EFFECT[this.effect];
 		this.triggerRenderData(triggeredByKey);
 	}
 

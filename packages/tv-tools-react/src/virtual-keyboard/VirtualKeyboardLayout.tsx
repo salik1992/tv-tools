@@ -8,9 +8,9 @@ import {
 	useState,
 } from 'react';
 import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
-import { type VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
+import type { VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
 import { VirtualKeyboardBase } from './VirtualKeyboardBase';
-import { bindListener } from './bindListener';
+import { useBindListener } from './useBindListener';
 
 export const VirtualKeyboardLayout = ({
 	layouts,
@@ -48,10 +48,10 @@ export const VirtualKeyboardLayout = ({
 	);
 	const [renderData, setRenderData] = useState(keyboard.getRenderData());
 
-	bindListener('renderData', keyboard, setRenderData);
-	bindListener('addChar', keyboard, onAddChar);
-	bindListener('removeChar', keyboard, onRemoveChar);
-	bindListener('done', keyboard, onDone);
+	useBindListener('renderData', keyboard, setRenderData);
+	useBindListener('addChar', keyboard, onAddChar);
+	useBindListener('removeChar', keyboard, onRemoveChar);
+	useBindListener('done', keyboard, onDone);
 
 	useEffect(() => {
 		keyboard.assignInput(inputRef?.current ?? undefined);

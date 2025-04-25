@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { noop } from '@salik1992/tv-tools/utils/noop';
 
-export const VKCContext = createContext<{
+export const VirtualKeyboardContainerContext = createContext<{
 	open: (node: ReactNode) => void;
 	close: () => void;
 }>({
@@ -42,9 +42,9 @@ export const VirtualKeyboardProvider = ({
 	);
 
 	return (
-		<VKCContext.Provider value={value}>
+		<VirtualKeyboardContainerContext.Provider value={value}>
 			{children}
 			<div {...props}>{keyboard}</div>
-		</VKCContext.Provider>
+		</VirtualKeyboardContainerContext.Provider>
 	);
 };

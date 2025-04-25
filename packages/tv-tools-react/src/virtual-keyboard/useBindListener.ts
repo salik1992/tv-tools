@@ -4,7 +4,7 @@ import type {
 	VirtualKeyboardEvents,
 } from '@salik1992/tv-tools/virtual-keyboard';
 
-export function bindListener<EventName extends keyof VirtualKeyboardEvents>(
+export function useBindListener<EventName extends keyof VirtualKeyboardEvents>(
 	eventName: EventName,
 	keyboard: VirtualKeyboard,
 	callback:
