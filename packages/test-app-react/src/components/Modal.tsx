@@ -9,6 +9,7 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import {
+	BlockNavigation,
 	FocusContext,
 	useFocusContainer,
 } from '@salik1992/tv-tools-react/focus';
@@ -71,26 +72,13 @@ const Content = styled.div`
 	overflow: hidden;
 `;
 
-const blockEvent = () => true;
-
 const Modal = ({
 	children,
 	size,
 	onClose,
 }: PropsWithChildren<{ size: ModalSize; onClose: () => boolean }>) => {
-	const {
-		focusContextValue,
-		useOnBack,
-		useOnLeft,
-		useOnRight,
-		useOnUp,
-		useOnDown,
-	} = useFocusContainer();
+	const { focusContextValue, useOnBack } = useFocusContainer();
 	useOnBack(onClose);
-	useOnLeft(blockEvent);
-	useOnRight(blockEvent);
-	useOnUp(blockEvent);
-	useOnDown(blockEvent);
 
 	const onClick = useCallback(
 		(event: MouseEvent) => {
@@ -103,14 +91,16 @@ const Modal = ({
 	);
 
 	return (
-		<FocusContext.Provider value={focusContextValue}>
-			<Wrap>
-				<Backdrop onClick={onClick} />
-				<InnerWrap $size={size}>
-					<Content>{children}</Content>
-				</InnerWrap>
-			</Wrap>
-		</FocusContext.Provider>
+		<BlockNavigation>
+			<FocusContext.Provider value={focusContextValue}>
+				<Wrap>
+					<Backdrop onClick={onClick} />
+					<InnerWrap $size={size}>
+						<Content>{children}</Content>
+					</InnerWrap>
+				</Wrap>
+			</FocusContext.Provider>
+		</BlockNavigation>
 	);
 };
 
