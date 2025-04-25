@@ -13,6 +13,9 @@ import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import { FocusContext } from './context';
 import { useTableFocusContainer } from './useTableFocusContainer';
 
+/**
+ * ChildrenOnlyComponent is a component that renders its children only.
+ */
 const ChildrenOnlyComponent = ({ children }: PropsWithChildren) => {
 	return <>{children}</>;
 };
@@ -26,6 +29,15 @@ const TableContext = createContext<{
 	TdComponent: ChildrenOnlyComponent,
 });
 
+/**
+ * FocusTd is a component that renders a table cell with focus management.
+ *
+ * @prop rowSpan - The number of rows the cell should span.
+ * @prop colSpan - The number of columns the cell should span.
+ * @prop children - The content of the cell.
+ * @prop ...props - Additional props to pass to the cell component that is specified
+ * in the props of the parent FocusTable.
+ */
 const FocusTd = ({
 	rowSpan,
 	colSpan,
@@ -38,6 +50,8 @@ const FocusTd = ({
 	const { addChild, ...originalfocusContextValue } = useContext(FocusContext);
 	const { TdComponent } = useContext(TableContext);
 
+	// Add more params to the addChild function to support rowSpan and colSpan.
+	// This way it does not need to be handled by the end focus component (Interactable in most cases).
 	const addChildWithSpans = useCallback(
 		(childId: string) => {
 			addChild(childId, { rowSpan, colSpan });
@@ -57,6 +71,13 @@ const FocusTd = ({
 	);
 };
 
+/**
+ * FocusTr is a component that renders a table row with focus management.
+ *
+ * @prop children - The content of the row.
+ * @prop ...props - Additional props to pass to the row component that is specified
+ * in the props of the parent FocusTable.
+ */
 const FocusTr = (props: PropsWithChildren<unknown>) => {
 	const { TrComponent, container } = useContext(TableContext);
 
@@ -72,7 +93,9 @@ export type FocusTableRenderComponents<
 	TrComponent extends ComponentType,
 	TdComponent extends ComponentType,
 > = {
+	// FocusTr is a component that renders a table row with focus management.
 	FocusTr: (props: ComponentProps<TrComponent>) => ReactNode;
+	// FocusTd is a component that renders a table cell with focus management.
 	FocusTd: (
 		props: {
 			colSpan?: number;
@@ -81,6 +104,36 @@ export type FocusTableRenderComponents<
 	) => ReactNode;
 };
 
+/**
+ * FocusTable is a component that renders a table with focus management.
+ *
+ * @prop id - The id of the table.
+ * @prop children - Function that returns the table rows and cells.
+ * @prop TableComponent - The component to use for the table element.
+ * @prop TrComponent - The component to use for the table row element.
+ * @prop TdComponent - The component to use for the table cell element.
+ * @example
+ * ```typescriptreact
+ * // SIMPLIFIED
+ * const VirtualKeyboard = ({ layout }: { layout: string[][] }) => {
+ *     return (
+ *         <FocusTable
+ *		       TableComponent="div"
+ *		       TrComponent="div"
+ *		       TdComponent={Interactable}
+ *         >
+ *             {({ FocusTr, FocusTd }) => layout.map((row, i) => (
+ *			       <FocusTr key={i}>
+ *			           {row.map((item) => (
+ *			               <FocusTd key={item}>{item}</FocusTd>
+ *			           ))}
+ *			       </FocusTr>
+ *			   ))}
+ *	       </FocusTable>
+ *	   );
+ * };
+ * ```
+ */
 export const FocusTable = ({
 	id,
 	children,

@@ -25,7 +25,9 @@ import { InputBase } from './InputBase';
  * @prop tabIndex - optional tab index for the Interactable component.
  * @prop focusOnMount - optional mark to tell the component to focus itself when mounted.
  * @prop disabled - optional flag to disable the input.
- * @prop other props - other props that will be passed to the input element.
+ * @prop inputRef - optional ref to the input element.
+ * @prop onInteractablePress - optional function that will be called when the Interactable is pressed.
+ * @prop ...props - other props that will be passed to the input element.
  */
 export const Input = ({
 	id: passedId,

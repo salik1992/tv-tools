@@ -40,7 +40,6 @@ Control also handles switching LEFT/RIGHT movements for LTR/RTL app orientation.
 
 ### Focus
 Focus management using predefined movements in code without any spatial calculations.
-The spatial focus management is on the roadmap but at smaller priority.
 
 ### List
 UI Component for rendering List (vertical or horizontal) that are optimized for
@@ -60,11 +59,13 @@ correct keyCodes to logical keys, device info, network info, etc.
 Input component for inputting text using platforms native keyboards and hw keyboards,
 where supported. Visual input component reimplements the UI with basic divs for a full
 support of custom styling to match your application.
- 
+
+### Virtual Keyboard
+Virtual keyboard component for inputting text using app defined keyboards and hw keyboards,
+where supported.
+
 ## Roadmap (more or less in priority order)
-- TableFocus - defining focus where it can be think of as table
-- Virtual Keyboard
-- More List and Grid behaviors - list/grid behavior decides when focus moves vs 
+- More List and Grid behaviors - list/grid behavior decides when focus moves vs
   when the list/grid scrolls
 - Looping for List
 - Automated movement for List

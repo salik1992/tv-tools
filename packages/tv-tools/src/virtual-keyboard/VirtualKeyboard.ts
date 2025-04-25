@@ -26,18 +26,43 @@ import type {
 } from './types';
 import { validateLayouts } from './validateLayouts';
 
+/**
+ * VirtualKeyboard is a class that manages the state and behavior of a virtual keyboard.
+ */
 export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
+	/**
+	 * Handles the events triggered by the virtual keyboard.
+	 */
 	protected events = new EventListener<VirtualKeyboardEvents>();
 
+	/**
+	 * @link EventListener.addEventListener
+	 */
 	public addEventListener = this.events.addEventListener;
+
+	/**
+	 * @link EventListener.removeEventListener
+	 */
 	public removeEventListener = this.events.removeEventListener;
 
+	/**
+	 * The full virtual keyboard layouts where all keys have all details.
+	 */
 	protected layouts: FullVirtualKeyboardLayouts;
 
+	/**
+	 * The current layout of the virtual keyboard.
+	 */
 	protected currentLayout: string;
 
+	/**
+	 * The current effect of the virtual keyboard (e.g., SHIFT, CAPS).
+	 */
 	protected effect: Effect = Effect.NONE;
 
+	/**
+	 * The input element that the virtual keyboard is associated with.
+	 */
 	protected input: HTMLInputElement | undefined;
 
 	constructor(
@@ -49,10 +74,19 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.currentLayout = Object.keys(this.layouts)[0];
 	}
 
+	/**
+	 * Assigns an input element to the virtual keyboard.
+	 * If undefined is passed, the keyboard will not control any element.
+	 * @param input The optional input element to be assigned.
+	 */
 	public assignInput(input: HTMLInputElement | undefined) {
 		this.input = input;
 	}
 
+	/**
+	 * Returns the render data object.
+	 * @param triggeredByKey optional key that triggered the render data update.
+	 */
 	public getRenderData(triggeredByKey?: string) {
 		return {
 			effect: this.effectToString(),
@@ -64,6 +98,11 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		};
 	}
 
+	/**
+	 * Converts the passed layouts that can be simplified to the full layout.
+	 * @param layouts The layouts to be converted.
+	 * @return The full virtual keyboard layouts.
+	 */
 	protected prepareLayouts(
 		layouts: VirtualKeyboardLayouts,
 	): FullVirtualKeyboardLayouts {
@@ -100,6 +139,12 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		);
 	}
 
+	/**
+	 * Handles key press for the virtual keys and calls the appropriate action.
+	 * @param actionCreator The action creator function for the key press action.
+	 * @param keyId The ID of the key that was pressed.
+	 * @returns boolean indicating whether the action was handled successfully.
+	 */
 	private onKey =
 		(actionCreator: InternalAction<string>, keyId: string) => (): true => {
 			const { action, payload } = actionCreator();
@@ -144,6 +189,11 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 			return true;
 		};
 
+	/**
+	 * Handles the character input for the virtual keyboard.
+	 * @param rawChar The character to be added.
+	 * @param triggeredByKey The ID of the key that triggered the input.
+	 */
 	private onChar(rawChar: string, triggeredByKey: string) {
 		const char =
 			this.effect === Effect.CAPS || this.effect === Effect.SHIFT
@@ -162,21 +212,37 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Handles the shift effect for the virtual keyboard.
+	 * @param triggeredByKey The ID of the key that triggered the shift.
+	 */
 	private onShift(triggeredByKey: string) {
 		this.effect = this.effect === Effect.SHIFT ? Effect.NONE : Effect.SHIFT;
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Handles the caps effect for the virtual keyboard.
+	 * @param triggeredByKey The ID of the key that triggered the caps effect.
+	 */
 	private onCaps(triggeredByKey: string) {
 		this.effect = this.effect === Effect.CAPS ? Effect.NONE : Effect.CAPS;
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Handles the shift and caps effect for the virtual keyboard.
+	 * @param triggeredByKey The ID of the key that triggered the shift and caps effect.
+	 */
 	private onShiftAndCaps(triggeredByKey: string) {
 		this.effect = NEXT_EFFECT[this.effect];
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Handles the backspace action for the virtual keyboard.
+	 * @param triggeredByKey The ID of the key that triggered the backspace action.
+	 */
 	private onBackspace(triggeredByKey: string) {
 		if (this.input) {
 			const oldValue = this.input.value;
@@ -190,6 +256,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Handles the delete action for the virtual keyboard.
+	 * @param triggeredByKey The ID of the key that triggered the delete action.
+	 */
 	private onDelete(triggeredByKey: string) {
 		if (this.input) {
 			const oldValue = this.input.value;
@@ -202,6 +272,9 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Handles the left arrow action for the virtual keyboard.
+	 */
 	private onLeft() {
 		if (this.input) {
 			this.input.selectionStart = Math.max(
@@ -212,6 +285,9 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		}
 	}
 
+	/**
+	 * Handles the right arrow action for the virtual keyboard.
+	 */
 	private onRight() {
 		if (this.input) {
 			this.input.selectionStart = Math.min(
@@ -222,6 +298,9 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		}
 	}
 
+	/**
+	 * Handles the home action for the virtual keyboard.
+	 */
 	private onHome() {
 		if (this.input) {
 			this.input.selectionStart = 0;
@@ -229,6 +308,9 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		}
 	}
 
+	/**
+	 * Handles the end action for the virtual keyboard.
+	 */
 	private onEnd() {
 		if (this.input) {
 			this.input.selectionStart = this.input.value.length;
@@ -236,22 +318,37 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		}
 	}
 
+	/**
+	 * Handles the done action for the virtual keyboard.
+	 */
 	private onDone() {
 		this.events.triggerEvent('done');
 	}
 
+	/**
+	 * Handles the layout change action for the virtual keyboard.
+	 * @param layoutName The name of the new layout.
+	 * @param triggeredByKey The ID of the key that triggered the layout change.
+	 */
 	private onLayout(layoutName: string, triggeredByKey: string) {
 		this.currentLayout = layoutName;
 		this.effect = Effect.NONE;
 		this.triggerRenderData(triggeredByKey);
 	}
 
+	/**
+	 * Cancels the current shift effect.
+	 */
 	private cancelShift() {
 		if (this.effect === Effect.SHIFT) {
 			this.effect = Effect.NONE;
 		}
 	}
 
+	/**
+	 * Returns the string representation of the current effect.
+	 * @returns The string representation of the current effect.
+	 */
 	private effectToString() {
 		switch (this.effect) {
 			case Effect.SHIFT:
@@ -263,6 +360,10 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		}
 	}
 
+	/**
+	 * Triggers the render data event with the current render data.
+	 * @param triggeredByKey optional key that triggered the render data update.
+	 */
 	private triggerRenderData(triggeredByKey?: string) {
 		this.events.triggerEvent(
 			'renderData',
@@ -270,6 +371,12 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		);
 	}
 
+	/**
+	 * Adjusts the focus on mount for the virtual keyboard layout.
+	 * @param layout The layout of the virtual keyboard.
+	 * @param triggeredByKey optional key that triggered the render data update.
+	 * @returns The adjusted layout with focus on the specified triggeredByKey key.
+	 */
 	private adjustFocusOnMount(
 		layout: FullVirtualKeyboardLayouts[string],
 		triggeredByKey?: string,
@@ -291,12 +398,20 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 		);
 	}
 
+	/**
+	 * Sets the value of the input element.
+	 * @param value The value to be set.
+	 */
 	protected setInputValue(value: string) {
 		if (this.input) {
 			this.input.value = value;
 		}
 	}
 
+	/**
+	 * Triggers the input event on the input element.
+	 * @param eventName The name of the event to be triggered (default: 'input').
+	 */
 	protected triggerInput(eventName = 'input') {
 		if (this.input) {
 			this.input.dispatchEvent(

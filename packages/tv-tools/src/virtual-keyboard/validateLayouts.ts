@@ -27,6 +27,11 @@ const ALLOWED_ACTIONS = [
 	LAYOUT,
 ];
 
+/**
+ * Returns all key ids from the layout.
+ * @param layout - The layout to get the keys from.
+ * @returns An array of key ids.
+ */
 function getAllKeys(layout: (string | Key<string>)[][]) {
 	const keys: string[] = [];
 	for (const row of layout) {
@@ -41,6 +46,11 @@ function getAllKeys(layout: (string | Key<string>)[][]) {
 	return keys;
 }
 
+/**
+ * Validates the layouts object.
+ * @param layouts - The layouts object to validate.
+ * @throws Will throw an error if the layouts object is invalid.
+ */
 export function validateLayouts(layouts: VirtualKeyboardLayouts) {
 	if (!layouts) {
 		throw new Error('Layouts are required');

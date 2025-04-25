@@ -23,10 +23,16 @@ import {
 import { Focus } from './types';
 import { useRefresh } from './useRefresh';
 
+/**
+ * useContainer is a custom hook that creates a focus container and provides
+ * hooks for managing focus within that container.
+ * @param C - The type of the focus container to create. It can be either
+ * FocusContainer or TableFocusContainer.
+ */
 export function useContainer<
 	C extends typeof FocusContainer | typeof TableFocusContainer,
 >(Container: C, id?: string) {
-	const container = useMemo(() => new Container(id), [id]);
+	const container = useMemo(() => new Container(id), [Container, id]);
 	const context = useContext(FocusContext);
 	const refresh = useRefresh();
 
@@ -47,6 +53,8 @@ export function useContainer<
 	const addChild = useCallback(
 		(childId: string, spans?: { colSpan?: number; rowSpan?: number }) => {
 			if (container.getRenderProgress() === RenderProgress.FINISHED) {
+				// A child rendered outside of the sync render loop.
+				// We need to re-render the container to add it at correct spot.
 				refresh();
 			} else {
 				container.addChild(childId, spans);

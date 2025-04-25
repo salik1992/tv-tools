@@ -12,6 +12,19 @@ import type { VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboar
 import { VirtualKeyboardBase } from './VirtualKeyboardBase';
 import { useBindListener } from './useBindListener';
 
+/**
+ * VirtualKeyboardLayout is a component that renders a virtual keyboard layout.
+ * It uses the VirtualKeyboardBase class to manage the keyboard state.
+ * @prop layouts - The layouts to use for the keyboard.
+ * @prop container - The focus container to use for the keyboard.
+ * @prop Keyboard - The component to use for the keyboard (main wrapper).
+ * @prop FocusTr - The component to use for the rows of the keyboard.
+ * @prop FocusTd - The component to use for the keys of the keyboard.
+ * @prop onAddChar - Callback function to call when a character is added.
+ * @prop onRemoveChar - Callback function to call when a character should be removed.
+ * @prop onDone - Callback function to call when the keyboard input is done.
+ * @prop inputRef - Ref to the input element that the keyboard is controlling.
+ */
 export const VirtualKeyboardLayout = ({
 	layouts,
 	container,
@@ -48,13 +61,19 @@ export const VirtualKeyboardLayout = ({
 	);
 	const [renderData, setRenderData] = useState(keyboard.getRenderData());
 
+	// Internally used listener
 	useBindListener('renderData', keyboard, setRenderData);
+
+	// Passthrough listeners
 	useBindListener('addChar', keyboard, onAddChar);
 	useBindListener('removeChar', keyboard, onRemoveChar);
 	useBindListener('done', keyboard, onDone);
 
 	useEffect(() => {
 		keyboard.assignInput(inputRef?.current ?? undefined);
+		return () => {
+			keyboard.assignInput(undefined);
+		};
 	}, [keyboard, inputRef?.current]);
 
 	const className = useMemo(() => {

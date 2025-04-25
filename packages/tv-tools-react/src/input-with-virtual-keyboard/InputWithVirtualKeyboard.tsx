@@ -9,6 +9,37 @@ import {
 import { Input } from '../input';
 import { VirtualKeyboardContainerContext } from './VirtualKeyboardContainer';
 
+/**
+ * InputWithVirtualKeyboard is a component that renders the Input from '@salik1992/tv-tools-react/input'
+ * and adds a virtual keyboard to it.
+ * @prop VirtualKeyboard - The virtual keyboard component to use.
+ * @prop ...props - Additional props to pass to the Input component.
+ * @example
+ * ```typescriptreact
+ * import { InputWithVirtualKeyboard } from '@salik1992/tv-tools-react/input-with-virtual-keyboard';
+ * import { EmailKeyboard, GenericKeyboard } from './VirtualKeyboard';
+ *
+ * const SignInForm = ({ onChangeEmail, onChangePassword }) => (
+ *     <>
+ *         <Label for="email">Email</Label>
+ *         <InputWithVirtualKeyboard
+ *             id="email"
+ *             type="email"
+ *             placeholder="Email"
+ *             onChange={onChangeEmail}
+ *             VirtualKeyboard={EmailKeyboard}
+ *         />
+ *         <Label for="password">Password</Label>
+ *         <InputWithVirtualKeyboard
+ *             id="password"
+ *             type="password"
+ *             placeholder="Password"
+ *             onChange={onChangePassword}
+ *             VirtualKeyboard={GenericKeyboard}
+ *         />
+ *     </>
+ * );
+ */
 export const InputWithVirtualKeyboard = ({
 	VirtualKeyboard,
 	...props
