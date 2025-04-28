@@ -250,6 +250,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 			this.setInputValue(
 				oldValue.slice(0, start - 1) + oldValue.slice(start),
 			);
+			this.input.selectionStart = Math.max(0, start - 1);
 			this.triggerInput();
 		}
 		this.events.triggerEvent('removeChar');

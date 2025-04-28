@@ -11,7 +11,7 @@ import {
 	SHIFT,
 	SHIFT_AND_CAPS,
 } from './constants';
-import type { Key, VirtualKeyboardLayouts } from './types';
+import type { Key } from './types';
 
 const ALLOWED_ACTIONS = [
 	SHIFT,
@@ -51,7 +51,7 @@ function getAllKeys(layout: (string | Key<string>)[][]) {
  * @param layouts - The layouts object to validate.
  * @throws Will throw an error if the layouts object is invalid.
  */
-export function validateLayouts(layouts: VirtualKeyboardLayouts) {
+export function validateLayouts(layouts: unknown) {
 	if (!layouts) {
 		throw new Error('Layouts are required');
 	}
