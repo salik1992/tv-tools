@@ -39,13 +39,14 @@ import { VirtualKeyboardLayout } from './VirtualKeyboardLayout';
  *             ['u', 'v', 'w', 'x', 'y'],
  *             ['z', ' ', '.', '.com', '@'],
  *         ]}
- *         Keyboard="div"
- *         Row="div"
+ *         Keyboard={Keyboard}
+ *         Row={Row}
  *         Key={Interactable}
  *     />
  * )
  */
 export const VirtualKeyboard = ({
+	id,
 	layouts,
 	blockNavigation = false,
 	Keyboard,
@@ -56,10 +57,14 @@ export const VirtualKeyboard = ({
 	onDone,
 	inputRef,
 }: {
+	id?: string;
 	layouts: VirtualKeyboardLayouts;
-	Keyboard: ComponentType;
-	Row: ComponentType;
-	Key: ComponentType;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	Keyboard: ComponentType<any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	Row: ComponentType<any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	Key: ComponentType<any>;
 	blockNavigation?: boolean;
 	onAddChar?: (char: string) => void;
 	onRemoveChar?: () => void;
@@ -70,6 +75,7 @@ export const VirtualKeyboard = ({
 	return (
 		<Blocker>
 			<FocusTable
+				id={id}
 				TableComponent={Fragment}
 				TrComponent={Row}
 				TdComponent={Key}

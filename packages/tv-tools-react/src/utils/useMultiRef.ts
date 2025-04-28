@@ -23,6 +23,13 @@ export function useMultiRef<T>(
 				r.current = ref.current;
 			}
 		});
+		return () => {
+			refs.forEach((r) => {
+				if (r) {
+					r.current = null;
+				}
+			});
+		};
 	}, [memoizedRefs, ref.current]);
 
 	return ref;

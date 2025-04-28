@@ -90,8 +90,10 @@ const FocusTr = (props: PropsWithChildren<unknown>) => {
 };
 
 export type FocusTableRenderComponents<
-	TrComponent extends ComponentType,
-	TdComponent extends ComponentType,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	TrComponent extends ComponentType<any>,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	TdComponent extends ComponentType<any>,
 > = {
 	// FocusTr is a component that renders a table row with focus management.
 	FocusTr: (props: ComponentProps<TrComponent>) => ReactNode;
