@@ -437,9 +437,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 	 */
 	protected triggerInput(eventName = 'input') {
 		if (this.input) {
-			this.input.dispatchEvent(
-				new InputEvent(eventName, { bubbles: true }),
-			);
+			this.input.dispatchEvent(new Event(eventName, { bubbles: true }));
 		}
 	}
 }
