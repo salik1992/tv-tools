@@ -1,13 +1,19 @@
 import {
 	type CSSProperties,
 	type ComponentType,
+	type KeyboardEvent,
 	type PropsWithChildren,
 	type RefObject,
+	useCallback,
 	useEffect,
 	useMemo,
 	useState,
 } from 'react';
-import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
+import {
+	ControlEvent,
+	type TableFocusContainer,
+	focus,
+} from '@salik1992/tv-tools/focus';
 import type { VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
 import { VirtualKeyboardBase } from './VirtualKeyboardBase';
 import { useBindListener } from './useBindListener';
@@ -69,6 +75,27 @@ export const VirtualKeyboardLayout = ({
 	useBindListener('removeChar', keyboard, onRemoveChar);
 	useBindListener('done', keyboard, onDone);
 
+	// Passtrough keydown event from HW keyboard typing
+	const onKeyDown = useCallback(
+		(event: KeyboardEvent) => {
+			keyboard.onKeyDown(event.nativeEvent);
+		},
+		[keyboard],
+	);
+	useEffect(() => {
+		const params = [
+			container.id,
+			onKeyDown as (event: ControlEvent) => boolean,
+			'keydown',
+			'bubble',
+		] as const;
+		focus.addEventListener(...params);
+		return () => {
+			focus.removeEventListener(...params);
+		};
+	}, [onKeyDown]);
+
+	// Assign input to keyboard
 	useEffect(() => {
 		keyboard.assignInput(inputRef?.current ?? undefined);
 		return () => {

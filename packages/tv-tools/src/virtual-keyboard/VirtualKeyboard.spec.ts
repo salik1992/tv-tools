@@ -213,6 +213,18 @@ describe('VirtualKeyboard', () => {
 			);
 			virtualKeyboard.removeEventListener('renderData', renderData);
 		});
+
+		it('should react to HW keyboard events and type printable characters', () => {
+			const addChar = jest.fn();
+			virtualKeyboard.addEventListener('addChar', addChar);
+			const eventControl = new KeyboardEvent('keydown', { key: 'Shift' });
+			virtualKeyboard.onKeyDown(eventControl);
+			const eventPrintable = new KeyboardEvent('keydown', { key: 'a' });
+			virtualKeyboard.onKeyDown(eventPrintable);
+			jest.runAllTimers();
+			expect(addChar.mock.calls).toEqual([['a']]);
+			virtualKeyboard.removeEventListener('addChar', addChar);
+		});
 	});
 
 	describe('with input', () => {
@@ -302,6 +314,14 @@ describe('VirtualKeyboard', () => {
 			const backspaceKey = getKeyById('backspace');
 			backspaceKey?.onPress();
 			expect(input.value).toBe('1231');
+		});
+
+		it('should react to HW keyboard events and type printable characters', () => {
+			const eventControl = new KeyboardEvent('keydown', { key: 'Shift' });
+			virtualKeyboard.onKeyDown(eventControl);
+			const eventPrintable = new KeyboardEvent('keydown', { key: 'a' });
+			virtualKeyboard.onKeyDown(eventPrintable);
+			expect(input.value).toBe('123a1');
 		});
 	});
 });

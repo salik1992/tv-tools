@@ -1,6 +1,8 @@
+import { BACK, ENTER } from '../control';
 import { TableFocusContainer } from '../focus';
 import { EventListener, IEventListener } from '../utils/EventListener';
 import { toEntries } from '../utils/toEntries';
+import { NON_PRINTABLE_CHARS } from './NonPrintableChars';
 import {
 	ADD,
 	BACKSPACE,
@@ -96,6 +98,27 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 				triggeredByKey,
 			),
 		};
+	}
+
+	/**
+	 * Handles the key down event for the virtual keyboard.
+	 * This enables using HW keyboard while the virtual keyboard is open.
+	 * @param event The keyboard event.
+	 */
+	public onKeyDown(event: KeyboardEvent) {
+		console.log(event.key);
+		if (ENTER.is(event) || BACK.is(event)) {
+			this.onDone();
+			return true;
+		}
+		if (
+			typeof event.key === 'string' &&
+			!NON_PRINTABLE_CHARS.includes(event.key)
+		) {
+			this.onChar(event.key, event.key);
+			return true;
+		}
+		return false;
 	}
 
 	/**

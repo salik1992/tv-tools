@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { act, render } from '@testing-library/react';
-import { ENTER } from '@salik1992/tv-tools/control';
+import { BACK, ENTER } from '@salik1992/tv-tools/control';
 import { backspace, done, layout } from '@salik1992/tv-tools/virtual-keyboard';
 import { FocusRoot, Interactable } from '../focus';
 import { VirtualKeyboard } from './VirtualKeyboard';
@@ -86,8 +86,41 @@ describe('VirtualKeyboard', () => {
 		expect(onRemoveChar).toHaveBeenCalled();
 
 		act(() => {
+			const backspaceKey = container.querySelector(
+				'#keyboard-vk-backspace',
+			);
+			backspaceKey?.dispatchEvent(
+				new KeyboardEvent('keydown', { bubbles: true, key: 'T' }),
+			);
+			jest.runAllTimers();
+		});
+		expect(onAddChar).toHaveBeenCalledWith('T');
+
+		onAddChar.mockClear();
+
+		act(() => {
+			const backspaceKey = container.querySelector(
+				'#keyboard-vk-backspace',
+			);
+			backspaceKey?.dispatchEvent(
+				new KeyboardEvent('keydown', { bubbles: true, key: 'Shift' }),
+			);
+			jest.runAllTimers();
+		});
+		expect(onAddChar).not.toHaveBeenCalled();
+
+		act(() => {
 			const doneKey = container.querySelector('#keyboard-vk-done');
 			doneKey?.dispatchEvent(ENTER.toKeyboardEvent('keydown'));
+			jest.runAllTimers();
+		});
+		expect(onDone).toHaveBeenCalled();
+
+		onDone.mockClear();
+
+		act(() => {
+			const spaceKey = container.querySelector('#keyboard-vk-space');
+			spaceKey?.dispatchEvent(BACK.toKeyboardEvent('keydown'));
 			jest.runAllTimers();
 		});
 		expect(onDone).toHaveBeenCalled();
