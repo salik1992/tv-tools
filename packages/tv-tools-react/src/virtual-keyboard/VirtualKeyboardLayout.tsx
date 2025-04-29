@@ -61,10 +61,7 @@ export const VirtualKeyboardLayout = ({
 	onDone?: () => void;
 	inputRef?: RefObject<HTMLInputElement | null>;
 }) => {
-	const keyboard = useMemo(
-		() => new VirtualKeyboardBase(layouts, container),
-		[container, layouts],
-	);
+	const keyboard = useMemo(() => new VirtualKeyboardBase(layouts), [layouts]);
 	const [renderData, setRenderData] = useState(keyboard.getRenderData());
 
 	// Internally used listener

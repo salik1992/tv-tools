@@ -1,4 +1,3 @@
-import { TableFocusContainer } from '../focus';
 import { VirtualKeyboard } from './VirtualKeyboard';
 import {
 	backspace,
@@ -59,8 +58,7 @@ const LAYOUT = {
 };
 
 describe('VirtualKeyboard', () => {
-	const container = new TableFocusContainer();
-	const virtualKeyboard = new VirtualKeyboard(LAYOUT, container);
+	const virtualKeyboard = new VirtualKeyboard(LAYOUT);
 
 	const getKeyById = (id: string) => {
 		for (const row of virtualKeyboard.getRenderData().layout) {
