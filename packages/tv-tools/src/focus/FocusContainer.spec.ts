@@ -1,4 +1,5 @@
-import { FocusContainer, RenderProgress } from './FocusContainer';
+import { FocusContainer } from './FocusContainer';
+import { RenderProgress } from './RenderProgress';
 import { focus } from './focus';
 
 describe('FocusContainer', () => {

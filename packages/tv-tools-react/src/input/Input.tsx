@@ -1,5 +1,6 @@
 import {
 	type InputHTMLAttributes,
+	type RefObject,
 	useEffect,
 	useMemo,
 	useRef,
@@ -8,11 +9,12 @@ import {
 import { Interactable as InteractableBase } from '@salik1992/tv-tools/focus';
 import {
 	type CharRenderData,
-	Input as InputBase,
 	type PxRenderData,
 	charRenderDataToPxRenderData,
 } from '@salik1992/tv-tools/input';
 import { Interactable } from '../focus';
+import { useMultiRef } from '../utils/useMultiRef';
+import { InputBase } from './InputBase';
 
 /**
  * Input component that wraps the Interactable and Input classes from tv-tools.
@@ -23,7 +25,9 @@ import { Interactable } from '../focus';
  * @prop tabIndex - optional tab index for the Interactable component.
  * @prop focusOnMount - optional mark to tell the component to focus itself when mounted.
  * @prop disabled - optional flag to disable the input.
- * @prop other props - other props that will be passed to the input element.
+ * @prop inputRef - optional ref to the input element.
+ * @prop onInteractablePress - optional function that will be called when the Interactable is pressed.
+ * @prop ...props - other props that will be passed to the input element.
  */
 export const Input = ({
 	id: passedId,
@@ -32,9 +36,13 @@ export const Input = ({
 	tabIndex,
 	focusOnMount,
 	disabled = false,
+	inputRef: propsInputRef,
+	onInteractablePress,
 	...props
 }: {
 	focusOnMount?: boolean;
+	inputRef?: RefObject<HTMLInputElement | null>;
+	onInteractablePress?: () => boolean;
 } & InputHTMLAttributes<HTMLInputElement>) => {
 	// Instance of Interactable and Input classes
 	const interactable = useMemo(
@@ -42,7 +50,10 @@ export const Input = ({
 		[passedId, disabled],
 	);
 	const input = useMemo(
-		() => (!interactable ? null : new InputBase(interactable)),
+		() =>
+			!interactable
+				? null
+				: new InputBase(interactable, { onInteractablePress }),
 		[interactable],
 	);
 	useEffect(
@@ -54,6 +65,7 @@ export const Input = ({
 
 	// References to the input and text elements
 	const inputRef = useRef<HTMLInputElement>(null);
+	const inputMultiRef = useMultiRef(inputRef, propsInputRef);
 	const textRef = useRef<HTMLDivElement>(null);
 
 	// Render data handling
@@ -136,7 +148,11 @@ export const Input = ({
 			focusOnMount={focusOnMount}
 		>
 			{visualText}
-			<input {...props} id={`${interactable.id}-input`} ref={inputRef} />
+			<input
+				{...props}
+				id={`${interactable.id}-input`}
+				ref={inputMultiRef}
+			/>
 		</Interactable>
 	);
 };

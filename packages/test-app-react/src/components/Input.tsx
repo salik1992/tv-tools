@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import { Input as InputBase } from '@salik1992/tv-tools-react/input';
+import { InputWithVirtualKeyboard } from '@salik1992/tv-tools-react/input-with-virtual-keyboard';
 import { Border, Colors } from './Theme';
 import { Typography } from './Typography';
 
@@ -9,7 +9,7 @@ const breathe = keyframes`
 	100% { opacity: 1; }
 `;
 
-export const Input = styled(InputBase)`
+export const Input = styled(InputWithVirtualKeyboard)`
 	position: relative;
 	${Border}
 	border-color: ${Colors.fg.primary};

@@ -1,29 +1,6 @@
 import { clamp } from '../utils/clamp';
+import { RenderProgress } from './RenderProgress';
 import { focus } from './focus';
-
-/**
- * Rendering phase of the component that should hopefully match somehow to most
- * of the UI frameworks.
- */
-export enum RenderProgress {
-	/**
-	 * Initial phase when the UI is built top-down either initially or in the update loop.
-	 * "render" phase in react for example
-	 */
-	STARTED,
-	/**
-	 * Middle phase when the children components are being finished and they
-	 * announce themselves to the container.
-	 * "componentDidMount" phase in children in react for example
-	 */
-	CHILDREN,
-	/**
-	 * Final phase when the container itself is ready and we have the full list
-	 * of children and we can commit the new list.
-	 * "componentDidMount" phase in container in react for example
-	 */
-	FINISHED,
-}
 
 /**
  * The behavior class for focus containers. Focus container is a component that
@@ -34,7 +11,7 @@ export class FocusContainer {
 	/**
 	 * The current state of the render loop.
 	 */
-	private renderProgress = RenderProgress.STARTED;
+	protected renderProgress = RenderProgress.STARTED;
 
 	/**
 	 * List of the children that are currently belonging under this container.
@@ -105,6 +82,9 @@ export class FocusContainer {
 	 */
 	public setRenderProgress(renderProgress: RenderProgress) {
 		this.renderProgress = renderProgress;
+		if (this.renderProgress === RenderProgress.STARTED) {
+			this.wipFocusChildren = [];
+		}
 		if (this.renderProgress === RenderProgress.FINISHED) {
 			this.focusChildren = this.wipFocusChildren;
 			this.focusChildren.forEach((childId) => {
@@ -123,7 +103,6 @@ export class FocusContainer {
 	 */
 	public addChild(childId: string) {
 		if (this.renderProgress === RenderProgress.STARTED) {
-			this.wipFocusChildren = [];
 			this.setRenderProgress(RenderProgress.CHILDREN);
 			this.wipFocusChildren.push(childId);
 		} else if (this.renderProgress === RenderProgress.CHILDREN) {

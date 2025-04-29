@@ -1,9 +1,4 @@
-import {
-	type DetailedHTMLProps,
-	type FocusEvent,
-	type HTMLAttributes,
-	useCallback,
-} from 'react';
+import { type ComponentProps, type FocusEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
@@ -63,10 +58,7 @@ export const Hero = ({
 }: {
 	asset?: Asset & AssetDescription;
 	id?: string;
-	style?: DetailedHTMLProps<
-		HTMLAttributes<HTMLDivElement>,
-		HTMLDivElement
-	>['style'];
+	style?: ComponentProps<'div'>['style'];
 	onFocus?: (event: FocusEvent) => void;
 }) => {
 	const dataProvider = useDataProvider();

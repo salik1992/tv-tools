@@ -26,11 +26,18 @@ export class Input implements IEventListener<InputEvents> {
 		selection: null,
 	};
 
+	protected boundOnBlur = this.onBlur.bind(this);
+	protected boundOnSelect = this.onSelect.bind(this);
+	protected boundOnKeyUp = this.onKeyUp.bind(this);
+	protected boundOnKeyDown = this.onKeyDown.bind(this);
+	protected boundOnChange = this.onChange.bind(this);
+	protected boundOnInteractablePress = this.onInteractablePress.bind(this);
+
 	/**
 	 * The interactable component that is used to wrap the input element.
 	 */
 	constructor(public interactable: Interactable) {
-		this.interactable.setOnPress(this.onInteractablePress);
+		this.interactable.setOnPress(this.boundOnInteractablePress);
 	}
 
 	/**
@@ -61,14 +68,14 @@ export class Input implements IEventListener<InputEvents> {
 	/**
 	 * Prepares the input element by adding all the necessary event listeners.
 	 */
-	private prepareElement() {
+	protected prepareElement() {
 		if (this.element) {
-			this.element.addEventListener('blur', this.onBlur);
-			this.element.addEventListener('select', this.onSelect);
-			this.element.addEventListener('keyup', this.onKeyUp);
-			this.element.addEventListener('keydown', this.onKeyDown);
-			this.element.addEventListener('change', this.onChange);
-			this.element.addEventListener('input', this.onChange);
+			this.element.addEventListener('blur', this.boundOnBlur);
+			this.element.addEventListener('select', this.boundOnSelect);
+			this.element.addEventListener('keyup', this.boundOnKeyUp);
+			this.element.addEventListener('keydown', this.boundOnKeyDown);
+			this.element.addEventListener('change', this.boundOnChange);
+			this.element.addEventListener('input', this.boundOnChange);
 			this.updateRenderData();
 		}
 	}
@@ -76,21 +83,21 @@ export class Input implements IEventListener<InputEvents> {
 	/**
 	 * Cleans up the input element by removing all the event listeners.
 	 */
-	private cleanElement() {
+	protected cleanElement() {
 		if (this.element) {
-			this.element.removeEventListener('blur', this.onBlur);
-			this.element.removeEventListener('select', this.onSelect);
-			this.element.removeEventListener('keyup', this.onKeyUp);
-			this.element.removeEventListener('keydown', this.onKeyDown);
-			this.element.removeEventListener('change', this.onChange);
-			this.element.removeEventListener('input', this.onChange);
+			this.element.removeEventListener('blur', this.boundOnBlur);
+			this.element.removeEventListener('select', this.boundOnSelect);
+			this.element.removeEventListener('keyup', this.boundOnKeyUp);
+			this.element.removeEventListener('keydown', this.boundOnKeyDown);
+			this.element.removeEventListener('change', this.boundOnChange);
+			this.element.removeEventListener('input', this.boundOnChange);
 		}
 	}
 
 	/**
 	 * Focuses the interactable component if it exists in focus management.
 	 */
-	private focusInteractable() {
+	protected focusInteractable() {
 		if (focus.hasFocusId(this.interactable.id)) {
 			focus.focus(this.interactable.id, { preventScroll: true });
 			this.updateRenderData();
@@ -101,7 +108,7 @@ export class Input implements IEventListener<InputEvents> {
 	 * Updates the render data of the Input component and triggers the event if
 	 * Something has changed since the last time.
 	 */
-	private updateRenderData() {
+	protected updateRenderData() {
 		if (this.element) {
 			const caret =
 				this.element.selectionDirection === 'backward'
@@ -142,7 +149,7 @@ export class Input implements IEventListener<InputEvents> {
 	 * Returns the visual value of the input element.
 	 * @returns The visual value of the input element
 	 */
-	private getVisualValue() {
+	protected getVisualValue() {
 		if (!this.element) {
 			return '';
 		}
@@ -160,7 +167,7 @@ export class Input implements IEventListener<InputEvents> {
 	 * Handles the input done event.
 	 * @param event The keyboard event that triggered this function.
 	 */
-	private inputDone(event: KeyboardEvent) {
+	protected inputDone(event: KeyboardEvent) {
 		this.focusInteractable();
 		event.preventDefault();
 		event.stopPropagation();
@@ -169,56 +176,56 @@ export class Input implements IEventListener<InputEvents> {
 	/**
 	 * Handles the blur event of the input element.
 	 */
-	private onBlur = () => {
+	protected onBlur() {
 		this.focusInteractable();
-	};
+	}
 
 	/**
 	 * Handles the select event of the input element.
 	 */
-	private onSelect = () => {
+	protected onSelect() {
 		this.updateRenderData();
-	};
+	}
 
 	/**
 	 * Handles the key down event of the input element.
 	 * @param event The keyboard event that triggered this function.
 	 */
-	private onKeyDown = (event: KeyboardEvent) => {
+	protected onKeyDown(event: KeyboardEvent) {
 		runAsync(() => this.updateRenderData());
 		if (ENTER.is(event) && document.activeElement === this.element) {
 			this.inputDone(event);
 		}
-	};
+	}
 
 	/**
 	 * Handles the key up event of the input element.
 	 * @param event The keyboard event that triggered this function.
 	 */
-	private onKeyUp = (event: KeyboardEvent) => {
+	protected onKeyUp(event: KeyboardEvent) {
 		if (INPUT_DONE.is(event)) {
 			this.inputDone(event);
 		}
 		this.updateRenderData();
-	};
+	}
 
 	/**
 	 * Handles the change event of the input element.
 	 * @param event The keyboard event that triggered this function.
 	 */
-	private onChange = () => {
+	protected onChange() {
 		this.updateRenderData();
-	};
+	}
 
 	/**
 	 * Handles the interactable press event and focuses the input element..
 	 * @returns True if the event was handled, false otherwise.
 	 */
-	private onInteractablePress = () => {
+	protected onInteractablePress() {
 		if (this.element) {
 			this.element.focus();
 			this.updateRenderData();
 		}
 		return true;
-	};
+	}
 }

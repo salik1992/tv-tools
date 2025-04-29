@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
-import { createGlobalStyle } from 'styled-components';
 import { device } from '@salik1992/tv-tools/device';
 import { logger as loggerGlobal, ns } from '@salik1992/tv-tools/logger';
 import { FocusRoot } from '@salik1992/tv-tools-react/focus';
@@ -10,34 +9,17 @@ import { Browse } from './Browse';
 import { Detail } from './Detail';
 import { Disclaimer } from './Disclaimer';
 import { Discover } from './Discover';
+import { GlobalStyles } from './GlobalStyles';
 import { ModalProvider } from './Modal';
 import { NotFound } from './NotFound';
+import { Providers } from './Providers';
 import { ScreenCentered } from './ScreenCentered';
 import { Search } from './Search';
-import { Colors } from './Theme';
 import { H1 } from './Typography';
+import { VirtualKeyboardProvider } from './VirtualKeyboardProvider';
 
 loggerGlobal.use(console);
 const logger = ns('[App]');
-
-const GlobalStyles = createGlobalStyle`
-html, body {
-	margin: 0;
-	padding: 0;
-}
-body {
-	background-color: #000000;
-	font-family: Fira Code, monospace;
-	color: #ffffff;
-}
-#root {
-	position: relative;
-	background-color: ${Colors.bg.primary};
-	width: 1920px;
-	height: 1080px;
-	overflow: hidden;
-}
-`;
 
 const BROWSE = {
 	path: '/browse/:browseId',
@@ -101,24 +83,26 @@ export const App = () => {
 					</ScreenCentered>
 				)}
 				{isReady && !error && (
-					<ModalProvider>
-						<Router>
-							<BackNavigation>
-								<Routes>
-									<Route {...NOT_FOUND} />
-									<Route {...BROWSE}>
-										<Route {...DETAIL} />
-									</Route>
-									<Route {...DISCOVER}>
-										<Route {...DETAIL} />
-									</Route>
-									<Route {...SEARCH}>
-										<Route {...DETAIL} />
-									</Route>
-								</Routes>
-							</BackNavigation>
-						</Router>
-					</ModalProvider>
+					<Providers
+						providers={[
+							ModalProvider,
+							VirtualKeyboardProvider,
+							Router,
+							BackNavigation,
+							Routes,
+						]}
+					>
+						<Route {...NOT_FOUND} />
+						<Route {...BROWSE}>
+							<Route {...DETAIL} />
+						</Route>
+						<Route {...DISCOVER}>
+							<Route {...DETAIL} />
+						</Route>
+						<Route {...SEARCH}>
+							<Route {...DETAIL} />
+						</Route>
+					</Providers>
 				)}
 			</FocusRoot>
 			<Disclaimer />
