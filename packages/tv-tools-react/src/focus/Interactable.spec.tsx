@@ -33,11 +33,11 @@ describe('Interactable', () => {
 		unmount();
 	});
 
-	it('should focus itself on pointer move', () => {
+	it('should focus itself on mouse over', () => {
 		const { container, unmount } = render(
 			<Interactable id="i1" onPress={onPress} />,
 		);
-		const event = new MouseEvent('pointermove', {
+		const event = new MouseEvent('mouseover', {
 			bubbles: true,
 		});
 		container.querySelector('#i1')?.dispatchEvent(event);
