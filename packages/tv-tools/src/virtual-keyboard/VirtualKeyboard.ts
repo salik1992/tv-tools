@@ -1,5 +1,4 @@
 import { BACK, ENTER } from '../control';
-import { TableFocusContainer } from '../focus';
 import { EventListener, IEventListener } from '../utils/EventListener';
 import { toEntries } from '../utils/toEntries';
 import { NON_PRINTABLE_CHARS } from './NonPrintableChars';
@@ -67,10 +66,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 	 */
 	protected input: HTMLInputElement | undefined;
 
-	constructor(
-		layouts: VirtualKeyboardLayouts,
-		public container: TableFocusContainer,
-	) {
+	constructor(layouts: VirtualKeyboardLayouts) {
 		validateLayouts(layouts);
 		this.layouts = this.prepareLayouts(layouts);
 		this.currentLayout = Object.keys(this.layouts)[0];
