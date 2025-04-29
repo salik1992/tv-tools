@@ -1,4 +1,4 @@
-import { RefObject, createRef } from 'react';
+import { type RefObject, createRef } from 'react';
 import { render } from '@testing-library/react';
 import { useMultiRef } from './useMultiRef';
 

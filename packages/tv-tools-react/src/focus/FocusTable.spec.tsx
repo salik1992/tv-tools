@@ -1,9 +1,9 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
-import { DOWN, LEFT, RIGHT, UP } from '@salik1992/tv-tools/control';
+import { DOWN, type Key, LEFT, RIGHT, UP } from '@salik1992/tv-tools/control';
 import { focus } from '@salik1992/tv-tools/focus';
 import { FocusRoot } from './FocusRoot';
-import { FocusTable, FocusTableRenderComponents } from './FocusTable';
+import { FocusTable, type FocusTableRenderComponents } from './FocusTable';
 import { Interactable } from './Interactable';
 
 const onPress = jest.fn();
@@ -16,6 +16,16 @@ const Table = ({ children }: PropsWithChildren) => (
 const Tr = ({ children }: PropsWithChildren) => (
 	<div className="tr">{children}</div>
 );
+
+const expectMoveBase =
+	(container: HTMLElement) => (from: string, by: Key, to: string) => {
+		container
+			.querySelector(`#${from}`)
+			?.dispatchEvent(by.toKeyboardEvent('keydown'));
+		expect(focusSpy).toHaveBeenCalledWith(to, {
+			preventScroll: true,
+		});
+	};
 
 describe('FocusTable', () => {
 	it('should render the children', () => {
@@ -90,75 +100,23 @@ describe('FocusTable', () => {
 				</FocusTable>
 			</FocusRoot>,
 		);
+		const expectMove = expectMoveBase(container);
 		expect(focusSpy).toHaveBeenCalledWith('a', {
 			preventScroll: true,
 		});
-		container
-			.querySelector('#a')
-			?.dispatchEvent(RIGHT.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('b', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#b')
-			?.dispatchEvent(RIGHT.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('c', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#c')
-			?.dispatchEvent(DOWN.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('g', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#g')
-			?.dispatchEvent(LEFT.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('f', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#f')
-			?.dispatchEvent(DOWN.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('j', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#j')
-			?.dispatchEvent(RIGHT.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('g', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#g')
-			?.dispatchEvent(RIGHT.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('k', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#k')
-			?.dispatchEvent(UP.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('h', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#h')
-			?.dispatchEvent(UP.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('d', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#d')
-			?.dispatchEvent(RIGHT.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('e', {
-			preventScroll: true,
-		});
-		container
-			.querySelector('#e')
-			?.dispatchEvent(DOWN.toKeyboardEvent('keydown'));
-		expect(focusSpy).toHaveBeenCalledWith('h', {
-			preventScroll: true,
-		});
+
+		expectMove('a', RIGHT, 'b');
+		expectMove('b', RIGHT, 'c');
+		expectMove('c', DOWN, 'g');
+		expectMove('g', LEFT, 'f');
+		expectMove('f', DOWN, 'j');
+		expectMove('j', RIGHT, 'g');
+		expectMove('g', RIGHT, 'k');
+		expectMove('k', UP, 'h');
+		expectMove('h', UP, 'd');
+		expectMove('d', RIGHT, 'e');
+		expectMove('e', DOWN, 'h');
+
 		unmount();
 	});
 });

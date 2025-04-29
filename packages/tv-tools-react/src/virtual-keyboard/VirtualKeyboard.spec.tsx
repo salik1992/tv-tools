@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { act, render } from '@testing-library/react';
-import { BACK, ENTER } from '@salik1992/tv-tools/control';
+import { BACK, ENTER, type Key } from '@salik1992/tv-tools/control';
 import { backspace, done, layout } from '@salik1992/tv-tools/virtual-keyboard';
 import { FocusRoot, Interactable } from '../focus';
 import { VirtualKeyboard } from './VirtualKeyboard';
@@ -35,6 +35,32 @@ const Row = ({ children }: PropsWithChildren) => (
 	<div className="row">{children}</div>
 );
 
+const expectPressResultBase =
+	(container: HTMLElement) =>
+	(
+		keyId: string,
+		keyOrEvent: Key | KeyboardEvent,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		listener: jest.MockedFn<any>,
+		params: unknown[],
+		negative = false,
+	) => {
+		act(() => {
+			const key = container.querySelector(`#keyboard-vk-${keyId}`);
+			const event =
+				keyOrEvent instanceof KeyboardEvent
+					? keyOrEvent
+					: keyOrEvent.toKeyboardEvent('keydown');
+			key?.dispatchEvent(event);
+			jest.runAllTimers();
+		});
+		if (negative) {
+			expect(listener).not.toHaveBeenCalled();
+		} else {
+			expect(listener).toHaveBeenCalledWith(...params);
+		}
+	};
+
 describe('VirtualKeyboard', () => {
 	it('should render the keyboard', () => {
 		const { container, unmount } = render(
@@ -68,62 +94,31 @@ describe('VirtualKeyboard', () => {
 			/>,
 			{ wrapper: FocusRoot },
 		);
+		const expectPressResult = expectPressResultBase(container);
 
-		act(() => {
-			const jKey = container.querySelector('#keyboard-vk-j');
-			jKey?.dispatchEvent(ENTER.toKeyboardEvent('keydown'));
-			jest.runAllTimers();
-		});
-		expect(onAddChar).toHaveBeenCalledWith('j');
-
-		act(() => {
-			const backspaceKey = container.querySelector(
-				'#keyboard-vk-backspace',
-			);
-			backspaceKey?.dispatchEvent(ENTER.toKeyboardEvent('keydown'));
-			jest.runAllTimers();
-		});
-		expect(onRemoveChar).toHaveBeenCalled();
-
-		act(() => {
-			const backspaceKey = container.querySelector(
-				'#keyboard-vk-backspace',
-			);
-			backspaceKey?.dispatchEvent(
-				new KeyboardEvent('keydown', { bubbles: true, key: 'T' }),
-			);
-			jest.runAllTimers();
-		});
-		expect(onAddChar).toHaveBeenCalledWith('T');
+		expectPressResult('j', ENTER, onAddChar, ['j']);
+		expectPressResult('backspace', ENTER, onRemoveChar, [undefined]);
+		expectPressResult(
+			'backspace',
+			new KeyboardEvent('keydown', { bubbles: true, key: 'T' }),
+			onAddChar,
+			['T'],
+		);
 
 		onAddChar.mockClear();
 
-		act(() => {
-			const backspaceKey = container.querySelector(
-				'#keyboard-vk-backspace',
-			);
-			backspaceKey?.dispatchEvent(
-				new KeyboardEvent('keydown', { bubbles: true, key: 'Shift' }),
-			);
-			jest.runAllTimers();
-		});
-		expect(onAddChar).not.toHaveBeenCalled();
-
-		act(() => {
-			const doneKey = container.querySelector('#keyboard-vk-done');
-			doneKey?.dispatchEvent(ENTER.toKeyboardEvent('keydown'));
-			jest.runAllTimers();
-		});
-		expect(onDone).toHaveBeenCalled();
+		expectPressResult(
+			'backspace',
+			new KeyboardEvent('keydown', { bubbles: true, key: 'Shift' }),
+			onAddChar,
+			[undefined],
+			true,
+		);
+		expectPressResult('done', ENTER, onDone, [undefined]);
 
 		onDone.mockClear();
 
-		act(() => {
-			const spaceKey = container.querySelector('#keyboard-vk-space');
-			spaceKey?.dispatchEvent(BACK.toKeyboardEvent('keydown'));
-			jest.runAllTimers();
-		});
-		expect(onDone).toHaveBeenCalled();
+		expectPressResult('space', BACK, onDone, [undefined]);
 
 		unmount();
 	});

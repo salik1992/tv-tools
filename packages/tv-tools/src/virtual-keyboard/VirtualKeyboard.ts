@@ -106,7 +106,6 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 	 * @param event The keyboard event.
 	 */
 	public onKeyDown(event: KeyboardEvent) {
-		console.log(event.key);
 		if (ENTER.is(event) || BACK.is(event)) {
 			this.onDone();
 			return true;

@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import { DOWN, LEFT, RIGHT, UP } from '@salik1992/tv-tools/control';
 import { BlockNavigation } from './BlockNavigation';

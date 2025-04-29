@@ -1,7 +1,7 @@
 import {
-	ChangeEvent,
-	ComponentProps,
-	PropsWithChildren,
+	type ChangeEvent,
+	type ComponentProps,
+	type PropsWithChildren,
 	useCallback,
 	useState,
 } from 'react';
