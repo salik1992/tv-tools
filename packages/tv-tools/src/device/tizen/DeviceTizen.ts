@@ -61,18 +61,18 @@ const keysToRegister = [
 export class DeviceTizen extends DeviceBase {
 	override readonly driver = 'tizen';
 
-	private scriptsInjected: Promise<void>;
+	protected scriptsInjected: Promise<void>;
 
-	private screenSaverEnabled = false;
+	protected screenSaverEnabled = false;
 
-	private networkState: NetworkState = NetworkState.WIFI_UNKNOWN;
+	protected networkState: NetworkState = NetworkState.WIFI_UNKNOWN;
 
 	constructor() {
 		super();
 		this.scriptsInjected = this.injectPlatformScripts();
 	}
 
-	private platformInfo: PlatformInfo = {
+	protected platformInfo: PlatformInfo = {
 		name: 'Tizen',
 		version:
 			window.navigator.userAgent.match(/Tizen ([.\d]*)/)?.[1] ??
@@ -83,8 +83,8 @@ export class DeviceTizen extends DeviceBase {
 		return this.platformInfo;
 	}
 
-	private screenSize: ScreenSize | null = null;
-	private getScreenSize(): ScreenSize {
+	protected screenSize: ScreenSize | null = null;
+	protected getScreenSize(): ScreenSize {
 		if (!this.screenSize) {
 			if (webapis.productinfo.is8kPanelSupported()) {
 				this.screenSize = '8k';
@@ -203,7 +203,7 @@ export class DeviceTizen extends DeviceBase {
 		}
 	}
 
-	private injectPlatformScripts(): Promise<void> {
+	protected injectPlatformScripts(): Promise<void> {
 		if (typeof webapis !== 'undefined') {
 			return Promise.resolve();
 		}
@@ -232,14 +232,14 @@ export class DeviceTizen extends DeviceBase {
 		});
 	}
 
-	private onVisibilityChange = () => {
+	protected onVisibilityChange = () => {
 		this.eventListener.triggerEvent(
 			'visibilitychange',
 			document.visibilityState === 'visible',
 		);
 	};
 
-	private onNetworkStateChange = (state: NetworkState) => {
+	protected onNetworkStateChange = (state: NetworkState) => {
 		this.networkState = state;
 		this.eventListener.triggerEvent(
 			'networkchange',
@@ -247,7 +247,7 @@ export class DeviceTizen extends DeviceBase {
 		);
 	};
 
-	private isNetworkConnected(state: NetworkState): boolean {
+	protected isNetworkConnected(state: NetworkState): boolean {
 		switch (state) {
 			case NetworkState.GATEWAY_CONNECTED:
 			case NetworkState.WIFI_CONNECTED:
@@ -258,7 +258,7 @@ export class DeviceTizen extends DeviceBase {
 		}
 	}
 
-	private getNetworkType(type: NetworkConnectionType): NetworkType {
+	protected getNetworkType(type: NetworkConnectionType): NetworkType {
 		switch (type) {
 			case NetworkConnectionType.WIFI:
 				return 'wifi';
@@ -271,7 +271,7 @@ export class DeviceTizen extends DeviceBase {
 		}
 	}
 
-	private initializeKeys() {
+	protected initializeKeys() {
 		keysToUnregister.forEach((key) => {
 			tizen.tvinputdevice.unregisterKey(key);
 		});

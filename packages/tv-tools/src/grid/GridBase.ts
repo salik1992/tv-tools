@@ -14,7 +14,7 @@ export abstract class GridBase<
 	/**
 	 * Handles listeners to events and their management.
 	 */
-	private events = new EventListener<{
+	protected events = new EventListener<{
 		dataIndex: number;
 		renderData: RenderData;
 	}>();
@@ -22,7 +22,7 @@ export abstract class GridBase<
 	/**
 	 * Stores focus listeners for the elements.
 	 */
-	private focusListeners = new Map<
+	protected focusListeners = new Map<
 		string,
 		<T extends { target: null | EventTarget }>(event: T) => void
 	>();
@@ -198,7 +198,7 @@ export abstract class GridBase<
 	 * Focuses the child element based by dataIndex that is rendered.
 	 * @param dataIndexToFocus - index in data that should be focused
 	 */
-	private focusChildOfDataIndex(dataIndexToFocus: number) {
+	protected focusChildOfDataIndex(dataIndexToFocus: number) {
 		const element = this.getAllElements().find(
 			({ dataIndex }) => dataIndex === dataIndexToFocus,
 		);

@@ -43,8 +43,8 @@ const UNKNONW_CONNECTION_MANAGER_RESPONSE: ConnectionManagerResponse = {
 export class DeviceWebos extends DeviceBase {
 	override readonly driver = 'webos';
 
-	private deviceInfoResolver: (value: DeviceInfo) => void = noop;
-	private deviceInfoPromise: Promise<DeviceInfo> = new Promise<DeviceInfo>(
+	protected deviceInfoResolver: (value: DeviceInfo) => void = noop;
+	protected deviceInfoPromise: Promise<DeviceInfo> = new Promise<DeviceInfo>(
 		(resolve) => {
 			this.deviceInfoResolver = resolve;
 		},
@@ -58,7 +58,7 @@ export class DeviceWebos extends DeviceBase {
 		};
 	}
 
-	private async getScreenSize(): Promise<ScreenSize> {
+	protected async getScreenSize(): Promise<ScreenSize> {
 		const deviceInfo = await this.deviceInfoPromise;
 		if (deviceInfo.uhd8k) {
 			return '8k';
@@ -157,7 +157,7 @@ export class DeviceWebos extends DeviceBase {
 		}
 	}
 
-	private isPalmSystem() {
+	protected isPalmSystem() {
 		const weboOS1 = /(Web0S|537.41).+(Web0S|537.41)/;
 		const weboOS2 = /(Web0S|538.2).+(Web0S|538.2)/;
 		return (
@@ -166,7 +166,7 @@ export class DeviceWebos extends DeviceBase {
 		);
 	}
 
-	private async getConnectionManager(): Promise<ConnectionManagerResponse> {
+	protected async getConnectionManager(): Promise<ConnectionManagerResponse> {
 		const url = this.isPalmSystem()
 			? RequestUrls.CONNECTION_MANAGER_PALM
 			: RequestUrls.CONNECTION_MANAGER;
@@ -185,7 +185,9 @@ export class DeviceWebos extends DeviceBase {
 		});
 	}
 
-	private getConnectionType(manager: ConnectionManagerResponse): NetworkType {
+	protected getConnectionType(
+		manager: ConnectionManagerResponse,
+	): NetworkType {
 		switch (CONNECTED) {
 			case manager.wired.state:
 				return 'ethernet';
@@ -198,7 +200,7 @@ export class DeviceWebos extends DeviceBase {
 		}
 	}
 
-	private getLocalIp(manager: ConnectionManagerResponse): string {
+	protected getLocalIp(manager: ConnectionManagerResponse): string {
 		switch (CONNECTED) {
 			case manager.wired.state:
 				return manager.wired.ipAddress ?? UNKNOWN_IP;
@@ -211,14 +213,14 @@ export class DeviceWebos extends DeviceBase {
 		}
 	}
 
-	private onVisibilityChange = () => {
+	protected onVisibilityChange = () => {
 		this.eventListener.triggerEvent(
 			'visibilitychange',
 			document.visibilityState === 'visible',
 		);
 	};
 
-	private onKeyboadStateChange = (event: KeyboardStateChangeEvent) => {
+	protected onKeyboadStateChange = (event: KeyboardStateChangeEvent) => {
 		if (
 			!event.detail?.visibility &&
 			document.activeElement?.tagName === 'INPUT'

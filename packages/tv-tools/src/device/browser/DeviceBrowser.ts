@@ -81,15 +81,15 @@ export class DeviceBrowser extends DeviceBase {
 		}
 	}
 
-	private onOnLine = () => {
+	protected onOnLine = () => {
 		this.eventListener.triggerEvent('networkchange', true);
 	};
 
-	private onOffLine = () => {
+	protected onOffLine = () => {
 		this.eventListener.triggerEvent('networkchange', false);
 	};
 
-	private onVisibilityChange = () => {
+	protected onVisibilityChange = () => {
 		this.eventListener.triggerEvent(
 			'visibilitychange',
 			document.visibilityState === 'visible',

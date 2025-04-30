@@ -12,41 +12,41 @@ export class TableFocusContainer {
 	/**
 	 * The table of children ids.
 	 */
-	private focusTable: string[][] = [];
+	protected focusTable: string[][] = [];
 
 	/**
 	 * The table of children ids that are being worked on.
 	 * This is used to keep track of the children that are being added.
 	 */
-	private wipFocusTable: string[][] = [];
+	protected wipFocusTable: string[][] = [];
 
 	/**
 	 * The current phase of the render loop.
 	 */
-	private renderProgress = RenderProgress.STARTED;
+	protected renderProgress = RenderProgress.STARTED;
 
 	/**
 	 * The current coordinate of the focus.
 	 * This is used to keep track of the current position of the focus.
 	 */
-	private coord: Coord = [0, 0];
+	protected coord: Coord = [0, 0];
 
 	/**
 	 * The coordinate of the current insertion point.
 	 */
-	private insertionCoord: Coord = [0, 0];
+	protected insertionCoord: Coord = [0, 0];
 
 	/**
 	 * Id of the last child that was focused by the container. When the container
 	 * is focused again, it will prefer this id if it still exists.
 	 */
-	private lastFocusedId: string | null = null;
+	protected lastFocusedId: string | null = null;
 
 	/**
 	 * Stores last focus options used when there's no child to focus.
 	 * These will be reused if it still valid to focus a child once we have some.
 	 */
-	private lastFocusOptions: FocusOptions | undefined = undefined;
+	protected lastFocusOptions: FocusOptions | undefined = undefined;
 
 	constructor(public readonly id: string = focus.generateId()) {
 		focus.addFocusId(this.id, this.focus.bind(this));
@@ -211,7 +211,7 @@ export class TableFocusContainer {
 	 * @param childId - id of the child
 	 * @param spans - optional spans of the child (colSpan and rowSpan)
 	 */
-	private insertChild(
+	protected insertChild(
 		childId: string,
 		{ colSpan = 1, rowSpan = 1 }: Spans = {},
 	) {
@@ -232,7 +232,7 @@ export class TableFocusContainer {
 	 * @param coord - coordinate to set the id at
 	 * @throws Error if the coordinate is already occupied
 	 */
-	private setAtCoord(id: string, coord: Coord) {
+	protected setAtCoord(id: string, coord: Coord) {
 		if (this.wipFocusTable[coord[0]] === undefined) {
 			this.wipFocusTable[coord[0]] = [];
 		}
@@ -249,7 +249,7 @@ export class TableFocusContainer {
 	 * @param startAt - coordinate to start searching from
 	 * @returns the next empty coordinate
 	 */
-	private moveToEmptyCoord(startAt: Coord): Coord {
+	protected moveToEmptyCoord(startAt: Coord): Coord {
 		const coord = startAt;
 		while (this.wipFocusTable[coord[0]] !== undefined) {
 			if (this.wipFocusTable[coord[0]][coord[1]] === undefined) {
@@ -264,7 +264,7 @@ export class TableFocusContainer {
 	 * Remember id of the child that had focus last time.
 	 * @param id = id of the child
 	 */
-	private onFocusWithin(id: string) {
+	protected onFocusWithin(id: string) {
 		if (this.hasChild(id)) {
 			this.lastFocusedId = id;
 		}
@@ -275,7 +275,7 @@ export class TableFocusContainer {
 	 * @param id - id of the child
 	 * @returns true if the child exists, false otherwise
 	 */
-	private hasChild(id: string): boolean {
+	protected hasChild(id: string): boolean {
 		return this.focusTable.some((row) => row.includes(id));
 	}
 
@@ -284,7 +284,7 @@ export class TableFocusContainer {
 	 * @param eventChildren - array of child ids to check
 	 * @returns the closest coordinate of the child id in the focus table
 	 */
-	private findStartingCoord(eventChildren: string[]): Coord | undefined {
+	protected findStartingCoord(eventChildren: string[]): Coord | undefined {
 		const coords: Coord[] = [];
 		this.focusTable.forEach((row, y) => {
 			row.forEach((childId, x) => {
@@ -315,7 +315,7 @@ export class TableFocusContainer {
 	 * @param table - the table to trim
 	 * @returns the trimmed table
 	 */
-	private trim(table: string[][]): string[][] {
+	protected trim(table: string[][]): string[][] {
 		return table
 			.filter((row) => row.length > 0)
 			.map((row) => row.filter((id) => typeof id === 'string'));

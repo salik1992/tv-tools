@@ -10,7 +10,7 @@ export class InputBase extends Input {
 
 	constructor(
 		interactable: Interactable,
-		private overrides: {
+		protected overrides: {
 			onInteractablePress?: () => boolean;
 		},
 	) {

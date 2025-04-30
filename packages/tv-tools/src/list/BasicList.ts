@@ -165,7 +165,7 @@ export class BasicList extends ListBase<{
 	 * Returns a function to use for calculation based on the list configuration
 	 * and the direction of movement.
 	 */
-	private getMoveFunction(index: number) {
+	protected getMoveFunction(index: number) {
 		if (this.isAnimated()) {
 			return index > this.dataIndex ? animateForward : animateBackward;
 		}

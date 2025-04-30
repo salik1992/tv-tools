@@ -16,25 +16,25 @@ export class FocusContainer {
 	/**
 	 * List of the children that are currently belonging under this container.
 	 */
-	private focusChildren: string[] = [];
+	protected focusChildren: string[] = [];
 
 	/**
 	 * List of the children that are currently belonging under this container,
 	 * while it is being rendered.
 	 */
-	private wipFocusChildren: string[] = [];
+	protected wipFocusChildren: string[] = [];
 
 	/**
 	 * Id of the last child that was focused by the container. When the container
 	 * is focused again, it will prefer this id if it still exists.
 	 */
-	private lastFocusedId: string | null = null;
+	protected lastFocusedId: string | null = null;
 
 	/**
 	 * Stores last focus options used when there's no child to focus.
 	 * These will be reused if it still valid to focus a child once we have some.
 	 */
-	private lastFocusOptions: FocusOptions | undefined = undefined;
+	protected lastFocusOptions: FocusOptions | undefined = undefined;
 
 	constructor(public readonly id: string = focus.generateId()) {
 		focus.addFocusId(this.id, this.focus.bind(this));
@@ -165,7 +165,7 @@ export class FocusContainer {
 	 * Remember id of the child that had focus last time.
 	 * @param id = id of the child
 	 */
-	private onFocusWithin(id: string) {
+	protected onFocusWithin(id: string) {
 		if (this.focusChildren.includes(id)) {
 			this.lastFocusedId = id;
 		}
