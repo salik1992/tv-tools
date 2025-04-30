@@ -12,7 +12,7 @@ import {
 	shift,
 	shiftAndCaps,
 } from './constants';
-import { Key } from './types';
+import type { Key } from './types';
 
 jest.useFakeTimers();
 

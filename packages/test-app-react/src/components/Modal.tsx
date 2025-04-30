@@ -1,7 +1,7 @@
 import {
 	type MouseEvent,
 	type PropsWithChildren,
-	ReactNode,
+	type ReactNode,
 	createContext,
 	useCallback,
 	useContext,

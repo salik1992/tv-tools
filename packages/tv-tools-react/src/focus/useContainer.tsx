@@ -20,7 +20,7 @@ import {
 	getUseOnRight,
 	getUseOnUp,
 } from './keyboardHooks';
-import { Focus } from './types';
+import type { Focus } from './types';
 import { useRefresh } from './useRefresh';
 
 /**

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { DataProvider } from '@salik1992/test-app-data/DataProvider';
+import type { DataProvider } from '@salik1992/test-app-data/DataProvider';
 import {
 	type TmdbConfiguration,
 	type TmdbConfigurationFilters,

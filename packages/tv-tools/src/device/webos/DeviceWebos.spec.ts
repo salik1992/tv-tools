@@ -1,9 +1,9 @@
 import { BACK } from '../../control';
 import { logger } from '../../logger';
-import { Feature } from '../base';
+import type { Feature } from '../base';
 import { Features } from '../mocks';
 import { DeviceWebos } from './DeviceWebos';
-import { DeviceInfo } from './types';
+import type { DeviceInfo } from './types';
 
 const prefix = '[DeviceWebos]';
 

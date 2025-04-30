@@ -1,5 +1,5 @@
 import { BACK, ENTER } from '../control';
-import { EventListener, IEventListener } from '../utils/EventListener';
+import { EventListener, type IEventListener } from '../utils/EventListener';
 import { toEntries } from '../utils/toEntries';
 import { NON_PRINTABLE_CHARS } from './NonPrintableChars';
 import {

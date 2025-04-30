@@ -1,10 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { RenderDataGroup } from '@salik1992/tv-tools/grid';
+import type { RenderDataGroup } from '@salik1992/tv-tools/grid';
 import { BasicGrid } from '@salik1992/tv-tools/grid/BasicGrid';
 import { Grid } from '@salik1992/tv-tools-react/grid';
-import { ListDataConfiguration } from '../data';
+import type { ListDataConfiguration } from '../data';
 import { useAssertedParams } from '../hooks/useAssertedParams';
 import { usePagedData } from '../hooks/usePagedData';
 import { MouseArrows } from './MouseArrows';

@@ -1,4 +1,4 @@
-import { AssetRating } from '@salik1992/test-app-data/types';
+import type { AssetRating } from '@salik1992/test-app-data/types';
 import { DetailLabel } from './DetailLabel';
 import { P } from './Typography';
 
