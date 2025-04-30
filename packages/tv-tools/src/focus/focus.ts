@@ -17,29 +17,29 @@ class FocusManager {
 	/**
 	 * Set of all ids of focusable elements that are currently managed.
 	 */
-	private focusIds = new Set<string>();
+	protected focusIds = new Set<string>();
 
 	/**
 	 * Mapping between the ids and focus functions. Each member requires to have
 	 * a focus listener that is called when it is focused.
 	 */
-	private focusFunctions = new Map<string, FocusFunction>();
+	protected focusFunctions = new Map<string, FocusFunction>();
 
 	/**
 	 * Lists of children to a parent.
 	 */
-	private children = new Map<string, string[]>();
+	protected children = new Map<string, string[]>();
 
 	/**
 	 * Mapping of the child to its parent. If it is null, the element is root
 	 * for that tree. There may be multiple root elements.
 	 */
-	private parents = new Map<string, string | null>();
+	protected parents = new Map<string, string | null>();
 
 	/**
 	 * Event listeners tied to an element.
 	 */
-	private eventListeners = new Map<
+	protected eventListeners = new Map<
 		string,
 		{ listener: ControlListener; type: ControlType; phase: ControlPhase }[]
 	>();
@@ -47,23 +47,23 @@ class FocusManager {
 	/**
 	 * Key sequences and their listeners.
 	 */
-	private keySequenceListeners = new Map<Key[], () => void>();
+	protected keySequenceListeners = new Map<Key[], () => void>();
 
 	/**
 	 * Current sequence of last N keys. The N is set based on the longest
 	 * sequence from the keySequenceListeners mapping.
 	 */
-	private currentKeySequence: ControlEvent[] = [];
+	protected currentKeySequence: ControlEvent[] = [];
 
 	/**
 	 * Listeners for focus within.
 	 */
-	private focusWithinListeners = new Map<string, FocusWithinListener>();
+	protected focusWithinListeners = new Map<string, FocusWithinListener>();
 
 	/**
 	 * Focus ids that were focused historically.
 	 */
-	private focusHistory: string[] = [];
+	protected focusHistory: string[] = [];
 
 	/**
 	 * This is used for components to signal that their focus was requested but
@@ -321,7 +321,7 @@ class FocusManager {
 	 * Goes through the focus components from root to the target and calls their
 	 * listeners. If the event is handled, it will stop the propagation.
 	 */
-	private handleCaptureKeyEvent<E extends ControlEvent>(
+	protected handleCaptureKeyEvent<E extends ControlEvent>(
 		type: ControlType,
 		event: E,
 	) {
@@ -356,7 +356,7 @@ class FocusManager {
 	 * Goes through the focus components from target to the root and calls their
 	 * listeners. If the event is handled, it will stop the propagation.
 	 */
-	private handleBubbleKeyEvent<E extends ControlEvent>(
+	protected handleBubbleKeyEvent<E extends ControlEvent>(
 		type: ControlType,
 		event: E,
 	) {
@@ -388,7 +388,7 @@ class FocusManager {
 	 * Returns the parent of a child.
 	 * @returns string id or null
 	 */
-	private getParent(childId: string) {
+	protected getParent(childId: string) {
 		return this.parents.get(childId) ?? null;
 	}
 
@@ -396,7 +396,7 @@ class FocusManager {
 	 * Goes through the sequence listeners, tests their validity and if they match
 	 * it will call them.
 	 */
-	private testSequences() {
+	protected testSequences() {
 		for (const [sequence, listener] of this.keySequenceListeners) {
 			const tested = this.currentKeySequence.slice(-sequence.length);
 			if (tested.length < sequence.length) {
@@ -416,7 +416,7 @@ class FocusManager {
 	 * Truncates the key sequence history to the length of the longest sequence
 	 * that we have a listener for.
 	 */
-	private truncateSequence() {
+	protected truncateSequence() {
 		const maxLength = Math.max(
 			...Array.from(this.keySequenceListeners.keys()).map(
 				(s) => s.length,
@@ -429,7 +429,7 @@ class FocusManager {
 	 * Handles adding a new key to the key sequence, test, calling of listeners
 	 * and truncation.
 	 */
-	private addKeyToSequence<E extends ControlEvent>(event: E) {
+	protected addKeyToSequence<E extends ControlEvent>(event: E) {
 		if (this.keySequenceListeners.size === 0) {
 			return;
 		}
@@ -445,7 +445,7 @@ class FocusManager {
 	 * self focus soon.
 	 * @param parentId - id of the potential parent
 	 */
-	private focusRestoreAttempt(parentId: string | null) {
+	protected focusRestoreAttempt(parentId: string | null) {
 		if (parentId && this.focusIds.has(parentId)) {
 			this.focus(parentId, { preventScroll: true });
 		} else if (this.focusHistory.length) {
@@ -457,7 +457,7 @@ class FocusManager {
 	 * Removes id from focus history.
 	 * @param idToRemove = id to remove
 	 */
-	private removeFromFocusHistory(idToRemove: string) {
+	protected removeFromFocusHistory(idToRemove: string) {
 		this.focusHistory = this.focusHistory.filter((id) => id !== idToRemove);
 	}
 }

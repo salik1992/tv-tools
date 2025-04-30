@@ -32,7 +32,7 @@ export class EventListener<
 	/**
 	 * Listeners
 	 */
-	private listeners: Partial<{
+	protected listeners: Partial<{
 		[key in keyof Events]: Set<(payload: Events[key]) => void>;
 	}> = {};
 

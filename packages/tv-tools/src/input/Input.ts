@@ -5,7 +5,7 @@ import { runAsync } from '../utils/runAsync';
 import type { CharRenderData, InputEvents, RenderData } from './types';
 
 export class Input implements IEventListener<InputEvents> {
-	private events = new EventListener<InputEvents>();
+	protected events = new EventListener<InputEvents>();
 
 	public addEventListener = this.events.addEventListener;
 	public removeEventListener = this.events.removeEventListener;
@@ -13,12 +13,12 @@ export class Input implements IEventListener<InputEvents> {
 	/**
 	 * The input element that is being used for input of the text.
 	 */
-	private element: HTMLInputElement | undefined;
+	protected element: HTMLInputElement | undefined;
 
 	/**
 	 * The render data of the Input component..
 	 */
-	private renderData: RenderData = {
+	protected renderData: RenderData = {
 		active: false,
 		placeholder: false,
 		value: '',

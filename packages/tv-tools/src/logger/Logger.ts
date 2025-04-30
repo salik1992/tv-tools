@@ -9,12 +9,12 @@ class Logger implements ConsoleAdapter {
 	/**
 	 * The set of adapters that receive the logs.
 	 */
-	private adapters = new Set<ConsoleAdapter>();
+	protected adapters = new Set<ConsoleAdapter>();
 
 	/**
 	 * Miminal level that is logged.
 	 */
-	private level = LogLevel.DEBUG;
+	protected level = LogLevel.DEBUG;
 
 	/**
 	 * Creates a logging output. Use to connect your logging adapter.
