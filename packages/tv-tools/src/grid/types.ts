@@ -1,4 +1,4 @@
-import { FocusContainer } from '../focus';
+import type { FocusContainer } from '../focus';
 import type { IEventListener } from '../utils/EventListener';
 import type { Performance } from '../utils/Performance';
 

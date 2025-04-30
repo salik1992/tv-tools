@@ -36,7 +36,7 @@ export class Input implements IEventListener<InputEvents> {
 	/**
 	 * The interactable component that is used to wrap the input element.
 	 */
-	constructor(public interactable: Interactable) {
+	public constructor(public interactable: Interactable) {
 		this.interactable.setOnPress(this.boundOnInteractablePress);
 	}
 

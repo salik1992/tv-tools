@@ -24,7 +24,7 @@ class Logger implements ConsoleAdapter {
 	 * logger.use(window.console).use(debugConsole);
 	 * ```
 	 */
-	use(adapter: ConsoleAdapter) {
+	public use(adapter: ConsoleAdapter) {
 		if (!this.adapters.has(adapter)) {
 			this.adapters.add(adapter);
 		}
@@ -46,7 +46,7 @@ class Logger implements ConsoleAdapter {
 	 * logger.log('test'); // the same as logger.log('List', 'test');
 	 * ```
 	 */
-	ns(namespace: string): ConsoleAdapter {
+	public ns(namespace: string): ConsoleAdapter {
 		return {
 			assert: (condition: boolean, ...params: unknown[]) =>
 				logger.assert(condition, namespace, ...params),
@@ -69,7 +69,7 @@ class Logger implements ConsoleAdapter {
 	 * Change the level of logs that are being collected.
 	 * @param logLevel - the level to set
 	 */
-	setLevel(logLevel: LogLevel) {
+	public setLevel(logLevel: LogLevel) {
 		this.level = logLevel;
 	}
 
@@ -78,7 +78,7 @@ class Logger implements ConsoleAdapter {
 	 * @param condition - The condition that when negative, the log is created
 	 * @param ...params - The things to log
 	 */
-	assert(condition: boolean, ...params: unknown[]) {
+	public assert(condition: boolean, ...params: unknown[]) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) =>
 			adapter.assert(condition, ...params),
@@ -88,7 +88,7 @@ class Logger implements ConsoleAdapter {
 	/**
 	 * Clears the console output.
 	 */
-	clear() {
+	public clear() {
 		this.adapters.forEach((adapter) => adapter.clear());
 	}
 
@@ -96,7 +96,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a counter.
 	 * @param label - label of the counter to count
 	 */
-	count(label: string) {
+	public count(label: string) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) => adapter.count(label));
 	}
@@ -105,7 +105,7 @@ class Logger implements ConsoleAdapter {
 	 * Resets a counter.
 	 * @param - label of the counter to reset
 	 */
-	countReset(label: string) {
+	public countReset(label: string) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) => adapter.countReset(label));
 	}
@@ -114,7 +114,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a log at the DEBUG level.
 	 * @param ...params - The things to log
 	 */
-	debug(...params: unknown[]) {
+	public debug(...params: unknown[]) {
 		if (this.level < LogLevel.DEBUG) return;
 		this.adapters.forEach((adapter) => adapter.debug(...params));
 	}
@@ -123,7 +123,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a log at the ERROR level.
 	 * @param ...params - The things to log
 	 */
-	error(...params: unknown[]) {
+	public error(...params: unknown[]) {
 		if (this.level < LogLevel.ERROR) return;
 		this.adapters.forEach((adapter) => adapter.error(...params));
 	}
@@ -132,7 +132,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a log at the INFO level.
 	 * @param ...params - The things to log
 	 */
-	info(...params: unknown[]) {
+	public info(...params: unknown[]) {
 		if (this.level < LogLevel.INFO) return;
 		this.adapters.forEach((adapter) => adapter.info(...params));
 	}
@@ -141,7 +141,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a log at the LOG level.
 	 * @param ...params - The things to log
 	 */
-	log(...params: unknown[]) {
+	public log(...params: unknown[]) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) => adapter.log(...params));
 	}
@@ -150,7 +150,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a timer.
 	 * @param label - The name of the timer
 	 */
-	time(label: string) {
+	public time(label: string) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) => adapter.time(label));
 	}
@@ -159,7 +159,7 @@ class Logger implements ConsoleAdapter {
 	 * Stops the timer.
 	 * @param label - The name of the timer
 	 */
-	timeEnd(label: string) {
+	public timeEnd(label: string) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) => adapter.timeEnd(label));
 	}
@@ -168,7 +168,7 @@ class Logger implements ConsoleAdapter {
 	 * Logs the current time of the timer.
 	 * @param label - The name of the timer
 	 */
-	timeLog(label: string) {
+	public timeLog(label: string) {
 		if (this.level < LogLevel.LOG) return;
 		this.adapters.forEach((adapter) => adapter.timeLog(label));
 	}
@@ -177,7 +177,7 @@ class Logger implements ConsoleAdapter {
 	 * Creates a log at the WARN level.
 	 * @param ...params - The things to log
 	 */
-	warn(...params: unknown[]) {
+	public warn(...params: unknown[]) {
 		if (this.level < LogLevel.WARN) return;
 		this.adapters.forEach((adapter) => adapter.warn(...params));
 	}

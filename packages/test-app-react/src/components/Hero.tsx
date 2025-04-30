@@ -2,7 +2,7 @@ import { type ComponentProps, type FocusEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
-import { Asset, AssetDescription } from '@salik1992/test-app-data/types';
+import type { Asset, AssetDescription } from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../data';
 import { ImageWithFallback } from './Image';
 import { Border, Colors, Transition } from './Theme';

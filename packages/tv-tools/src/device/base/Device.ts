@@ -1,4 +1,4 @@
-import { IEventListener } from '../../utils/EventListener';
+import type { IEventListener } from '../../utils/EventListener';
 
 export type ScreenSize = 'unknown' | 'hd' | 'fhd' | 'qhd' | '4k' | '8k';
 

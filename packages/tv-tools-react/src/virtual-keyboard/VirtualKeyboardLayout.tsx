@@ -10,7 +10,7 @@ import {
 	useState,
 } from 'react';
 import {
-	ControlEvent,
+	type ControlEvent,
 	type TableFocusContainer,
 	focus,
 } from '@salik1992/tv-tools/focus';

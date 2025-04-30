@@ -12,7 +12,7 @@ import { DeviceBase } from '../base';
 const logger = ns('[DeviceBrowser]');
 
 export class DeviceBrowser extends DeviceBase {
-	override driver = 'browser';
+	public override driver = 'browser';
 
 	public override async platform(): Promise<PlatformInfo> {
 		return {

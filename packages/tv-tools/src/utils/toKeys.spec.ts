@@ -7,8 +7,8 @@ describe('toKeys', () => {
 
 	it('converts only instance keys not prototype properties', () => {
 		class Test {
-			prototypeFunction() {}
-			instanceFunction = () => {};
+			public prototypeFunction() {}
+			public instanceFunction = () => {};
 		}
 		expect(toKeys(new Test())).toEqual(['instanceFunction']);
 	});

@@ -1,5 +1,5 @@
 import { BACK } from '../../control';
-import { Feature } from '../base';
+import type { Feature } from '../base';
 import { Features } from '../mocks';
 import { DeviceTizen } from './DeviceTizen';
 import {

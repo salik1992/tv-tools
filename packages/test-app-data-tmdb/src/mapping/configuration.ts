@@ -1,4 +1,4 @@
-import { Configuration, ConfigurationResponse, ImageSize } from '../types';
+import type { Configuration, ConfigurationResponse, ImageSize } from '../types';
 
 const mapImageSizes = (rawImageSize: string): ImageSize | null => {
 	if (rawImageSize === 'original') {

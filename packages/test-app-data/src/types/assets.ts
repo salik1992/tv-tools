@@ -1,4 +1,4 @@
-import { ImageType } from './images';
+import type { ImageType } from './images';
 
 export type Id = string;
 

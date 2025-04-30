@@ -6,9 +6,10 @@ import { Input } from '@salik1992/tv-tools/input';
  * onInteractablePress method.
  */
 export class InputBase extends Input {
-	protected boundOnInteractablePress = this.onInteractablePress.bind(this);
+	protected override boundOnInteractablePress =
+		this.onInteractablePress.bind(this);
 
-	constructor(
+	public constructor(
 		interactable: Interactable,
 		protected overrides: {
 			onInteractablePress?: () => boolean;

@@ -59,7 +59,7 @@ const keysToRegister = [
 ] as const;
 
 export class DeviceTizen extends DeviceBase {
-	override readonly driver = 'tizen';
+	public override readonly driver = 'tizen';
 
 	protected scriptsInjected: Promise<void>;
 
@@ -67,7 +67,7 @@ export class DeviceTizen extends DeviceBase {
 
 	protected networkState: NetworkState = NetworkState.WIFI_UNKNOWN;
 
-	constructor() {
+	public constructor() {
 		super();
 		this.scriptsInjected = this.injectPlatformScripts();
 	}

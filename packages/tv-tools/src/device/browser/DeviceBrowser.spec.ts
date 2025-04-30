@@ -1,5 +1,5 @@
 import { logger } from '../../logger';
-import { Feature } from '../base';
+import type { Feature } from '../base';
 import { Features } from '../mocks';
 import { DeviceBrowser } from './DeviceBrowser';
 

@@ -37,7 +37,7 @@ export abstract class GridBase<
 	 */
 	protected dataIndex = 0;
 
-	constructor(
+	public constructor(
 		/**
 		 * FocusContainer that is rendered at the base of the grid and provides focus
 		 * functionality for the grid.
