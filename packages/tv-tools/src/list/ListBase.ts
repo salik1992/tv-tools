@@ -37,7 +37,7 @@ export abstract class ListBase<
 	 */
 	protected dataIndex = 0;
 
-	constructor(
+	public constructor(
 		/**
 		 * FocusContainer that is rendered at the base of the list and provides focus
 		 * functionality for the list.

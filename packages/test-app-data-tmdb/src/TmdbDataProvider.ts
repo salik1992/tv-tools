@@ -35,7 +35,7 @@ import type {
 export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 	private configuration: Configuration | undefined;
 
-	constructor(private tmdbAccessToken: string) {
+	public constructor(private tmdbAccessToken: string) {
 		super();
 	}
 

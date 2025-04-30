@@ -41,7 +41,7 @@ const UNKNONW_CONNECTION_MANAGER_RESPONSE: ConnectionManagerResponse = {
 };
 
 export class DeviceWebos extends DeviceBase {
-	override readonly driver = 'webos';
+	public override readonly driver = 'webos';
 
 	protected deviceInfoResolver: (value: DeviceInfo) => void = noop;
 	protected deviceInfoPromise: Promise<DeviceInfo> = new Promise<DeviceInfo>(

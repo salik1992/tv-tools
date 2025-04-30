@@ -116,7 +116,7 @@ export class BasicList extends ListBase<{
 	/**
 	 * Calculates the new render data for the new data index.
 	 */
-	public override move(newIndex: number): RenderData {
+	protected override move(newIndex: number): RenderData {
 		// Get the function that should do the calculation
 		const moveFunction = this.getMoveFunction(newIndex);
 		// Calculate data offset and list scroll

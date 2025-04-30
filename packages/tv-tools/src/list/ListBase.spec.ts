@@ -6,7 +6,7 @@ jest.useFakeTimers(); // Because events run async
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 class List extends ListBase<{}> {
-	move = jest.fn(() => this.renderData);
+	protected move = jest.fn(() => this.renderData);
 }
 
 const element = (id: string, dataIndex: number, offset: number) => ({

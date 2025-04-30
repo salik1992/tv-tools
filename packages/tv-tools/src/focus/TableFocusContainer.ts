@@ -48,7 +48,7 @@ export class TableFocusContainer {
 	 */
 	protected lastFocusOptions: FocusOptions | undefined = undefined;
 
-	constructor(public readonly id: string = focus.generateId()) {
+	public constructor(public readonly id: string = focus.generateId()) {
 		focus.addFocusId(this.id, this.focus.bind(this));
 		focus.addOnFocusWithin(id, this.onFocusWithin.bind(this));
 	}

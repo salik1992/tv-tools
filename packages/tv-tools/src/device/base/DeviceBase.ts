@@ -19,13 +19,13 @@ export abstract class DeviceBase implements Device {
 	public addEventListener = this.eventListener.addEventListener;
 	public removeEventListener = this.eventListener.removeEventListener;
 
-	abstract driver: string;
+	public abstract driver: string;
 
-	abstract platform(): Promise<PlatformInfo>;
+	public abstract platform(): Promise<PlatformInfo>;
 
-	abstract deviceInfo(): Promise<DeviceInfo>;
+	public abstract deviceInfo(): Promise<DeviceInfo>;
 
-	abstract initialize(): Promise<void>;
+	public abstract initialize(): Promise<void>;
 
 	public readonly canCloseApplication: boolean = false;
 
@@ -37,13 +37,15 @@ export abstract class DeviceBase implements Device {
 		window.location.reload();
 	}
 
-	abstract getVolume(): Promise<Volume>;
-	abstract setVolume(volume: Partial<Volume>): Promise<void>;
+	public abstract getVolume(): Promise<Volume>;
+	public abstract setVolume(volume: Partial<Volume>): Promise<void>;
 
-	abstract getScreenSaver(): Promise<ScreenSaver>;
-	abstract setScreenSaver(screenSaver: Partial<ScreenSaver>): Promise<void>;
+	public abstract getScreenSaver(): Promise<ScreenSaver>;
+	public abstract setScreenSaver(
+		screenSaver: Partial<ScreenSaver>,
+	): Promise<void>;
 
-	abstract getNetworkInfo(): Promise<NetworkInfo>;
+	public abstract getNetworkInfo(): Promise<NetworkInfo>;
 
-	abstract isSupported(feature: Feature): Promise<boolean>;
+	public abstract isSupported(feature: Feature): Promise<boolean>;
 }

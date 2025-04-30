@@ -66,7 +66,7 @@ export class VirtualKeyboard implements IEventListener<VirtualKeyboardEvents> {
 	 */
 	protected input: HTMLInputElement | undefined;
 
-	constructor(layouts: VirtualKeyboardLayouts) {
+	public constructor(layouts: VirtualKeyboardLayouts) {
 		validateLayouts(layouts);
 		this.layouts = this.prepareLayouts(layouts);
 		this.currentLayout = Object.keys(this.layouts)[0];

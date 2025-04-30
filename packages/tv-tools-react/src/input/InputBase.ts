@@ -8,7 +8,7 @@ import { Input } from '@salik1992/tv-tools/input';
 export class InputBase extends Input {
 	protected boundOnInteractablePress = this.onInteractablePress.bind(this);
 
-	constructor(
+	public constructor(
 		interactable: Interactable,
 		protected overrides: {
 			onInteractablePress?: () => boolean;

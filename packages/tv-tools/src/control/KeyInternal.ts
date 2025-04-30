@@ -6,7 +6,7 @@ import type { Key, KeyInformation, KeyOption } from './types';
  * alternatives.
  */
 export class KeyInternal implements Key {
-	constructor(
+	public constructor(
 		/**
 		 * All the keycodes that should be matched to this Key.
 		 */
@@ -46,7 +46,7 @@ export class KeyInternal implements Key {
 	 * }
 	 * ```
 	 */
-	is<T extends KeyInformation>(
+	public is<T extends KeyInformation>(
 		event: T,
 		{ ignoreRtl = false }: KeyOption = {},
 	) {
@@ -71,7 +71,7 @@ export class KeyInternal implements Key {
 	 * - rtl - use rtlKeyCodes and rtlCodes, if defined
 	 * @returns KeyboardEvent to use for dispatchEvent
 	 */
-	toKeyboardEvent(
+	public toKeyboardEvent(
 		type: KeyboardEvent['type'],
 		{ rtl = false }: { rtl?: boolean } = {},
 	): KeyboardEvent {
@@ -92,7 +92,7 @@ export class KeyInternal implements Key {
 	 * `${LEFT}` // --> "[ArrowLeft]"
 	 * ```
 	 */
-	toString() {
+	public toString() {
 		return `[${this.codes[0]}]`;
 	}
 }
