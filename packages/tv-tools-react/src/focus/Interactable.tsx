@@ -64,7 +64,7 @@ export const Interactable = ({
 				? null
 				: (interactableBase ??
 					new InteractableBase(focusManager, id, tabIndex)),
-		[id, disabled, interactableBase],
+		[focusManager, id, disabled, interactableBase],
 	);
 	const ref = useRef<HTMLDivElement>(null);
 
