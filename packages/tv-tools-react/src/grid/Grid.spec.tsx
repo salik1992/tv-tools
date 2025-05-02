@@ -1,61 +1,69 @@
+import { type PropsWithChildren, createRef } from 'react';
 import { act, render } from '@testing-library/react';
 import { DOWN, LEFT, RIGHT, UP } from '@salik1992/tv-tools/control';
-import { focus } from '@salik1992/tv-tools/focus';
+import type { FocusManager } from '@salik1992/tv-tools/focus';
 import { BasicGrid } from '@salik1992/tv-tools/grid/BasicGrid';
 import { Performance } from '@salik1992/tv-tools/utils/Performance';
-import { FocusRoot, Interactable } from '../focus';
+import { FocusProvider, Interactable } from '../focus';
+import { ExposeFocusManager, assertFocusManager } from '../focus/mocks';
 import { Grid } from './Grid';
 
-const focusSpy = jest.spyOn(focus, 'focus');
 const throttleMs = 300;
 jest.useFakeTimers();
 
-describe('Grid', () => {
-	beforeEach(() => {
-		focusSpy.mockClear();
-	});
+const focusManager = createRef<FocusManager>();
+const Wrapper = ({ children }: PropsWithChildren) => (
+	<FocusProvider id="focusRoot">
+		{children}
+		<ExposeFocusManager focusManager={focusManager} />
+	</FocusProvider>
+);
 
+describe('Grid', () => {
 	it('should render the grid', () => {
-		const { container, unmount } = render(
-			<FocusRoot>
-				<Grid
-					id="grid"
-					Implementation={BasicGrid}
-					throttleMs={throttleMs}
-					configuration={{
-						performance: Performance.BASIC,
-						dataLength: 25,
-						visibleGroups: 5,
-						elementsPerGroup: 5,
-						config: {
-							navigatableGroups: 3,
-							scrolling: {
-								first: 50,
-								other: 100,
-							},
+		const { container, rerender, unmount } = render(null, {
+			wrapper: Wrapper,
+		});
+		assertFocusManager(focusManager);
+		const focusSpy = jest.spyOn(focusManager.current, 'focus');
+		rerender(
+			<Grid
+				id="grid"
+				Implementation={BasicGrid}
+				throttleMs={throttleMs}
+				configuration={{
+					performance: Performance.BASIC,
+					dataLength: 25,
+					visibleGroups: 5,
+					elementsPerGroup: 5,
+					config: {
+						navigatableGroups: 3,
+						scrolling: {
+							first: 50,
+							other: 100,
 						},
-					}}
-					renderGroup={({ id, offset, elements }) => (
-						<div
-							className="group"
-							id={id}
-							key={id}
-							data-data-offset={offset}
-						>
-							{elements.map(({ id, dataIndex, onFocus }) => (
-								<Interactable
-									id={id}
-									key={id}
-									data-data-index={dataIndex}
-									onFocus={onFocus}
-									onPress={jest.fn()}
-								/>
-							))}
-						</div>
-					)}
-					focusOnMount
-				/>
-			</FocusRoot>,
+					},
+				}}
+				renderGroup={({ id, offset, elements }) => (
+					<div
+						className="group"
+						id={id}
+						key={id}
+						data-data-offset={offset}
+					>
+						{elements.map(({ id, dataIndex, onFocus }) => (
+							<Interactable
+								id={id}
+								key={id}
+								data-data-index={dataIndex}
+								onFocus={onFocus}
+								onPress={jest.fn()}
+							/>
+						))}
+					</div>
+				)}
+				focusOnMount
+			/>,
 		);
 		expect(container.innerHTML).toMatchSnapshot();
 		expect(focusSpy).toHaveBeenCalledWith('grid-g0-e0', {
@@ -66,46 +74,48 @@ describe('Grid', () => {
 
 	it('should move with keyboard, mouse wheel and virtual arrows', () => {
 		const { container, unmount } = render(
-			<FocusRoot>
-				<Grid
-					id="grid"
-					Implementation={BasicGrid}
-					throttleMs={throttleMs}
-					configuration={{
-						performance: Performance.BASIC,
-						dataLength: 25,
-						visibleGroups: 5,
-						elementsPerGroup: 5,
-						config: {
-							navigatableGroups: 3,
-							scrolling: {
-								first: 50,
-								other: 100,
-							},
+			<Grid
+				id="grid"
+				Implementation={BasicGrid}
+				throttleMs={throttleMs}
+				configuration={{
+					performance: Performance.BASIC,
+					dataLength: 25,
+					visibleGroups: 5,
+					elementsPerGroup: 5,
+					config: {
+						navigatableGroups: 3,
+						scrolling: {
+							first: 50,
+							other: 100,
 						},
-					}}
-					renderGroup={({ id, offset, elements }) => (
-						<div
-							className="group"
-							id={id}
-							key={id}
-							data-data-offset={offset}
-						>
-							{elements.map(({ id, dataIndex, onFocus }) => (
-								<Interactable
-									id={id}
-									key={id}
-									data-data-index={dataIndex}
-									onFocus={onFocus}
-									onPress={jest.fn()}
-								/>
-							))}
-						</div>
-					)}
-					focusOnMount
-				/>
-			</FocusRoot>,
+					},
+				}}
+				renderGroup={({ id, offset, elements }) => (
+					<div
+						className="group"
+						id={id}
+						key={id}
+						data-data-offset={offset}
+					>
+						{elements.map(({ id, dataIndex, onFocus }) => (
+							<Interactable
+								id={id}
+								key={id}
+								data-data-index={dataIndex}
+								onFocus={onFocus}
+								onPress={jest.fn()}
+							/>
+						))}
+					</div>
+				)}
+				focusOnMount
+			/>,
+			{ wrapper: Wrapper },
 		);
+
+		assertFocusManager(focusManager);
+		const focusSpy = jest.spyOn(focusManager.current, 'focus');
 
 		// RIGHT
 		act(() => {

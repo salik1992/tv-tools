@@ -1,32 +1,50 @@
+import type { PropsWithChildren } from 'react';
+import { createRef } from 'react';
 import { render } from '@testing-library/react';
 import { ENTER } from '@salik1992/tv-tools/control';
-import { focus } from '@salik1992/tv-tools/focus';
-import { FocusRoot } from './FocusRoot';
+import type { FocusManager } from '@salik1992/tv-tools/focus';
+import { FocusProvider } from './FocusProvider';
 import { Interactable } from './Interactable';
+import { ExposeFocusManager, assertFocusManager } from './mocks';
 
 const onPress = jest.fn(() => true);
-const focusSpy = jest.spyOn(focus, 'focus');
+const focusManager = createRef<FocusManager>();
+
+const Wrapper = ({ children }: PropsWithChildren) => (
+	<FocusProvider>
+		{children}
+		<ExposeFocusManager focusManager={focusManager} />
+	</FocusProvider>
+);
 
 describe('Interactable', () => {
-	beforeEach(() => {
-		focusSpy.mockClear();
-	});
-
 	it('should render the children', () => {
-		const { container, unmount } = render(
+		const { container, rerender, unmount } = render(
+			<Interactable id="i1" onPress={onPress}>
+				Hello World
+			</Interactable>,
+			{ wrapper: Wrapper },
+		);
+		expect(container.innerHTML).toMatchSnapshot();
+		assertFocusManager(focusManager);
+		const focusSpy = jest.spyOn(focusManager.current, 'focus');
+		rerender(
 			<Interactable id="i1" onPress={onPress}>
 				Hello World
 			</Interactable>,
 		);
-		expect(container.innerHTML).toMatchSnapshot();
 		expect(focusSpy).not.toHaveBeenCalled();
 		unmount();
 	});
 
 	it('should focus itself with focusOnMount', () => {
-		const { unmount } = render(
-			<Interactable id="i1" onPress={onPress} focusOnMount />,
+		const { unmount, rerender } = render(
+			<Interactable id="i1" onPress={onPress} />,
+			{ wrapper: Wrapper },
 		);
+		assertFocusManager(focusManager);
+		const focusSpy = jest.spyOn(focusManager.current, 'focus');
+		rerender(<Interactable id="i1" onPress={onPress} focusOnMount />);
 		expect(focusSpy).toHaveBeenCalledWith('i1', {
 			preventScroll: true,
 		});
@@ -36,7 +54,10 @@ describe('Interactable', () => {
 	it('should focus itself on mouse over', () => {
 		const { container, unmount } = render(
 			<Interactable id="i1" onPress={onPress} />,
+			{ wrapper: Wrapper },
 		);
+		assertFocusManager(focusManager);
+		const focusSpy = jest.spyOn(focusManager.current, 'focus');
 		const event = new MouseEvent('mouseover', {
 			bubbles: true,
 		});
@@ -49,10 +70,10 @@ describe('Interactable', () => {
 
 	it('should call onPress on ENTER key', () => {
 		const { container, unmount } = render(
-			<FocusRoot>
-				<Interactable id="i1" onPress={onPress} />
-			</FocusRoot>,
+			<Interactable id="i1" onPress={onPress} />,
+			{ wrapper: Wrapper },
 		);
+		assertFocusManager(focusManager);
 		const event = ENTER.toKeyboardEvent('keydown');
 		const spyStopPropagation = jest.spyOn(event, 'stopPropagation');
 		const spyPreventDefault = jest.spyOn(event, 'preventDefault');
@@ -66,6 +87,7 @@ describe('Interactable', () => {
 	it('should call onPress on click', () => {
 		const { container, unmount } = render(
 			<Interactable id="i1" onPress={onPress} />,
+			{ wrapper: Wrapper },
 		);
 		const event = new MouseEvent('click', {
 			bubbles: true,
@@ -78,25 +100,32 @@ describe('Interactable', () => {
 	it('should not be focusable when disabled', () => {
 		const { unmount } = render(
 			<Interactable id="i1" onPress={onPress} disabled />,
+			{ wrapper: Wrapper },
 		);
-		expect(focus.hasFocusId('i1')).toBe(false);
+		assertFocusManager(focusManager);
+		expect(focusManager.current.hasFocusId('i1')).toBe(false);
 		unmount();
 	});
 
 	it('should remove itself from focus when disabled', () => {
 		const { unmount, rerender } = render(
 			<Interactable id="i1" onPress={onPress} />,
+			{ wrapper: Wrapper },
 		);
-		expect(focus.hasFocusId('i1')).toBe(true);
+		assertFocusManager(focusManager);
+		expect(focusManager.current.hasFocusId('i1')).toBe(true);
 		rerender(<Interactable id="i1" onPress={onPress} disabled />);
-		expect(focus.hasFocusId('i1')).toBe(false);
+		expect(focusManager.current.hasFocusId('i1')).toBe(false);
 		unmount();
 	});
 
 	it('should remove itself from focus when unmounted', () => {
-		const { unmount } = render(<Interactable id="i1" onPress={onPress} />);
-		expect(focus.hasFocusId('i1')).toBe(true);
+		const { unmount } = render(<Interactable id="i1" onPress={onPress} />, {
+			wrapper: Wrapper,
+		});
+		assertFocusManager(focusManager);
+		expect(focusManager.current.hasFocusId('i1')).toBe(true);
 		unmount();
-		expect(focus.hasFocusId('i1')).toBe(false);
+		expect(focusManager.current.hasFocusId('i1')).toBe(false);
 	});
 });

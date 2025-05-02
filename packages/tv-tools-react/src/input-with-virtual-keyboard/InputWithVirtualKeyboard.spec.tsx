@@ -16,7 +16,7 @@ import {
 	left,
 	right,
 } from '@salik1992/tv-tools/virtual-keyboard';
-import { FocusRoot, Interactable } from '../focus';
+import { FocusProvider, Interactable } from '../focus';
 import { VirtualKeyboard } from '../virtual-keyboard';
 import { InputWithVirtualKeyboard } from './InputWithVirtualKeyboard';
 import { VirtualKeyboardProvider } from './VirtualKeyboardContainer';
@@ -36,11 +36,11 @@ Range.prototype.getBoundingClientRect = jest.fn(() => ({
 }));
 
 const Providers = ({ children }: PropsWithChildren) => (
-	<FocusRoot>
+	<FocusProvider>
 		<VirtualKeyboardProvider className="keyboard-wrapper">
 			{children}
 		</VirtualKeyboardProvider>
-	</FocusRoot>
+	</FocusProvider>
 );
 
 const KeyboardBody = ({ children }: PropsWithChildren) => (

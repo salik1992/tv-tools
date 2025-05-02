@@ -12,9 +12,9 @@ import {
 import {
 	type ControlEvent,
 	type TableFocusContainer,
-	focus,
 } from '@salik1992/tv-tools/focus';
 import type { VirtualKeyboardLayouts } from '@salik1992/tv-tools/virtual-keyboard';
+import { useFocusManager } from '../focus';
 import { VirtualKeyboardBase } from './VirtualKeyboardBase';
 import { useBindListener } from './useBindListener';
 
@@ -61,6 +61,7 @@ export const VirtualKeyboardLayout = ({
 	onDone?: () => void;
 	inputRef?: RefObject<HTMLInputElement | null>;
 }) => {
+	const focusManager = useFocusManager();
 	const keyboard = useMemo(() => new VirtualKeyboardBase(layouts), [layouts]);
 	const [renderData, setRenderData] = useState(keyboard.getRenderData());
 
@@ -86,9 +87,9 @@ export const VirtualKeyboardLayout = ({
 			'keydown',
 			'bubble',
 		] as const;
-		focus.addEventListener(...params);
+		focusManager.addEventListener(...params);
 		return () => {
-			focus.removeEventListener(...params);
+			focusManager.removeEventListener(...params);
 		};
 	}, [onKeyDown]);
 

@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { act, render } from '@testing-library/react';
 import { BACK, ENTER, type Key } from '@salik1992/tv-tools/control';
 import { backspace, done, layout } from '@salik1992/tv-tools/virtual-keyboard';
-import { FocusRoot, Interactable } from '../focus';
+import { FocusProvider, Interactable } from '../focus';
 import { VirtualKeyboard } from './VirtualKeyboard';
 
 jest.useFakeTimers();
@@ -71,6 +71,7 @@ describe('VirtualKeyboard', () => {
 				Row={Row}
 				Key={Interactable}
 			/>,
+			{ wrapper: FocusProvider },
 		);
 		expect(container).toMatchSnapshot();
 		unmount();
@@ -92,7 +93,7 @@ describe('VirtualKeyboard', () => {
 				onRemoveChar={onRemoveChar}
 				onDone={onDone}
 			/>,
-			{ wrapper: FocusRoot },
+			{ wrapper: FocusProvider },
 		);
 		const expectPressResult = expectPressResultBase(container);
 
@@ -159,7 +160,7 @@ describe('VirtualKeyboard', () => {
 				Row={Row}
 				Key={Interactable}
 			/>,
-			{ wrapper: FocusRoot },
+			{ wrapper: FocusProvider },
 		);
 
 		expect(container.innerHTML).toContain('123');

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import type { Key } from '@salik1992/tv-tools/control';
-import { focus } from '@salik1992/tv-tools/focus';
+import { useFocusManager } from './useFocusManager';
 
 /**
  * Hook for listening to key sequences. Ideal for hidden shortcuts
@@ -26,6 +26,7 @@ export function useKeySequenceListener(
 	listener: () => void,
 	dependencies: unknown[],
 ) {
+	const focusManager = useFocusManager();
 	const memoizedSequence = useMemo(
 		() => sequence,
 		[sequence.map((key) => `${key}`).join(',')],
@@ -34,9 +35,9 @@ export function useKeySequenceListener(
 	const memoizedListener = useCallback(listener, dependencies);
 
 	useEffect(() => {
-		focus.addKeySequenceListener(memoizedSequence, memoizedListener);
+		focusManager.addKeySequenceListener(memoizedSequence, memoizedListener);
 		return () => {
-			focus.removeKeySequenceListener(memoizedSequence);
+			focusManager.removeKeySequenceListener(memoizedSequence);
 		};
 	}, [memoizedSequence, listener]);
 }

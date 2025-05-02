@@ -4,4 +4,5 @@ import type { Focus } from './types';
 
 export const FocusContext = createContext<Focus>({
 	addChild: noop,
+	focusManager: null,
 });

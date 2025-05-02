@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`FocusRoot should render the children 1`] = `"<div id="focusRoot"><div>Test</div></div>"`;

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FocusProvider should render the children 1`] = `"<div><div>Test</div></div>"`;
