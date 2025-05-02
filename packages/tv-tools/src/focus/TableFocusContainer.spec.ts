@@ -1,13 +1,17 @@
+import { FocusManager } from './FocusManager';
 import { Interactable } from './Interactable';
 import { RenderProgress } from './RenderProgress';
 import { TableFocusContainer } from './TableFocusContainer';
-import { focus } from './focus';
 
 type Item = string | { id: string; colSpan?: number; rowSpan?: number };
 
-const el = (id: string) => new Interactable(id);
+const el = (focus: FocusManager, id: string) => new Interactable(focus, id);
 
-const processTable = (table: Item[][], container: TableFocusContainer) => {
+const processTable = (
+	focus: FocusManager,
+	table: Item[][],
+	container: TableFocusContainer,
+) => {
 	const interactables: Interactable[][] = [];
 	container.setRenderProgress(RenderProgress.STARTED);
 	table.forEach((row, i) => {
@@ -19,7 +23,7 @@ const processTable = (table: Item[][], container: TableFocusContainer) => {
 				typeof item === 'string'
 					? undefined
 					: { colSpan: item.colSpan, rowSpan: item.rowSpan };
-			const interactable = el(id);
+			const interactable = el(focus, id);
 			interactables[i].push(interactable);
 			container.addChild(id, spans);
 		});
@@ -37,10 +41,12 @@ const clean = (interactables: Interactable[][]) => {
 };
 
 describe('TableFocusContainer', () => {
-	const container = new TableFocusContainer('test');
+	const focus = new FocusManager();
+	const container = new TableFocusContainer(focus, 'test');
 
 	it('should navigate among the elements', () => {
 		const interactables = processTable(
+			focus,
 			[
 				['a', 'b', 'c'],
 				['d', 'e', 'f'],
@@ -80,6 +86,7 @@ describe('TableFocusContainer', () => {
 
 	it('should navigate among the elements with rowSpan and colSpan', () => {
 		const interactables = processTable(
+			focus,
 			[
 				[
 					'a',
@@ -129,6 +136,7 @@ describe('TableFocusContainer', () => {
 
 	it('should remember focus positions', () => {
 		const interactables1 = processTable(
+			focus,
 			[
 				['a', 'b', 'c'],
 				['d', 'e', 'f'],
@@ -143,6 +151,7 @@ describe('TableFocusContainer', () => {
 		expect(spy).toHaveBeenCalledWith('e', { preventScroll: true });
 		clean(interactables1);
 		const interactables2 = processTable(
+			focus,
 			[
 				['1', '2', '3'],
 				['4', '5', '6'],
@@ -153,7 +162,7 @@ describe('TableFocusContainer', () => {
 		container.focus({ preventScroll: true });
 		expect(spy).toHaveBeenCalledWith('4', { preventScroll: true });
 		clean(interactables2);
-		const interactables3 = processTable([['*']], container);
+		const interactables3 = processTable(focus, [['*']], container);
 		container.focus({ preventScroll: true });
 		expect(spy).toHaveBeenCalledWith('*', { preventScroll: true });
 		clean(interactables3);
@@ -162,10 +171,10 @@ describe('TableFocusContainer', () => {
 
 	it('should focus itself on focus without children and then the first child', () => {
 		const spy = jest.spyOn(focus, 'focus');
-		processTable([[]], container);
+		processTable(focus, [[]], container);
 		container.focus({ preventScroll: true });
 		expect(spy).not.toHaveBeenCalled();
-		const interactables = processTable([['a']], container);
+		const interactables = processTable(focus, [['a']], container);
 		expect(spy).toHaveBeenCalledWith('a', { preventScroll: true });
 		clean(interactables);
 		spy.mockRestore();

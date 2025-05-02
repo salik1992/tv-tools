@@ -13,7 +13,7 @@ import type {
  * Main class that manages the focus, key events and their propagation through
  * focus tree.
  */
-class FocusManager {
+export class FocusManager {
 	/**
 	 * Set of all ids of focusable elements that are currently managed.
 	 */
@@ -461,5 +461,3 @@ class FocusManager {
 		this.focusHistory = this.focusHistory.filter((id) => id !== idToRemove);
 	}
 }
-
-export const focus = new FocusManager();

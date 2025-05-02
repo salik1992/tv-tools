@@ -1,4 +1,4 @@
-import { FocusContainer } from '../focus';
+import { FocusContainer, FocusManager } from '../focus';
 import { Performance } from '../utils/Performance';
 import { ListBase } from './ListBase';
 
@@ -17,7 +17,8 @@ const element = (id: string, dataIndex: number, offset: number) => ({
 });
 
 describe('ListBase', () => {
-	const container = new FocusContainer();
+	const focus = new FocusManager();
+	const container = new FocusContainer(focus);
 	const list = new List(container, {
 		id: 'list',
 		performance: Performance.BASIC,

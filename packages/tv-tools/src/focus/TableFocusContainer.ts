@@ -1,5 +1,5 @@
+import type { FocusManager } from './FocusManager';
 import { RenderProgress } from './RenderProgress';
-import { focus } from './focus';
 
 type Coord = [number, number];
 
@@ -48,9 +48,21 @@ export class TableFocusContainer {
 	 */
 	protected lastFocusOptions: FocusOptions | undefined = undefined;
 
-	public constructor(public readonly id: string = focus.generateId()) {
-		focus.addFocusId(this.id, this.focus.bind(this));
-		focus.addOnFocusWithin(id, this.onFocusWithin.bind(this));
+	/**
+	 * ID of the container.
+	 */
+	public readonly id: string;
+
+	public constructor(
+		protected readonly focusManager: FocusManager,
+		id?: string,
+	) {
+		this.id = id ?? this.focusManager.generateId();
+		this.focusManager.addFocusId(this.id, this.focus.bind(this));
+		this.focusManager.addOnFocusWithin(
+			this.id,
+			this.onFocusWithin.bind(this),
+		);
 	}
 
 	/**
@@ -78,7 +90,7 @@ export class TableFocusContainer {
 			this.focusChild(firstChild, options);
 			return;
 		}
-		focus.focusTrappedInContainer = this.id;
+		this.focusManager.focusTrappedInContainer = this.id;
 		this.lastFocusOptions = options;
 	}
 
@@ -108,11 +120,11 @@ export class TableFocusContainer {
 			this.focusTable = this.trim(this.wipFocusTable);
 			this.focusTable.forEach((row) => {
 				row.forEach((childId) => {
-					focus.addParentChild(this.id, childId);
+					this.focusManager.addParentChild(this.id, childId);
 				});
 			});
-			if (focus.focusTrappedInContainer === this.id) {
-				focus.focusTrappedInContainer = undefined;
+			if (this.focusManager.focusTrappedInContainer === this.id) {
+				this.focusManager.focusTrappedInContainer = undefined;
 				this.focus(this.lastFocusOptions);
 			}
 		}
@@ -157,7 +169,7 @@ export class TableFocusContainer {
 		if (x === 0 && y === 0) {
 			return false;
 		}
-		const eventChildren = focus.getEventChildren(fromChildId);
+		const eventChildren = this.focusManager.getEventChildren(fromChildId);
 		const childAtCurrentCoord =
 			this.focusTable[this.coord[0]]?.[this.coord[1]];
 		const coord = eventChildren.includes(childAtCurrentCoord)
@@ -189,7 +201,7 @@ export class TableFocusContainer {
 	 * Clean up when removed.
 	 */
 	public destroy() {
-		focus.removeFocusId(this.id);
+		this.focusManager.removeFocusId(this.id);
 	}
 
 	/**
@@ -199,10 +211,10 @@ export class TableFocusContainer {
 	 */
 	public focusChild(id: string, options?: FocusOptions) {
 		this.lastFocusedId = id;
-		if (focus.hasFocusId(id)) {
-			focus.focus(id, options);
+		if (this.focusManager.hasFocusId(id)) {
+			this.focusManager.focus(id, options);
 		} else {
-			focus.focusTrappedInContainer = this.id;
+			this.focusManager.focusTrappedInContainer = this.id;
 		}
 	}
 

@@ -1,10 +1,11 @@
-import { FocusContainer } from '../focus';
+import { FocusContainer, FocusManager } from '../focus';
 import { Performance } from '../utils/Performance';
 import { BasicGrid } from './BasicGrid';
 import { assertRenderData } from './mocks';
 
 describe('BasicGrid', () => {
-	const container = new FocusContainer();
+	const focus = new FocusManager();
+	const container = new FocusContainer(focus);
 	const focusSpy = jest
 		.spyOn(container, 'focusChild')
 		.mockImplementation(() => {});
