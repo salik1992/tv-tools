@@ -7,7 +7,9 @@ import { FocusContext } from './context';
 
 /**
  * The main root component for the focus management.
- * It creates a div element that is used for listening to key events in the manager.
+ * It creates a div element that is used for listening to key events in the manager and
+ * it also creates the focus manager instance for the application which is available through
+ * the FocusContext or useFocusManager hook.
  * Use at the root of your application.
  * @prop alwaysPreventNavigationalEvents - Use this to prevent TV use their own navigation.
  * @prop ...props - Any other props that you want to pass to the wrapping div element.
@@ -27,17 +29,20 @@ export const FocusProvider = ({
 }) => {
 	const focusManager = useMemo(() => new FocusManager(), []);
 
-	const onFocus = useCallback((event: FocusEvent<HTMLDivElement>) => {
-		focusManager.handleFocusEvent(event.nativeEvent);
-		onOuterFocus?.(event);
-	}, []);
+	const onFocus = useCallback(
+		(event: FocusEvent<HTMLDivElement>) => {
+			focusManager.handleFocusEvent(event.nativeEvent);
+			onOuterFocus?.(event);
+		},
+		[focusManager, onOuterFocus],
+	);
 
 	const keyDownCapture = useCallback(
 		(event: KeyboardEvent<HTMLDivElement>) => {
 			focusManager.handleKeyEvent('keydown', 'capture', event);
 			onOuterKeyDownCapture?.(event);
 		},
-		[],
+		[focusManager, onOuterKeyDownCapture],
 	);
 
 	const keyDownBubble = useCallback(
@@ -54,27 +59,33 @@ export const FocusProvider = ({
 				onOuterKeyDown?.(event);
 			}
 		},
-		[],
+		[focusManager, alwaysPreventNavigationalEvents, onOuterKeyDown],
 	);
 
-	const keyUpCapture = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-		focusManager.handleKeyEvent('keyup', 'capture', event);
-		onOuterKeyUpCapture?.(event);
-	}, []);
+	const keyUpCapture = useCallback(
+		(event: KeyboardEvent<HTMLDivElement>) => {
+			focusManager.handleKeyEvent('keyup', 'capture', event);
+			onOuterKeyUpCapture?.(event);
+		},
+		[focusManager, onOuterKeyUpCapture],
+	);
 
-	const keyUpBubble = useCallback((event: KeyboardEvent<HTMLDivElement>) => {
-		focusManager.handleKeyEvent('keyup', 'bubble', event);
-		if (
-			alwaysPreventNavigationalEvents &&
-			isDirectional(event) &&
-			document.activeElement?.tagName !== 'INPUT'
-		) {
-			event.preventDefault();
-			event.stopPropagation();
-		} else {
-			onOuterKeyUp?.(event);
-		}
-	}, []);
+	const keyUpBubble = useCallback(
+		(event: KeyboardEvent<HTMLDivElement>) => {
+			focusManager.handleKeyEvent('keyup', 'bubble', event);
+			if (
+				alwaysPreventNavigationalEvents &&
+				isDirectional(event) &&
+				document.activeElement?.tagName !== 'INPUT'
+			) {
+				event.preventDefault();
+				event.stopPropagation();
+			} else {
+				onOuterKeyUp?.(event);
+			}
+		},
+		[focusManager, alwaysPreventNavigationalEvents, onOuterKeyUp],
+	);
 
 	const focusContextValue = useMemo(
 		() => ({

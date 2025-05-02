@@ -51,7 +51,7 @@ export const Input = ({
 			disabled
 				? null
 				: new InteractableBase(focusManager, passedId, tabIndex),
-		[passedId, disabled],
+		[focusManager, passedId, disabled],
 	);
 	const input = useMemo(
 		() =>
@@ -60,7 +60,7 @@ export const Input = ({
 				: new InputBase(focusManager, interactable, {
 						onInteractablePress,
 					}),
-		[interactable],
+		[focusManager, interactable],
 	);
 	useEffect(
 		() => () => {

@@ -71,31 +71,31 @@ export function useContainer<
 
 	const useOnKeyDown = useCallback(
 		getUseOnKey(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 	const useOnEnter = useCallback(
 		getUseOnEnter(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 	const useOnBack = useCallback(
 		getUseOnBack(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 	const useOnLeft = useCallback(
 		getUseOnLeft(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 	const useOnRight = useCallback(
 		getUseOnRight(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 	const useOnUp = useCallback(
 		getUseOnUp(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 	const useOnDown = useCallback(
 		getUseOnDown(context.focusManager, container.id),
-		[container.id],
+		[container.id, context.focusManager],
 	);
 
 	return useMemo(
