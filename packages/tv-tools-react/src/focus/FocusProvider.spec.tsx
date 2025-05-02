@@ -1,31 +1,31 @@
+import { createRef } from 'react';
 import { render } from '@testing-library/react';
-import { focus } from '@salik1992/tv-tools/focus';
-import { FocusRoot } from './FocusRoot';
+import type { FocusManager } from '@salik1992/tv-tools/focus';
+import { FocusProvider } from './FocusProvider';
+import { ExposeFocusManager, assertFocusManager } from './mocks';
 
 const NAVIGATIONAL_CODE = 'ArrowDown';
 const OTHER_CODE = 'Enter';
 
-describe('FocusRoot', () => {
-	const spy = jest.spyOn(focus, 'handleKeyEvent');
-
-	beforeEach(() => {
-		spy.mockClear();
-	});
+describe('FocusProvider', () => {
+	const focusManager = createRef<FocusManager>();
 
 	it('should render the children', () => {
 		const { container } = render(
-			<FocusRoot>
+			<FocusProvider>
 				<div>Test</div>
-			</FocusRoot>,
+				<ExposeFocusManager focusManager={focusManager} />
+			</FocusProvider>,
 		);
 		expect(container.innerHTML).toMatchSnapshot();
 	});
 
 	it('should pass keyboard events to the focus manager', () => {
 		const { container } = render(
-			<FocusRoot>
+			<FocusProvider id="focusRoot">
 				<div>Test</div>
-			</FocusRoot>,
+				<ExposeFocusManager focusManager={focusManager} />
+			</FocusProvider>,
 		);
 		const keydDownBubble = new KeyboardEvent('keydown', {
 			code: 'ArrowDown',
@@ -37,6 +37,8 @@ describe('FocusRoot', () => {
 			bubbles: true,
 		});
 		const stopSpyUB = jest.spyOn(keyUpBubble, 'stopPropagation');
+		assertFocusManager(focusManager);
+		const spy = jest.spyOn(focusManager.current, 'handleKeyEvent');
 		const root = container.querySelector('#focusRoot');
 		root?.dispatchEvent(keydDownBubble);
 		root?.dispatchEvent(keyUpBubble);
@@ -69,11 +71,11 @@ describe('FocusRoot', () => {
 	});
 
 	it('should prevent default and stop propagation for navigational events with alwaysPreventNavigationalEvents', () => {
-		const spy = jest.spyOn(focus, 'handleKeyEvent');
 		const { container } = render(
-			<FocusRoot alwaysPreventNavigationalEvents>
+			<FocusProvider id="focusRoot" alwaysPreventNavigationalEvents>
 				<div>Test</div>
-			</FocusRoot>,
+				<ExposeFocusManager focusManager={focusManager} />
+			</FocusProvider>,
 		);
 		const keydDownBubble = new KeyboardEvent('keydown', {
 			code: 'ArrowDown',
@@ -87,6 +89,8 @@ describe('FocusRoot', () => {
 		});
 		const preventSpyUB = jest.spyOn(keyUpBubble, 'preventDefault');
 		const stopSpyUB = jest.spyOn(keyUpBubble, 'stopPropagation');
+		assertFocusManager(focusManager);
+		const spy = jest.spyOn(focusManager.current, 'handleKeyEvent');
 		const root = container.querySelector('#focusRoot');
 		root?.dispatchEvent(keydDownBubble);
 		root?.dispatchEvent(keyUpBubble);
@@ -121,11 +125,11 @@ describe('FocusRoot', () => {
 	});
 
 	it('should not prevent default and stop propagation for non-navigational events with alwaysPreventNavigationalEvents', () => {
-		const spy = jest.spyOn(focus, 'handleKeyEvent');
 		const { container } = render(
-			<FocusRoot alwaysPreventNavigationalEvents>
+			<FocusProvider id="focusRoot" alwaysPreventNavigationalEvents>
 				<div>Test</div>
-			</FocusRoot>,
+				<ExposeFocusManager focusManager={focusManager} />
+			</FocusProvider>,
 		);
 		const keydDownBubble = new KeyboardEvent('keydown', {
 			code: OTHER_CODE,
@@ -139,6 +143,8 @@ describe('FocusRoot', () => {
 		});
 		const preventSpyUB = jest.spyOn(keyUpBubble, 'preventDefault');
 		const stopSpyUB = jest.spyOn(keyUpBubble, 'stopPropagation');
+		assertFocusManager(focusManager);
+		const spy = jest.spyOn(focusManager.current, 'handleKeyEvent');
 		const root = container.querySelector('#focusRoot');
 		root?.dispatchEvent(keydDownBubble);
 		root?.dispatchEvent(keyUpBubble);

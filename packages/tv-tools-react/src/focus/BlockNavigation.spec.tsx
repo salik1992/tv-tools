@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import { DOWN, LEFT, RIGHT, UP } from '@salik1992/tv-tools/control';
 import { BlockNavigation } from './BlockNavigation';
-import { FocusRoot } from './FocusRoot';
+import { FocusProvider } from './FocusProvider';
 import { Interactable } from './Interactable';
 import { FocusContext } from './context';
 import { useFocusContainer } from './useFocusContainer';
@@ -47,19 +47,17 @@ describe('BlockNavigation', () => {
 
 	it('should pass events from Interactable to container without BlockNavigation', () => {
 		const { container } = render(
-			<FocusRoot>
-				<Container
-					onLeft={onLeft}
-					onRight={onRight}
-					onUp={onUp}
-					onDown={onDown}
-				>
-					<Interactable id="test" onPress={onPress}>
-						Test
-					</Interactable>
-				</Container>
-				,
-			</FocusRoot>,
+			<Container
+				onLeft={onLeft}
+				onRight={onRight}
+				onUp={onUp}
+				onDown={onDown}
+			>
+				<Interactable id="test" onPress={onPress}>
+					Test
+				</Interactable>
+			</Container>,
+			{ wrapper: FocusProvider },
 		);
 		const interactable = container.querySelector('#test');
 		expect(interactable).toBeTruthy();
@@ -75,20 +73,19 @@ describe('BlockNavigation', () => {
 
 	it('should block events from Interactable to container with BlockNavigation', () => {
 		const { container } = render(
-			<FocusRoot>
-				<Container
-					onLeft={onLeft}
-					onRight={onRight}
-					onUp={onUp}
-					onDown={onDown}
-				>
-					<BlockNavigation>
-						<Interactable id="test" onPress={onPress}>
-							Test
-						</Interactable>
-					</BlockNavigation>
-				</Container>
-			</FocusRoot>,
+			<Container
+				onLeft={onLeft}
+				onRight={onRight}
+				onUp={onUp}
+				onDown={onDown}
+			>
+				<BlockNavigation>
+					<Interactable id="test" onPress={onPress}>
+						Test
+					</Interactable>
+				</BlockNavigation>
+			</Container>,
+			{ wrapper: FocusProvider },
 		);
 		const interactable = container.querySelector('#test');
 		expect(interactable).toBeTruthy();

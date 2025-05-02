@@ -1,16 +1,9 @@
-import {
-	useCallback,
-	useContext,
-	useEffect,
-	useLayoutEffect,
-	useMemo,
-} from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo } from 'react';
 import {
 	type FocusContainer,
 	RenderProgress,
 	type TableFocusContainer,
 } from '@salik1992/tv-tools/focus';
-import { FocusContext } from './context';
 import {
 	getUseOnBack,
 	getUseOnDown,
@@ -21,6 +14,7 @@ import {
 	getUseOnUp,
 } from './keyboardHooks';
 import type { Focus } from './types';
+import { useFocusContext } from './useFocusContext';
 import { useRefresh } from './useRefresh';
 
 /**
@@ -32,8 +26,11 @@ import { useRefresh } from './useRefresh';
 export function useContainer<
 	C extends typeof FocusContainer | typeof TableFocusContainer,
 >(Container: C, id?: string) {
-	const container = useMemo(() => new Container(id), [Container, id]);
-	const context = useContext(FocusContext);
+	const context = useFocusContext();
+	const container = useMemo(
+		() => new Container(context.focusManager, id),
+		[context.focusManager, Container, id],
+	);
 	const refresh = useRefresh();
 
 	container.setRenderProgress(RenderProgress.STARTED);
@@ -67,15 +64,39 @@ export function useContainer<
 		container.setRenderProgress(RenderProgress.FINISHED);
 	});
 
-	const focusContextValue = useMemo((): Focus => ({ addChild }), [addChild]);
+	const focusContextValue = useMemo(
+		(): Focus => ({ addChild, focusManager: context.focusManager }),
+		[addChild, context.focusManager],
+	);
 
-	const useOnKeyDown = useCallback(getUseOnKey(container.id), [container.id]);
-	const useOnEnter = useCallback(getUseOnEnter(container.id), [container.id]);
-	const useOnBack = useCallback(getUseOnBack(container.id), [container.id]);
-	const useOnLeft = useCallback(getUseOnLeft(container.id), [container.id]);
-	const useOnRight = useCallback(getUseOnRight(container.id), [container.id]);
-	const useOnUp = useCallback(getUseOnUp(container.id), [container.id]);
-	const useOnDown = useCallback(getUseOnDown(container.id), [container.id]);
+	const useOnKeyDown = useCallback(
+		getUseOnKey(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
+	const useOnEnter = useCallback(
+		getUseOnEnter(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
+	const useOnBack = useCallback(
+		getUseOnBack(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
+	const useOnLeft = useCallback(
+		getUseOnLeft(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
+	const useOnRight = useCallback(
+		getUseOnRight(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
+	const useOnUp = useCallback(
+		getUseOnUp(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
+	const useOnDown = useCallback(
+		getUseOnDown(context.focusManager, container.id),
+		[container.id, context.focusManager],
+	);
 
 	return useMemo(
 		() => ({

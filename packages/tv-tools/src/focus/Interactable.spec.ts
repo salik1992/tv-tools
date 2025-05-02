@@ -1,6 +1,6 @@
 import { BACK, ENTER, type Key } from '../control';
+import { FocusManager } from './FocusManager';
 import { Interactable } from './Interactable';
-import { focus } from './focus';
 
 const keyEvent = (key: Key) => ({
 	target: (() => {
@@ -14,13 +14,15 @@ const keyEvent = (key: Key) => ({
 	stopPropagation: jest.fn(),
 });
 
+const focus = new FocusManager();
+
 describe('Interactable', () => {
 	const onPress = jest.fn();
 	const element = document.createElement('div');
 	const focusSpy = jest.spyOn(element, 'focus');
 	const addEventListener = jest.spyOn(element, 'addEventListener');
 	const removeEventListener = jest.spyOn(element, 'removeEventListener');
-	const interactable = new Interactable('interactable', 1);
+	const interactable = new Interactable(focus, 'interactable', 1);
 	interactable.setOnPress(onPress);
 
 	beforeEach(() => {

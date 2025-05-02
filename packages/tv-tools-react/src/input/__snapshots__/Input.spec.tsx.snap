@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Input should render the Input with Interactable 1`] = `"<div class="class-1" style="border-color: black;" id="input-1" tabindex="0"><div class="text"></div><div class="caret" style="transform: translateX(0px);"></div><input readonly="" id="input-1-input" type="text" value="test"></div>"`;
+exports[`Input should render the Input with Interactable 1`] = `"<div><div class="class-1" style="border-color: black;" id="input-1" tabindex="0"><div class="text"></div><div class="caret" style="transform: translateX(0px);"></div><input readonly="" id="input-1-input" type="text" value="test"></div></div>"`;
 
-exports[`Input should render the Input without Interactable and input when disabled 1`] = `"<div class="class-1" style="border-color: black;"><div class="text"></div><div class="caret" style="transform: translateX(0px);"></div></div>"`;
+exports[`Input should render the Input without Interactable and input when disabled 1`] = `"<div><div class="class-1" style="border-color: black;"><div class="text"></div><div class="caret" style="transform: translateX(0px);"></div></div></div>"`;
 
-exports[`Input should update render data and run proper callbacks when input 1`] = `"<div class="class-1" style="border-color: black;" id="input-1" tabindex="0"><div class="text">test-changed</div><div class="caret" style="transform: translateX(-12px);"></div><input id="input-1-input" type="text" value="test"></div>"`;
+exports[`Input should update render data and run proper callbacks when input 1`] = `"<div><div class="class-1" style="border-color: black;" id="input-1" tabindex="0"><div class="text">test-changed</div><div class="caret" style="transform: translateX(-12px);"></div><input id="input-1-input" type="text" value="test"></div></div>"`;

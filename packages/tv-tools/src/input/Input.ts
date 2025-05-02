@@ -1,5 +1,5 @@
 import { ENTER, INPUT_DONE } from '../control';
-import { type Interactable, focus } from '../focus';
+import type { FocusManager, Interactable } from '../focus';
 import { EventListener, type IEventListener } from '../utils/EventListener';
 import { runAsync } from '../utils/runAsync';
 import type { CharRenderData, InputEvents, RenderData } from './types';
@@ -36,7 +36,10 @@ export class Input implements IEventListener<InputEvents> {
 	/**
 	 * The interactable component that is used to wrap the input element.
 	 */
-	public constructor(public interactable: Interactable) {
+	public constructor(
+		protected readonly focusManager: FocusManager,
+		public readonly interactable: Interactable,
+	) {
 		this.interactable.setOnPress(this.boundOnInteractablePress);
 	}
 
@@ -98,8 +101,10 @@ export class Input implements IEventListener<InputEvents> {
 	 * Focuses the interactable component if it exists in focus management.
 	 */
 	protected focusInteractable() {
-		if (focus.hasFocusId(this.interactable.id)) {
-			focus.focus(this.interactable.id, { preventScroll: true });
+		if (this.focusManager.hasFocusId(this.interactable.id)) {
+			this.focusManager.focus(this.interactable.id, {
+				preventScroll: true,
+			});
 			this.updateRenderData();
 		}
 	}

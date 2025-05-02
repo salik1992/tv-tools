@@ -1,6 +1,6 @@
 import { clamp } from '../utils/clamp';
+import type { FocusManager } from './FocusManager';
 import { RenderProgress } from './RenderProgress';
-import { focus } from './focus';
 
 /**
  * The behavior class for focus containers. Focus container is a component that
@@ -36,9 +36,21 @@ export class FocusContainer {
 	 */
 	protected lastFocusOptions: FocusOptions | undefined = undefined;
 
-	public constructor(public readonly id: string = focus.generateId()) {
-		focus.addFocusId(this.id, this.focus.bind(this));
-		focus.addOnFocusWithin(id, this.onFocusWithin.bind(this));
+	/**
+	 * ID of the container.
+	 */
+	public readonly id: string;
+
+	public constructor(
+		protected readonly focusManager: FocusManager,
+		id?: string,
+	) {
+		this.id = id ?? this.focusManager.generateId();
+		this.focusManager.addFocusId(this.id, this.focus.bind(this));
+		this.focusManager.addOnFocusWithin(
+			this.id,
+			this.onFocusWithin.bind(this),
+		);
 	}
 
 	/**
@@ -59,7 +71,7 @@ export class FocusContainer {
 		} else if (this.focusChildren.length) {
 			this.focusChild(this.focusChildren[0], options);
 		} else {
-			focus.focusTrappedInContainer = this.id;
+			this.focusManager.focusTrappedInContainer = this.id;
 			this.lastFocusOptions = options;
 		}
 	}
@@ -88,10 +100,10 @@ export class FocusContainer {
 		if (this.renderProgress === RenderProgress.FINISHED) {
 			this.focusChildren = this.wipFocusChildren;
 			this.focusChildren.forEach((childId) => {
-				focus.addParentChild(this.id, childId);
+				this.focusManager.addParentChild(this.id, childId);
 			});
-			if (focus.focusTrappedInContainer === this.id) {
-				focus.focusTrappedInContainer = undefined;
+			if (this.focusManager.focusTrappedInContainer === this.id) {
+				this.focusManager.focusTrappedInContainer = undefined;
 				this.focus(this.lastFocusOptions);
 			}
 		}
@@ -119,7 +131,7 @@ export class FocusContainer {
 	 * further.
 	 */
 	public moveFocus(diff: number, fromChildId: string): boolean {
-		const eventChildren = focus.getEventChildren(fromChildId);
+		const eventChildren = this.focusManager.getEventChildren(fromChildId);
 		const originalChildIndex = this.focusChildren.findIndex((childId) =>
 			eventChildren.includes(childId),
 		);
@@ -144,7 +156,7 @@ export class FocusContainer {
 	 * Clean up when removed.
 	 */
 	public destroy() {
-		focus.removeFocusId(this.id);
+		this.focusManager.removeFocusId(this.id);
 	}
 
 	/**
@@ -154,10 +166,10 @@ export class FocusContainer {
 	 */
 	public focusChild(id: string, options?: FocusOptions) {
 		this.lastFocusedId = id;
-		if (focus.hasFocusId(id)) {
-			focus.focus(id, options);
+		if (this.focusManager.hasFocusId(id)) {
+			this.focusManager.focus(id, options);
 		} else {
-			focus.focusTrappedInContainer = this.id;
+			this.focusManager.focusTrappedInContainer = this.id;
 		}
 	}
 

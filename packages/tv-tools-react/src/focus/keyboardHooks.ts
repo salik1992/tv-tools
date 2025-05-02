@@ -9,12 +9,12 @@ import {
 	RIGHT,
 	UP,
 } from '@salik1992/tv-tools/control';
-import {
-	type ControlEvent,
-	type ControlListener,
-	type ControlPhase,
-	type ControlType,
-	focus,
+import type {
+	ControlEvent,
+	ControlListener,
+	ControlPhase,
+	ControlType,
+	FocusManager,
 } from '@salik1992/tv-tools/focus';
 
 type Options = KeyOption & {
@@ -23,7 +23,7 @@ type Options = KeyOption & {
 	phase?: ControlPhase;
 };
 
-export function getUseOnKey(id: string) {
+export function getUseOnKey(focusManager: FocusManager, id: string) {
 	return function useOnKey(
 		listener: ControlListener,
 		dependencies: unknown[],
@@ -45,66 +45,77 @@ export function getUseOnKey(id: string) {
 		);
 
 		useEffect(() => {
-			focus.addEventListener(id, cachedListener, type, phase);
+			focusManager.addEventListener(id, cachedListener, type, phase);
 			return () => {
-				focus.removeEventListener(id, cachedListener, type, phase);
+				focusManager.removeEventListener(
+					id,
+					cachedListener,
+					type,
+					phase,
+				);
 			};
 		}, [id, cachedListener, type, phase]);
 	};
 }
 
-export function getUseOnEnter(id: string) {
+export function getUseOnEnter(focusManager: FocusManager, id: string) {
 	return function useOnEnter(
 		listener: ControlListener,
 		dependencies: unknown[] = [listener],
 	) {
-		getUseOnKey(id)(listener, dependencies, { key: ENTER });
+		getUseOnKey(focusManager, id)(listener, dependencies, { key: ENTER });
 	};
 }
 
-export function getUseOnBack(id: string) {
+export function getUseOnBack(focusManager: FocusManager, id: string) {
 	return function useOnBack(
 		listener: ControlListener,
 		dependencies: unknown[] = [listener],
 	) {
-		getUseOnKey(id)(listener, dependencies, { key: BACK });
+		getUseOnKey(focusManager, id)(listener, dependencies, { key: BACK });
 	};
 }
 
-export function getUseOnUp(id: string) {
+export function getUseOnUp(focusManager: FocusManager, id: string) {
 	return function useOnUp(
 		listener: ControlListener,
 		dependencies: unknown[] = [listener],
 	) {
-		getUseOnKey(id)(listener, dependencies, { key: UP });
+		getUseOnKey(focusManager, id)(listener, dependencies, { key: UP });
 	};
 }
 
-export function getUseOnDown(id: string) {
+export function getUseOnDown(focusManager: FocusManager, id: string) {
 	return function useOnDown(
 		listener: ControlListener,
 		dependencies: unknown[] = [listener],
 	) {
-		getUseOnKey(id)(listener, dependencies, { key: DOWN });
+		getUseOnKey(focusManager, id)(listener, dependencies, { key: DOWN });
 	};
 }
 
-export function getUseOnLeft(id: string) {
+export function getUseOnLeft(focusManager: FocusManager, id: string) {
 	return function useOnLeft(
 		listener: ControlListener,
 		dependencies: unknown[] = [listener],
 		{ ignoreRtl }: KeyOption = {},
 	) {
-		getUseOnKey(id)(listener, dependencies, { key: LEFT, ignoreRtl });
+		getUseOnKey(focusManager, id)(listener, dependencies, {
+			key: LEFT,
+			ignoreRtl,
+		});
 	};
 }
 
-export function getUseOnRight(id: string) {
+export function getUseOnRight(focusManager: FocusManager, id: string) {
 	return function useOnRight(
 		listener: ControlListener,
 		dependencies: unknown[] = [listener],
 		{ ignoreRtl }: KeyOption = {},
 	) {
-		getUseOnKey(id)(listener, dependencies, { key: RIGHT, ignoreRtl });
+		getUseOnKey(focusManager, id)(listener, dependencies, {
+			key: RIGHT,
+			ignoreRtl,
+		});
 	};
 }

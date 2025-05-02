@@ -1,9 +1,10 @@
 import { FocusContainer } from './FocusContainer';
+import { FocusManager } from './FocusManager';
 import { RenderProgress } from './RenderProgress';
-import { focus } from './focus';
 
 describe('FocusContainer', () => {
-	const container = new FocusContainer('container');
+	const focus = new FocusManager();
+	const container = new FocusContainer(focus, 'container');
 	const children = [
 		{ id: '0', onFocus: jest.fn() },
 		{ id: '1', onFocus: jest.fn() },

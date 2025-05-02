@@ -1,13 +1,14 @@
-import { Interactable, focus } from '../focus';
+import { FocusManager, Interactable } from '../focus';
 import { Input } from './Input';
 
 jest.useFakeTimers();
 
 describe('Input', () => {
+	const focus = new FocusManager();
 	const div = document.createElement('div');
-	const interactable = new Interactable('input');
+	const interactable = new Interactable(focus, 'input');
 	interactable.setElement(div);
-	const input = new Input(interactable);
+	const input = new Input(focus, interactable);
 	const element = document.createElement('input');
 	const rdSpy = jest.fn();
 	const activeElementSpy = jest.spyOn(document, 'activeElement', 'get');

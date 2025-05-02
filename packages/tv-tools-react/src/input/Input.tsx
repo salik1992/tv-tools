@@ -12,7 +12,7 @@ import {
 	type PxRenderData,
 	charRenderDataToPxRenderData,
 } from '@salik1992/tv-tools/input';
-import { Interactable } from '../focus';
+import { Interactable, useFocusManager } from '../focus';
 import { useMultiRef } from '../utils/useMultiRef';
 import { InputBase } from './InputBase';
 
@@ -44,17 +44,23 @@ export const Input = ({
 	inputRef?: RefObject<HTMLInputElement | null>;
 	onInteractablePress?: () => boolean;
 } & InputHTMLAttributes<HTMLInputElement>) => {
+	const focusManager = useFocusManager();
 	// Instance of Interactable and Input classes
 	const interactable = useMemo(
-		() => (disabled ? null : new InteractableBase(passedId, tabIndex)),
-		[passedId, disabled],
+		() =>
+			disabled
+				? null
+				: new InteractableBase(focusManager, passedId, tabIndex),
+		[focusManager, passedId, disabled],
 	);
 	const input = useMemo(
 		() =>
 			!interactable
 				? null
-				: new InputBase(interactable, { onInteractablePress }),
-		[interactable],
+				: new InputBase(focusManager, interactable, {
+						onInteractablePress,
+					}),
+		[focusManager, interactable],
 	);
 	useEffect(
 		() => () => {

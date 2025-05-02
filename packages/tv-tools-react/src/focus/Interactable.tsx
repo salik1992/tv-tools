@@ -1,16 +1,12 @@
 import {
 	type ComponentProps,
-	useContext,
 	useEffect,
 	useLayoutEffect,
 	useMemo,
 	useRef,
 } from 'react';
-import {
-	Interactable as InteractableBase,
-	focus,
-} from '@salik1992/tv-tools/focus';
-import { FocusContext } from './context';
+import { Interactable as InteractableBase } from '@salik1992/tv-tools/focus';
+import { useFocusContext } from './useFocusContext';
 
 /**
  * The main component for rendering focusable elements. It renders a div and you
@@ -61,14 +57,15 @@ export const Interactable = ({
 	focusOnMount?: boolean;
 	disabled?: boolean;
 } & ComponentProps<'div'>) => {
+	const { focusManager, addChild } = useFocusContext();
 	const interactable = useMemo(
 		() =>
 			disabled
 				? null
-				: (interactableBase ?? new InteractableBase(id, tabIndex)),
-		[id, disabled, interactableBase],
+				: (interactableBase ??
+					new InteractableBase(focusManager, id, tabIndex)),
+		[focusManager, id, disabled, interactableBase],
 	);
-	const { addChild } = useContext(FocusContext);
 	const ref = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -84,7 +81,7 @@ export const Interactable = ({
 
 	useEffect(() => {
 		if (focusOnMount && interactable) {
-			focus.focus(interactable.id, { preventScroll: true });
+			focusManager.focus(interactable.id, { preventScroll: true });
 		}
 	}, [focusOnMount, interactable]);
 

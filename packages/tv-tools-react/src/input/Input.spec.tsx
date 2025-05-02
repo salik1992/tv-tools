@@ -1,4 +1,5 @@
 import { act, render } from '@testing-library/react';
+import { FocusProvider } from '../focus';
 import { Input } from './Input';
 
 jest.useFakeTimers();
@@ -14,6 +15,7 @@ describe('Input', () => {
 				style={{ borderColor: 'black ' }}
 				readOnly
 			/>,
+			{ wrapper: FocusProvider },
 		);
 		expect(container.innerHTML).toMatchSnapshot();
 		unmount();
@@ -30,6 +32,7 @@ describe('Input', () => {
 				readOnly
 				disabled
 			/>,
+			{ wrapper: FocusProvider },
 		);
 		expect(container.innerHTML).toMatchSnapshot();
 		unmount();
@@ -46,6 +49,7 @@ describe('Input', () => {
 				style={{ borderColor: 'black ' }}
 				onChange={onChange}
 			/>,
+			{ wrapper: FocusProvider },
 		);
 		const input = container.querySelector('input');
 		if (!input) {

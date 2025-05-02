@@ -1,9 +1,10 @@
-export { FocusRoot } from './FocusRoot';
 export { FocusContext } from './context';
+export { FocusProvider } from './FocusProvider';
 export { HorizontalFocus } from './HorizontalFocus';
 export { Interactable } from './Interactable';
 export { VerticalFocus } from './VerticalFocus';
 export { FocusTable, FocusTableRenderComponents } from './FocusTable';
 export { BlockNavigation } from './BlockNavigation';
 export { useFocusContainer } from './useFocusContainer';
+export { useFocusManager } from './useFocusManager';
 export { useKeySequenceListener } from './useKeySequenceListener';

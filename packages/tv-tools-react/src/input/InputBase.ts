@@ -1,4 +1,4 @@
-import type { Interactable } from '@salik1992/tv-tools/focus';
+import type { FocusManager, Interactable } from '@salik1992/tv-tools/focus';
 import { Input } from '@salik1992/tv-tools/input';
 
 /**
@@ -10,12 +10,13 @@ export class InputBase extends Input {
 		this.onInteractablePress.bind(this);
 
 	public constructor(
+		focusManager: FocusManager,
 		interactable: Interactable,
 		protected overrides: {
 			onInteractablePress?: () => boolean;
 		},
 	) {
-		super(interactable);
+		super(focusManager, interactable);
 		this.interactable.setOnPress(this.boundOnInteractablePress);
 	}
 

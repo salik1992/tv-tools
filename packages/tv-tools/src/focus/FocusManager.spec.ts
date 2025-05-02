@@ -1,5 +1,5 @@
 import { BLUE, GREEN, type Key, RED, YELLOW } from '../control';
-import { focus } from './focus';
+import { FocusManager } from './FocusManager';
 import type { ControlEvent } from './types';
 
 const mockEvent = (targetId: string): ControlEvent => ({
@@ -22,6 +22,8 @@ const getFocusableElement = (id: string) => {
 };
 
 describe('focus', () => {
+	const focus = new FocusManager();
+
 	describe('single focus id handling', () => {
 		const onFocus = jest.fn();
 

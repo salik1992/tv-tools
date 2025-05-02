@@ -1,4 +1,4 @@
-import { FocusContainer } from '../focus';
+import { FocusContainer, FocusManager } from '../focus';
 import { Performance } from '../utils/Performance';
 import { GridBase } from './GridBase';
 
@@ -27,7 +27,8 @@ const group = (
 });
 
 describe('GridBase', () => {
-	const container = new FocusContainer();
+	const focus = new FocusManager();
+	const container = new FocusContainer(focus);
 	const grid = new Grid(container, {
 		id: 'grid',
 		performance: Performance.BASIC,

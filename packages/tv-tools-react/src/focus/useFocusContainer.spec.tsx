@@ -1,3 +1,4 @@
+import { type PropsWithChildren, createRef } from 'react';
 import { renderHook } from '@testing-library/react';
 import {
 	BACK,
@@ -11,31 +12,45 @@ import {
 import {
 	type ControlEvent,
 	FocusContainer,
-	focus,
+	FocusManager,
 } from '@salik1992/tv-tools/focus';
+import { FocusProvider } from './FocusProvider';
+import { ExposeFocusManager } from './mocks';
 import { useFocusContainer } from './useFocusContainer';
 
 const ID = 'test';
 
+const focusManager = createRef<FocusManager>();
 const press = (key: Key) => {
 	const event = key.toKeyboardEvent('keydown');
 	const target = document.createElement('div');
 	target.id = ID;
-	focus.handleKeyEvent('keydown', 'bubble', {
+	focusManager.current?.handleKeyEvent('keydown', 'bubble', {
 		code: event.code,
 		target,
 		preventDefault: () => event.preventDefault(),
 		stopPropagation: () => event.stopPropagation(),
 	} as unknown as ControlEvent);
 };
+const Wrapper = ({ children }: PropsWithChildren) => {
+	return (
+		<FocusProvider>
+			{children}
+			<ExposeFocusManager focusManager={focusManager} />
+		</FocusProvider>
+	);
+};
 
 describe('useFocusContainer', () => {
 	it('should return FocusContainer, keybinding hooks and value for FocusContext', () => {
-		const { result } = renderHook(() => useFocusContainer());
+		const { result } = renderHook(() => useFocusContainer(), {
+			wrapper: Wrapper,
+		});
 		expect(result.current).toEqual({
 			container: expect.any(FocusContainer),
 			focusContextValue: {
 				addChild: expect.any(Function),
+				focusManager: expect.any(FocusManager),
 			},
 			useOnKeyDown: expect.any(Function),
 			useOnEnter: expect.any(Function),
@@ -49,7 +64,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnKeyDown for any key press', () => {
 		const onKeyDown = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnKeyDown(onKeyDown, []),
 		);
@@ -73,7 +90,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnEnter for ENTER key press', () => {
 		const onEnter = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnEnter(onEnter, []),
 		);
@@ -93,7 +112,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnBack for BACK key press', () => {
 		const onBack = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnBack(onBack, []),
 		);
@@ -113,7 +134,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnUp for UP key press', () => {
 		const onUp = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() => result.current.useOnUp(onUp, []));
 		press(UP);
 		expect(onUp).toHaveBeenCalledWith(
@@ -131,7 +154,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnDown for DOWN key press', () => {
 		const onDown = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnDown(onDown, []),
 		);
@@ -151,7 +176,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnLeft for LEFT key press', () => {
 		const onLeft = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnLeft(onLeft, []),
 		);
@@ -171,7 +198,9 @@ describe('useFocusContainer', () => {
 
 	it('should call useOnRight for RIGHT key press', () => {
 		const onRight = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnRight(onRight, []),
 		);
@@ -192,7 +221,9 @@ describe('useFocusContainer', () => {
 	it('should call useOnLeft for RIGHT key press during rtl', () => {
 		document.documentElement.dir = 'rtl';
 		const onLeft = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnLeft(onLeft, []),
 		);
@@ -212,7 +243,9 @@ describe('useFocusContainer', () => {
 	it('should call useOnRight for LEFT key press during rtl', () => {
 		document.documentElement.dir = 'rtl';
 		const onRight = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnRight(onRight, []),
 		);
@@ -232,7 +265,9 @@ describe('useFocusContainer', () => {
 	it('should call useOnLeft for LEFT key press during rtl with ignoreRtl', () => {
 		document.documentElement.dir = 'rtl';
 		const onLeft = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnLeft(onLeft, [], { ignoreRtl: true }),
 		);
@@ -252,7 +287,9 @@ describe('useFocusContainer', () => {
 	it('should call useOnRight for RIGHT key press during rtl with ignoreRtl', () => {
 		document.documentElement.dir = 'rtl';
 		const onRight = jest.fn();
-		const { result } = renderHook(() => useFocusContainer(ID));
+		const { result } = renderHook(() => useFocusContainer(ID), {
+			wrapper: Wrapper,
+		});
 		const { unmount } = renderHook(() =>
 			result.current.useOnRight(onRight, [], { ignoreRtl: true }),
 		);

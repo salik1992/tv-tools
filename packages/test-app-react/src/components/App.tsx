@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import { device } from '@salik1992/tv-tools/device';
 import { logger as loggerGlobal, ns } from '@salik1992/tv-tools/logger';
-import { FocusRoot } from '@salik1992/tv-tools-react/focus';
+import { FocusProvider } from '@salik1992/tv-tools-react/focus';
 import { useDataProvider } from '../data';
 import { BackNavigation } from './BackNavigation';
 import { Browse } from './Browse';
@@ -71,7 +71,7 @@ export const App = () => {
 	return (
 		<>
 			<GlobalStyles />
-			<FocusRoot alwaysPreventNavigationalEvents>
+			<FocusProvider alwaysPreventNavigationalEvents>
 				{!isReady && (
 					<ScreenCentered>
 						<H1>Loading...</H1>
@@ -104,7 +104,7 @@ export const App = () => {
 						</Route>
 					</Providers>
 				)}
-			</FocusRoot>
+			</FocusProvider>
 			<Disclaimer />
 		</>
 	);

@@ -1,43 +1,52 @@
+import { type PropsWithChildren, createRef } from 'react';
 import { act, render } from '@testing-library/react';
 import { DOWN, UP } from '@salik1992/tv-tools/control';
-import { focus } from '@salik1992/tv-tools/focus';
-import { FocusRoot } from './FocusRoot';
+import type { FocusManager } from '@salik1992/tv-tools/focus';
+import { FocusProvider } from './FocusProvider';
 import { Interactable } from './Interactable';
 import { VerticalFocus } from './VerticalFocus';
+import { ExposeFocusManager, assertFocusManager } from './mocks';
 
 const onPress = jest.fn();
-const focusSpy = jest.spyOn(focus, 'focus');
+const focusManager = createRef<FocusManager>();
+const Wrapper = ({ children }: PropsWithChildren) => (
+	<FocusProvider id="focusRoot">
+		{children}
+		<ExposeFocusManager focusManager={focusManager} />
+	</FocusProvider>
+);
 
 describe('HorizontalFocus', () => {
-	beforeEach(() => {
-		focusSpy.mockClear();
-	});
-
 	it('should render the children', () => {
 		const { container, unmount } = render(
-			<FocusRoot>
-				<VerticalFocus id="hf">
-					<Interactable id="i1" onPress={onPress} />
-					<Interactable id="i2" onPress={onPress} />
-					<Interactable id="i3" onPress={onPress} />
-					<Interactable id="i4" onPress={onPress} />
-				</VerticalFocus>
-			</FocusRoot>,
+			<VerticalFocus id="hf">
+				<Interactable id="i1" onPress={onPress} />
+				<Interactable id="i2" onPress={onPress} />
+				<Interactable id="i3" onPress={onPress} />
+				<Interactable id="i4" onPress={onPress} />
+			</VerticalFocus>,
+			{ wrapper: Wrapper },
 		);
 		expect(container.innerHTML).toMatchSnapshot();
 		unmount();
 	});
 
 	it('should move focus with UP/DOWN keys', () => {
-		const { container, unmount } = render(
-			<FocusRoot>
-				<VerticalFocus id="hf">
-					<Interactable id="i1" onPress={onPress} focusOnMount />
-					<Interactable id="i2" onPress={onPress} />
-					<Interactable id="i3" onPress={onPress} />
-				</VerticalFocus>
-			</FocusRoot>,
+		const { container, rerender, unmount } = render(null, {
+			wrapper: Wrapper,
+		});
+
+		assertFocusManager(focusManager);
+		const focusSpy = jest.spyOn(focusManager.current, 'focus');
+
+		rerender(
+			<VerticalFocus id="hf">
+				<Interactable id="i1" onPress={onPress} focusOnMount />
+				<Interactable id="i2" onPress={onPress} />
+				<Interactable id="i3" onPress={onPress} />
+			</VerticalFocus>,
 		);
+
 		expect(focusSpy).toHaveBeenNthCalledWith(1, 'i1', {
 			preventScroll: true,
 		});
