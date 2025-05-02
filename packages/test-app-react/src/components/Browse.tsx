@@ -1,10 +1,10 @@
 import { type PropsWithChildren, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { focus } from '@salik1992/tv-tools/focus';
 import {
 	FocusContext,
 	VerticalFocus,
 	useFocusContainer,
+	useFocusManager,
 } from '@salik1992/tv-tools-react/focus';
 import { ListType } from '@salik1992/test-app-data/types';
 import { validateId } from '@salik1992/test-app-data/validations';
@@ -42,6 +42,7 @@ const OnBackScrollTop = ({
 };
 
 export const Browse = () => {
+	const focusManager = useFocusManager();
 	const { browseId } = useAssertedParams({ browseId: validateId });
 	const [index, setIndex] = useState(0);
 	const topRowId = `${TOP}${browseId}`;
@@ -60,8 +61,8 @@ export const Browse = () => {
 
 	const onBack = useCallback(() => {
 		if (scroll !== 0) {
-			if (focus.hasFocusId(topRowId)) {
-				focus.focus(topRowId, { preventScroll: true });
+			if (focusManager.hasFocusId(topRowId)) {
+				focusManager.focus(topRowId, { preventScroll: true });
 			}
 			return true;
 		}
