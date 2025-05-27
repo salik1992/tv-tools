@@ -1,6 +1,7 @@
 import {
 	type ComponentProps,
 	type ComponentType,
+	Fragment,
 	type PropsWithChildren,
 	type ReactNode,
 	createContext,
@@ -13,20 +14,13 @@ import type { TableFocusContainer } from '@salik1992/tv-tools/focus';
 import { FocusContext } from './context';
 import { useTableFocusContainer } from './useTableFocusContainer';
 
-/**
- * ChildrenOnlyComponent is a component that renders its children only.
- */
-const ChildrenOnlyComponent = ({ children }: PropsWithChildren) => {
-	return <>{children}</>;
-};
-
 const TableContext = createContext<{
 	container?: TableFocusContainer;
 	TrComponent: ComponentType<PropsWithChildren<unknown>>;
 	TdComponent: ComponentType<PropsWithChildren<unknown>>;
 }>({
-	TrComponent: ChildrenOnlyComponent,
-	TdComponent: ChildrenOnlyComponent,
+	TrComponent: Fragment,
+	TdComponent: Fragment,
 });
 
 /**
@@ -141,8 +135,8 @@ export const FocusTable = ({
 	children,
 	// @ts-expect-error: Circular type definition
 	TableComponent = ChildrenOnlyComponent,
-	TrComponent = ChildrenOnlyComponent,
-	TdComponent = ChildrenOnlyComponent,
+	TrComponent = Fragment,
+	TdComponent = Fragment,
 	...tableProps
 }: {
 	children: (
