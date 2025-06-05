@@ -12,7 +12,7 @@ body {
 		monospace;
 	color: #ffffff;
 }
-#root {
+:global(#root) {
 	position: relative;
 	background-color: colors.$bg-primary;
 	width: 1920px;

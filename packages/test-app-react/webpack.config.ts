@@ -56,7 +56,7 @@ const config: webpack.Configuration = {
 				],
 			},
 			{
-				test: /\.module\.s?css$/,
+				test: /(\.module)?\.s?css$/,
 				use: [
 					MiniCssExtractPlugin.loader,
 					{

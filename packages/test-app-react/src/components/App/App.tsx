@@ -16,7 +16,7 @@ import { ScreenCentered } from '../ScreenCentered';
 import { Search } from '../Search';
 import { H1 } from '../Typography';
 import { VirtualKeyboardProvider } from '../VirtualKeyboardProvider';
-import './App.module.scss';
+import './App.scss';
 
 loggerGlobal.use(console);
 const logger = ns('[App]');

@@ -21,7 +21,7 @@
 
 .description {
 	color: colors.$fg-secondary;
-	max-width: 1000px;
+	max-width: 66 * sizes.$column;
 	height: 3 * sizes.$row;
 	@include utils.n-line-ellipsis(3);
 }
