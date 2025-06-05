@@ -1,8 +1,9 @@
+import type { HTMLProps } from 'react';
 import * as css from './ScreenCentered.module.scss';
 
 export const ScreenCentered = ({
 	className = '',
 	...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: HTMLProps<HTMLDivElement>) => (
 	<div className={`${css.container} ${className}`} {...props} />
 );
