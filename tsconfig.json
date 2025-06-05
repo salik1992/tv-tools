@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+		"plugins": [{ "name": "typescript-plugin-css-modules" }],
         "target": "ES2016",
         "jsx": "react-jsx",
         "lib": ["ES2020", "DOM", "DOM.Iterable"],

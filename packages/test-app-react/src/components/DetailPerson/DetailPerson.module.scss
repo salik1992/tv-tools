@@ -1,0 +1,6 @@
+@use '../Theme/colors' as colors;
+
+.profession {
+	color: colors.$fg-secondary;
+	font-weight: 400;
+}

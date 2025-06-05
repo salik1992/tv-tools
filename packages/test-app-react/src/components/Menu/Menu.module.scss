@@ -1,0 +1,86 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+
+$width-closed: 4 * sizes.$column;
+$width-open: 20 * sizes.$column;
+$width-shade: 1920 - $width-open;
+
+.glyph {
+	color: colors.$fg-secondary;
+	font-size: 2em;
+	vertical-align: bottom;
+	margin: 0 sizes.$column;
+
+	.active & {
+		color: colors.$fg-focus;
+	}
+}
+
+.item {
+	width: $width-closed;
+	color: colors.$fg-secondary;
+	padding: sizes.$column 0;
+	cursor: pointer;
+	white-space: nowrap;
+	@include b.border;
+	@include t.transition(color);
+
+	&:focus {
+		color: colors.$fg-primary;
+		border-color: colors.$fg-focus;
+	}
+
+	.open & {
+		width: $width-open;
+	}
+}
+
+.items-wrap {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.menu-background {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: $width-closed;
+	background-color: colors.$bg-opaque;
+
+	.open & {
+		width: $width-open;
+	}
+}
+
+.menu-shade {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 0;
+	left: $width-open;
+	background-color: colors.$bg-opaque;
+
+	.open & {
+		width: $width-shade;
+	}
+}
+
+.wrap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: $width-closed;
+	opacity: 0.5;
+	overflow: hidden;
+	z-index: 10;
+
+	&.open {
+		width: 100%;
+		opacity: 1;
+	}
+}

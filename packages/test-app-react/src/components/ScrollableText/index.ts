@@ -1,0 +1,1 @@
+export { ScrollableText } from './ScrollableText';

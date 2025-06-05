@@ -1,0 +1,48 @@
+@use '../MouseArrows/MouseArrows.scss' as m;
+@use '../Theme/transition' as t;
+@use '../Tile/variables' as tile;
+@use '../Typography/sizes' as sizes;
+
+.header {
+	margin-bottom: sizes.$row;
+}
+
+.wrap {
+	margin-top: sizes.$row;
+
+	:global(.list) {
+		position: relative;
+		white-space: nowrap;
+		@include m.mouse-arrows('horizontal');
+
+		:global(.mouse-arrow) {
+			height: 6 * sizes.$row;
+			&:global(.next),
+			&:global(.previous) {
+				width: 12 * sizes.$column;
+			}
+			&:global(.previous) {
+				left: -3 * sizes.$column;
+			}
+			&:global(.next) {
+				right: -3 * sizes.$column;
+			}
+		}
+
+		&:hover :global(.mouse-arrow) {
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+
+	:global(.list-inner-wrap) {
+		@include t.transition(transform);
+	}
+}
+
+.placeholder {
+	height: tile.$height;
+}

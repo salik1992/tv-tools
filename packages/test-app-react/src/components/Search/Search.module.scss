@@ -1,0 +1,10 @@
+@use '../Typography/sizes' as sizes;
+
+.input {
+	margin-top: 2 * sizes.$row;
+}
+
+.hint {
+	text-align: center;
+	margin-top: 2 * sizes.$row;
+}

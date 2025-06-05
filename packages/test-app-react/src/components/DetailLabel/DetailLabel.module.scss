@@ -1,0 +1,5 @@
+@use '../Theme/colors' as colors;
+
+.label {
+	color: colors.$fg-secondary;
+}

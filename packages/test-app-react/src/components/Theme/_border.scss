@@ -1,0 +1,16 @@
+@use './colors' as colors;
+@use './transition' as t;
+
+@mixin border {
+	box-sizing: border-box;
+	border-width: 3px;
+	border-style: dashed;
+	border-color: transparent;
+	outline: none;
+
+	@include t.transition(border-color);
+
+	&:focus {
+		border-color: colors.$fg-focus;
+	}
+}

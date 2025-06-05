@@ -1,0 +1,1 @@
+export { DetailSeries } from './DetailSeries';

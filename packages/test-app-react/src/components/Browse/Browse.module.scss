@@ -1,0 +1,5 @@
+@use '../Theme/transition' as t;
+
+.inner-wrap {
+	@include t.transition(transform);
+}

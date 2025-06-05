@@ -1,0 +1,55 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+@use '../Typography/utils' as utils;
+@use './variables' as vars;
+
+.image {
+	background-size: cover;
+	background-position: center center;
+	width: vars.$image-width;
+	height: vars.$image-height;
+
+	.person & {
+		height: vars.$person-image-height;
+	}
+}
+
+.colorbox {
+	background-color: colors.$bg-action;
+	color: colors.$bg-primary;
+	width: vars.$image-width;
+	height: vars.$image-height;
+	box-sizing: border-box;
+	padding-top: 1.5 * sizes.$row;
+	text-align: center;
+
+	p {
+		@include utils.one-line-ellipsis;
+	}
+}
+
+.title {
+	color: colors.$fg-secondary;
+	@include t.transition(color);
+	@include utils.one-line-ellipsis;
+
+	*:focus & {
+		color: colors.$fg-primary;
+	}
+}
+
+.wrap {
+	display: inline-block;
+	width: vars.$width;
+	height: vars.$height;
+	margin-right: vars.$margin;
+	padding: sizes.$column sizes.$column;
+	cursor: pointer;
+	@include b.border;
+
+	&.person {
+		height: vars.$person-height;
+	}
+}

@@ -1,0 +1,53 @@
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+
+@mixin mouse-arrows($orientation: 'horizontal') {
+	:global(.mouse-arrow) {
+		position: absolute;
+		top: 0;
+		opacity: 0;
+		background-color: rgba(0, 0, 0, 0);
+		background-position: center center;
+		background-repeat: no-repeat;
+		cursor: pointer;
+		@include t.transition(opacity, background-color);
+
+		&:hover {
+			background-color: colors.$bg-opaque;
+
+			&::after {
+				color: colors.$fg-focus;
+			}
+		}
+
+		&::after {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 100px;
+			color: colors.$fg-primary;
+			@include t.transition(color);
+		}
+
+		&:global(.next) {
+			&::after {
+				@if $orientation == 'horizontal' {
+					content: '\2192';
+				} @else {
+					content: '\2193';
+				}
+			}
+		}
+
+		&:global(.previous) {
+			&::after {
+				@if $orientation == 'horizontal' {
+					content: '\2190';
+				} @else {
+					content: '\2191';
+				}
+			}
+		}
+	}
+}

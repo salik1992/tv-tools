@@ -1,0 +1,27 @@
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+@use '../Typography/utils' as utils;
+
+.wrap {
+	height: 0;
+	overflow: hidden;
+	margin-top: sizes.$row;
+	@include t.transition(height);
+
+	&.visible {
+		height: 6 * sizes.$row;
+	}
+}
+
+.title {
+	margin-bottom: sizes.$row;
+	@include utils.one-line-ellipsis;
+}
+
+.description {
+	color: colors.$fg-secondary;
+	max-width: 66 * sizes.$column;
+	height: 3 * sizes.$row;
+	@include utils.n-line-ellipsis(3);
+}

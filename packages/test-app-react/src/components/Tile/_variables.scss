@@ -1,0 +1,11 @@
+@use '../Typography/sizes' as sizes;
+
+$width: 16 * sizes.$column;
+$height: 6 * sizes.$row;
+$person-height: 8 * sizes.$row;
+
+$margin: 2 * sizes.$column;
+
+$image-width: 14 * sizes.$column;
+$image-height: 4 * sizes.$row;
+$person-image-height: 5 * sizes.$row;

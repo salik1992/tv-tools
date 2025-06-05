@@ -1,0 +1,1 @@
+export { DetailRating } from './DetailRating';

@@ -1,0 +1,34 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+@use '../Typography/utils' as utils;
+@use './variables' as vars;
+
+.image {
+	background-size: cover;
+	background-position: center center;
+	width: vars.$image-width;
+	height: vars.$image-height;
+	margin-bottom: sizes.$row;
+}
+
+.text {
+	color: colors.$fg-secondary;
+	@include t.transition(color);
+	@include utils.one-line-ellipsis;
+}
+
+.wrap {
+	display: inline-block;
+	width: vars.$width;
+	height: vars.$height;
+	margin-right: vars.$margin;
+	padding: sizes.$column sizes.$column;
+	cursor: pointer;
+	@include b.border;
+
+	&:focus .text {
+		color: colors.$fg-primary;
+	}
+}

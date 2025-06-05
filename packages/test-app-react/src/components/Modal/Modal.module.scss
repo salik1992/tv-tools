@@ -1,0 +1,49 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Typography/sizes' as sizes;
+
+.wrap {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 100;
+	background-color: colors.$bg-opaque;
+}
+
+.inner-wrap {
+	position: absolute;
+	padding: 3 * sizes.$column 6 * sizes.$column;
+	background-color: colors.$bg-primary;
+	@include b.border;
+	border-color: colors.$fg-primary;
+	border-style: solid;
+
+	&.small {
+		top: 12 * sizes.$row;
+		bottom: 12 * sizes.$row;
+		left: 40 * sizes.$column;
+		right: 40 * sizes.$column;
+	}
+
+	&.large {
+		top: 5 * sizes.$row;
+		bottom: 5 * sizes.$row;
+		left: 20 * sizes.$column;
+		right: 20 * sizes.$column;
+	}
+}
+
+.backdrop {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.content {
+	height: 23 * sizes.$row;
+	overflow: hidden;
+}

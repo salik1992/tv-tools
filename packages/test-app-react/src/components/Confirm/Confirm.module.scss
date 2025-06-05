@@ -1,0 +1,12 @@
+@use '../Typography/sizes' as sizes;
+
+.wrap {
+	position: relative;
+	overflow: hidden;
+	height: 5 * sizes.$row;
+	margin-bottom: sizes.$row;
+}
+
+.centered {
+	text-align: center;
+}
