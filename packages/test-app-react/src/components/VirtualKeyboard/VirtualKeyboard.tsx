@@ -1,4 +1,4 @@
-import { type ComponentProps } from 'react';
+import type { ComponentProps, HTMLProps } from 'react';
 import {
 	backspace,
 	done,
@@ -107,11 +107,11 @@ const LAYOUTS = {
 	},
 };
 
-const Keyboard = ({ className, ...props }: React.HTMLProps<HTMLDivElement>) => (
+const Keyboard = ({ className, ...props }: HTMLProps<HTMLDivElement>) => (
 	<div className={`${css.keyboard} ${className}`} {...props} />
 );
 
-const Row = ({ className, ...props }: React.HTMLProps<HTMLDivElement>) => (
+const Row = ({ className, ...props }: HTMLProps<HTMLDivElement>) => (
 	<div className={`${css.row} ${className}`} {...props} />
 );
 
