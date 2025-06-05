@@ -18,8 +18,7 @@
 		"react-dom": "^19.0.0",
 		"react-error-boundary": "^5.0.0",
 		"react-router": "7.5.3",
-		"react-router-dom": "7.2.0",
-		"styled-components": "^6.1.15"
+		"react-router-dom": "7.2.0"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.27.0",
@@ -32,6 +31,7 @@
 		"@types/webpack": "^5.3.2",
 		"babel-loader": "^10.0.0",
 		"core-js": "^3.41.0",
+		"css-loader": "^7.1.2",
 		"dotenv": "^16.4.7",
 		"eslint": "^9.19.0",
 		"eslint-plugin-react-hooks": "^5.0.0",
@@ -39,10 +39,13 @@
 		"file-loader": "^6.2.0",
 		"globals": "^15.14.0",
 		"html-webpack-plugin": "^5.6.3",
+		"mini-css-extract-plugin": "^2.9.2",
+		"sass-loader": "^16.0.5",
 		"ts-loader": "^9.5.2",
 		"ts-node": "^10.9.2",
 		"typescript": "~5.7.2",
 		"typescript-eslint": "^8.22.0",
+		"typescript-plugin-css-modules": "^5.1.0",
 		"webpack": "^5.98.0",
 		"webpack-cli": "^6.0.1",
 		"webpack-dev-server": "^5.2.1"

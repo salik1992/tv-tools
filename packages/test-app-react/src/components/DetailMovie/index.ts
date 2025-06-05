@@ -1,0 +1,1 @@
+export { DetailMovie } from './DetailMovie';

@@ -1,0 +1,76 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Typography/sizes' as sizes;
+
+@keyframes breathe {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.input {
+	position: relative;
+	@include b.border;
+	border-color: colors.$fg-primary;
+	font-size: sizes.$row;
+	padding: sizes.$column;
+
+	&:global(.active) {
+		border-color: colors.$fg-focus;
+	}
+
+	input {
+		position: absolute;
+		opacity: 0;
+	}
+
+	:global(.text) {
+		position: relative;
+		white-space: pre;
+	}
+	&:global(.placeholder) {
+		:global(.text) {
+			color: colors.$fg-secondary;
+		}
+	}
+
+	:global(.caret),
+	:global(.selection) {
+		position: absolute;
+		top: 0.5 * sizes.$row;
+		left: 0.5 * sizes.$row;
+	}
+
+	:global(.caret) {
+		display: none;
+		animation-name: breathe;
+		animation-duration: 1s;
+		animation-iteration-count: infinite;
+		&::after {
+			position: absolute;
+			left: -0.5 * sizes.$column;
+			content: '|';
+			width: 0;
+		}
+	}
+
+	:global(.selection) {
+		display: block;
+		background-color: colors.$bg-focus;
+		height: 1.3 * sizes.$row;
+		z-index: -1;
+	}
+
+	&:global(.active) {
+		:global(.caret),
+		:global(.selection) {
+			display: block;
+		}
+	}
+}

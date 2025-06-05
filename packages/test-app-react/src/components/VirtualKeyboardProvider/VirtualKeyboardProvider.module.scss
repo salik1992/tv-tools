@@ -1,0 +1,10 @@
+@use '../Theme/colors' as colors;
+
+.virtual-keyboard-provider {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	background-color: colors.$bg-opaque;
+	z-index: 10;
+}

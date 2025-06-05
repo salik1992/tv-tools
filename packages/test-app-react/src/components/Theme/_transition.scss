@@ -1,0 +1,12 @@
+@use './variables' as var;
+
+@mixin transition($properties...) {
+	transition: $properties;
+	-webkit-transition: $properties;
+	-moz-transition: $properties;
+	-o-transition: $properties;
+	transition-duration: var.$transitionTime;
+	-webkit-transition-duration: var.$transitionTime;
+	-moz-transition-duration: var.$transitionTime;
+	-o-transition-duration: var.$transitionTime;
+}

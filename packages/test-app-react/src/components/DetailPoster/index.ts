@@ -1,0 +1,1 @@
+export { DetailPoster } from './DetailPoster';

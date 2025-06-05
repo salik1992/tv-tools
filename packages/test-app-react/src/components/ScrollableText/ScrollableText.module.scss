@@ -1,0 +1,52 @@
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+
+.wrap {
+	position: relative;
+	overflow: hidden;
+	height: 19 * sizes.$row;
+	margin-bottom: sizes.$row;
+}
+
+.centered {
+	text-align: center;
+}
+
+.text {
+	width: 73 * sizes.$column;
+	line-height: 1.5 * sizes.$row;
+	text-align: justify;
+	@include t.transition(transform);
+}
+
+.scrollbar {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	bottom: 10px;
+	width: 5px;
+}
+
+.scroll-arrow {
+	position: absolute;
+	right: 0;
+	width: 5px;
+	height: 5px;
+
+	&.up {
+		top: 0;
+	}
+
+	&.down {
+		bottom: 0;
+	}
+}
+
+.scroller {
+	position: absolute;
+	top: 25px;
+	right: -5px;
+	width: 5px;
+	background-color: #ffffff;
+	@include t.transition(transform);
+}

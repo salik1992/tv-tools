@@ -1,0 +1,53 @@
+@use '../MouseArrows/MouseArrows.scss' as m;
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/utils' as utils;
+@use '../Typography/sizes' as sizes;
+
+.header {
+	position: relative;
+	padding: sizes.$row sizes.$column;
+	margin: sizes.$row 0;
+	z-index: 1;
+	@include b.border;
+	border-color: colors.$fg-primary;
+	border-style: solid;
+	background-color: colors.$bg-opaque;
+	@include utils.one-line-ellipsis;
+}
+
+.screen {
+	:global(.grid) {
+		position: relative;
+		white-space: nowrap;
+		@include m.mouse-arrows('vertical');
+
+		:global(.mouse-arrow) {
+			&:global(.next),
+			&:global(.previous) {
+				width: 100%;
+				height: 3 * sizes.$row;
+			}
+			&:global(.previous) {
+				top: -1 * sizes.$row;
+			}
+			&:global(.next) {
+				top: 25 * sizes.$row;
+				height: 6 * sizes.$row;
+			}
+		}
+
+		&:hover :glboal(.mouse-arrow) {
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+
+	:global(.grid-inner-wrap) {
+		@include t.transition(transform);
+	}
+}

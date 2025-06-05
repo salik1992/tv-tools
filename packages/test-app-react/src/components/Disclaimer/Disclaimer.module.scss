@@ -1,0 +1,17 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Typography/sizes' as sizes;
+
+.wrap {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	background-color: colors.$bg-opaque;
+	@include b.border;
+	border-color: colors.$fg-warning;
+	padding: sizes.$column sizes.$column;
+}
+
+.text {
+	color: colors.$fg-warning;
+}

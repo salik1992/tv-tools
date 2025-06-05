@@ -1,0 +1,7 @@
+@use '../Typography/sizes' as sizes;
+
+$width: 66 * sizes.$column;
+$height: 19 * sizes.$row;
+$margin: 5 * sizes.$column;
+$image-width: 64 * sizes.$column;
+$image-height: 15 * sizes.$row;

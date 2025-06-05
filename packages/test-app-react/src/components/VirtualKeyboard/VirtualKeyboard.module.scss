@@ -1,0 +1,100 @@
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+
+.keyboard {
+	display: inline-block;
+	position: relative;
+	transform: translateX(50%);
+
+	&:global(.effect-shift),
+	&:global(.effect-caps) {
+		text-transform: uppercase;
+	}
+
+	&:global(.effect-caps) {
+		:global(.vk-shift) {
+			text-decoration: underline;
+		}
+	}
+
+	&:global(.layout-base) {
+		:global(.vk-done) {
+			margin-left: 1.5 * sizes.$row;
+		}
+	}
+}
+
+.row {
+	height: 2 * sizes.$row;
+	margin-bottom: sizes.$column;
+}
+
+.key {
+	display: inline-block;
+	width: 2 * sizes.$row;
+	height: 2 * sizes.$row;
+	line-height: 1.5 * sizes.$row;
+	font-size: sizes.$row;
+	text-align: center;
+	vertical-align: top;
+	outline: none;
+	border-width: 3px;
+	border-style: solid;
+	border-color: colors.$fg-secondary;
+	box-sizing: border-box;
+	@include t.transition(color, background-color, border-color);
+	margin-right: sizes.$column;
+	user-select: none;
+	cursor: pointer;
+
+	&:global(.vk-backspace),
+	&:global(.vk-shift) {
+		font-size: 4em;
+	}
+
+	&:global(.vk-done),
+	&:global(.vk-shift),
+	&:global(.vk-space) {
+		text-transform: initial !important;
+	}
+
+	&:global(.vk-done),
+	&:global(.vk-backspace),
+	&:global(.vk-switch),
+	&:global(.vk-shift) {
+		width: 4 * sizes.$row;
+		height: 4.5 * sizes.$row;
+		line-height: 4 * sizes.$row;
+	}
+	&:global(.vk-space) {
+		width: 15 * sizes.$row;
+		margin-left: 9 * sizes.$row;
+	}
+
+	&:global(.vk-q),
+	&:global(.vk-z),
+	&:global(.vk-1) {
+		margin-left: sizes.$row;
+	}
+
+	&:global(.vk-a),
+	&:global(.vk-exclamation),
+	&:global(.vk-underscore) {
+		margin-left: 6 * sizes.$row;
+	}
+
+	&:global(.vk-z) {
+		margin-left: 2 * sizes.$row;
+	}
+
+	&:global(.vk-done) {
+		margin-left: 2 * sizes.$row;
+	}
+
+	&:focus {
+		color: colors.$bg-primary;
+		background-color: colors.$fg-primary;
+		border-color: colors.$fg-primary;
+	}
+}

@@ -1,0 +1,13 @@
+@mixin one-line-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+@mixin n-line-ellipsis($n) {
+	display: -webkit-box;
+	-webkit-line-clamp: $n;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

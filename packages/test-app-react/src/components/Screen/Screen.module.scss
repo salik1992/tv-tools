@@ -1,0 +1,21 @@
+@use '../Menu/Menu.module.scss' as menu;
+@use '../Theme/colors' as colors;
+@use '../Typography/sizes' as sizes;
+
+.container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1920px;
+	height: 1080px;
+	padding-left: 3 * sizes.$column;
+	padding-right: 3 * sizes.$column;
+	overflow: hidden;
+	box-sizing: border-box;
+	background-color: colors.$bg-primary;
+	z-index: 0; // Reset for nested routes to keep the content within
+
+	&.with-menu {
+		padding-left: menu.$width-closed + 3 * sizes.$column;
+	}
+}

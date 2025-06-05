@@ -1,0 +1,47 @@
+@use '../Hero/variables' as hero;
+@use '../MouseArrows/MouseArrows.scss' as m;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+
+.wrap {
+	margin-top: 15px;
+
+	:global(.list) {
+		position: relative;
+		white-space: nowrap;
+		padding: 50px 0;
+		box-sizing: border-box;
+		@include m.mouse-arrows('horizontal');
+
+		:global(.mouse-arrow) {
+			height: 22 * sizes.$row;
+			&:global(.next) {
+				right: -3 * sizes.$column;
+				width: 49 * sizes.$column;
+			}
+
+			&:global(.previous) {
+				left: -3 * sizes.$column;
+				width: 6 * sizes.$column;
+			}
+		}
+
+		&:hover :global(.mouse-arrow) {
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+
+	:global(.list-inner-wrap) {
+		@include t.transition(transform);
+	}
+}
+
+.text {
+	height: hero.$height;
+	line-height: hero.$height;
+	vertical-align: middle;
+}

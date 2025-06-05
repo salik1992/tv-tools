@@ -1,0 +1,1 @@
+export { AssetsRowDetail } from './AssetsRowDetail';

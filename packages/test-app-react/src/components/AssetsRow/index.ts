@@ -1,0 +1,1 @@
+export { AssetsRow } from './AssetsRow';

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import webpack from 'webpack';
 
 dotenv.config({ path: './.env' });
@@ -54,9 +55,23 @@ const config: webpack.Configuration = {
 					},
 				],
 			},
+			{
+				test: /\.module\.s?css$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					{
+						loader: 'css-loader',
+						options: { modules: true },
+					},
+					'sass-loader',
+				],
+			},
 		],
 	},
 	plugins: [
+		new MiniCssExtractPlugin({
+			filename: 'styles.css',
+		}),
 		new webpack.EnvironmentPlugin(['TMDB_ACCESS_TOKEN']),
 		new HtmlWebpackPlugin({
 			template: './templates/index.html',

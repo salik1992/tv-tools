@@ -1,0 +1,22 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Typography/sizes' as sizes;
+
+.button {
+	display: inline-block;
+	padding: sizes.$column sizes.$column;
+	cursor: pointer;
+	@include b.border;
+
+	&.primary {
+		background-color: colors.$bg-action;
+	}
+
+	&.secondary {
+		background-color: colors.$bg-focus;
+	}
+
+	&.danger {
+		background-color: colors.$bg-danger;
+	}
+}

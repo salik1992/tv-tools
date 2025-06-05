@@ -1,0 +1,24 @@
+@use '../Theme/border' as b;
+@use '../Theme/colors' as colors;
+@use '../Theme/transition' as t;
+@use '../Typography/sizes' as sizes;
+@use '../Typography/utils' as utils;
+
+.wrap {
+	padding: sizes.$column sizes.$column;
+	max-width: 50 * sizes.$column;
+	cursor: pointer;
+	@include b.border;
+
+	p {
+		color: colors.$fg-secondary;
+		@include t.transition(color);
+		@include utils.n-line-ellipsis(3);
+	}
+
+	&:focus {
+		p {
+			color: colors.$fg-primary;
+		}
+	}
+}
