@@ -26,12 +26,12 @@ const validateFilter = (value: unknown): ListDataConfiguration => {
 };
 
 export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
-	const { data, loading, error } = usePagedData(filter);
+	const { data, pages, loading, error } = usePagedData(filter);
 
 	const gridConfiguration = useMemo(
 		() => ({
 			performance: Performance,
-			dataLength: data[0]?.length,
+			dataLength: data.length,
 			visibleGroups: 7,
 			elementsPerGroup: COLUMNS,
 			config: {
@@ -42,7 +42,7 @@ export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
 				},
 			},
 		}),
-		[data[0]],
+		[data],
 	);
 
 	const renderGroup = useCallback(
@@ -52,13 +52,13 @@ export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
 					<Tile
 						id={id}
 						key={id}
-						asset={data[0][dataIndex]}
+						asset={data[dataIndex]}
 						onFocus={onFocus}
 					/>
 				))}
 			</div>
 		),
-		[data[0]],
+		[data],
 	);
 
 	return (
@@ -74,12 +74,12 @@ export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
 					<H1>There was an error loading the data.</H1>
 				</ScreenCentered>
 			)}
-			{!loading && !error && (!data || data.pages === 0) && (
+			{!loading && !error && pages === 0 && (
 				<ScreenCentered>
 					<H1>No data available.</H1>
 				</ScreenCentered>
 			)}
-			{data && data[0] && (
+			{data && data && (
 				<Grid
 					Implementation={BasicGrid}
 					configuration={gridConfiguration}

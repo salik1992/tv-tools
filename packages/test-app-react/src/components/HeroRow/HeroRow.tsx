@@ -2,6 +2,7 @@ import { type FocusEvent, useCallback, useMemo } from 'react';
 import type { RenderDataElement } from '@salik1992/tv-tools/list';
 import { BasicList } from '@salik1992/tv-tools/list/BasicList';
 import { List } from '@salik1992/tv-tools-react/list';
+import type { Asset, AssetDescription } from '@salik1992/test-app-data/types';
 import { type ListDataConfiguration } from '../../data';
 import { usePagedData } from '../../hooks/usePagedData';
 import { Hero } from '../Hero';
@@ -20,14 +21,11 @@ export const HeroRow = ({
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
 }) => {
-	const { data, loading, error } = usePagedData(listData);
-
-	const hasData = useMemo(() => (data[0]?.length ?? 0) > 0, [data[0]]);
+	const { data, pages, loading, error } = usePagedData(listData);
 
 	const listConfiguration = useMemo(
 		() => ({
 			performance: Performance,
-			dataLength: data[0]?.length,
 			visibleElements: 5,
 			config: {
 				navigatableElements: 2,
@@ -37,42 +35,48 @@ export const HeroRow = ({
 				},
 			},
 		}),
-		[data[0]?.length],
+		[],
 	);
 
 	const renderElement = useCallback(
-		({ id, dataIndex, offset, onFocus }: RenderDataElement) => (
+		({
+			id,
+			item,
+			offset,
+			onFocus,
+		}: RenderDataElement<Asset & AssetDescription>) => (
 			<Hero
 				id={id}
 				key={id}
-				asset={data[0][dataIndex]}
+				asset={item}
 				style={{
 					transform: `translateX(${offset}px)`,
 				}}
 				onFocus={onFocus}
 			/>
 		),
-		[data[0]],
+		[],
 	);
 
 	return (
 		<div className={css.wrap} onFocus={onFocus}>
 			{loading && <H3 className={css.text}>Loading...</H3>}
-			{error !== null && data.pages === 0 && (
+			{error !== null && pages === 0 && (
 				<H3 className={css.text}>
 					There was an error loading the data.
 				</H3>
 			)}
-			{!loading && !error && !hasData && (
+			{!loading && !error && !data.length && (
 				<H3 className={css.text}>Nothing was found.</H3>
 			)}
-			{hasData && (
+			{data.length && (
 				<>
 					<List
 						id={id}
 						Implementation={BasicList}
 						configuration={listConfiguration}
 						renderItem={renderElement}
+						data={data}
 						focusOnMount={focusOnMount}
 					/>
 				</>

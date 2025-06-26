@@ -66,6 +66,7 @@ export const DetailPerson = ({
 				}}
 				showDetail={false}
 				onFocus={scroll(7 * ROW)}
+				paginate
 			/>
 			<AssetsRow
 				key={`knownFor-series-${asset.id}`}
@@ -77,6 +78,7 @@ export const DetailPerson = ({
 				}}
 				showDetail={false}
 				onFocus={scroll(14 * ROW)}
+				paginate
 			/>
 		</>
 	);
