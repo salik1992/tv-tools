@@ -96,27 +96,30 @@ function animate(baseMove: (move: MoveParams) => MoveResult) {
 const animateForward = animate(baseForward);
 const animateBackward = animate(baseBackward);
 
-export class BasicList extends ListBase<{
-	/**
-	 * The number of elements which are focusable. The rule of thumb is usually
-	 * navigatableElements + 2 === visibleElements
-	 */
-	navigatableElements: number;
-	scrolling: {
+export class BasicList<T> extends ListBase<
+	T,
+	{
 		/**
-		 * The number of pixels by which to scroll from the 0.
+		 * The number of elements which are focusable. The rule of thumb is usually
+		 * navigatableElements + 2 === visibleElements
 		 */
-		first: number;
-		/**
-		 * The number of pixels bu which to scroll in all other scroll movements.
-		 */
-		other: number;
-	};
-}> {
+		navigatableElements: number;
+		scrolling: {
+			/**
+			 * The number of pixels by which to scroll from the 0.
+			 */
+			first: number;
+			/**
+			 * The number of pixels bu which to scroll in all other scroll movements.
+			 */
+			other: number;
+		};
+	}
+> {
 	/**
 	 * Calculates the new render data for the new data index.
 	 */
-	protected override move(newIndex: number): RenderData {
+	protected override move(newIndex: number): RenderData<T> {
 		// Get the function that should do the calculation
 		const moveFunction = this.getMoveFunction(newIndex);
 		// Calculate data offset and list scroll
@@ -140,13 +143,16 @@ export class BasicList extends ListBase<{
 		const newPageUpTo = (moveResult.dataOffset % length) - 1;
 		return {
 			elements: this.renderData.elements.map((element, i) => {
-				// DataIndex for basic behavior
-				const dataIndex = i + moveResult.dataOffset;
 				// Page for the element for animated
 				const page = newPageUpTo >= i ? basePage + 1 : basePage;
+				// DataIndex for basic behavior
+				const dataIndex = isAnimated
+					? page * length + i
+					: i + moveResult.dataOffset;
 				return {
 					id: element.id,
-					dataIndex: isAnimated ? page * length + i : dataIndex,
+					item: this.data[dataIndex],
+					dataIndex,
 					offset: isAnimated
 						? page *
 							(this.c.visibleElements *
@@ -157,7 +163,7 @@ export class BasicList extends ListBase<{
 			}),
 			listOffset: moveResult.listOffset,
 			previousArrow: newIndex > 0,
-			nextArrow: newIndex < this.c.dataLength - 1,
+			nextArrow: newIndex < this.data.length - 1,
 		};
 	}
 

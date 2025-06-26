@@ -2,21 +2,22 @@ import type { FocusContainer } from '../focus';
 import { EventListener } from '../utils/EventListener';
 import { Performance } from '../utils/Performance';
 import { clamp } from '../utils/clamp';
-import type { DataChange, ListBehavior, ListSetup, RenderData } from './types';
+import type { ListBehavior, ListSetup, RenderData } from './types';
 
 /**
  * The base for all ListBehavior implementations.
  */
 export abstract class ListBase<
+	T,
 	ListConfiguration extends Record<string, unknown>,
-> implements ListBehavior
+> implements ListBehavior<T>
 {
 	/**
 	 * Handles listeners to events and their management.
 	 */
 	protected events = new EventListener<{
 		dataIndex: number;
-		renderData: RenderData;
+		renderData: RenderData<T>;
 	}>();
 
 	/**
@@ -24,13 +25,13 @@ export abstract class ListBase<
 	 */
 	protected focusListeners = new Map<
 		string,
-		<T extends { target: null | EventTarget }>(event: T) => void
+		<E extends { target: null | EventTarget }>(event: E) => void
 	>();
 
 	/**
 	 * Render data that contain the information of what should be rendered.
 	 */
-	protected renderData: RenderData;
+	protected renderData: RenderData<T>;
 
 	/**
 	 * The current index to data.
@@ -46,13 +47,14 @@ export abstract class ListBase<
 		/**
 		 * Configuration of the list.
 		 */
-		protected c: ListSetup<ListConfiguration>,
+		protected c: ListSetup<T, ListConfiguration>,
+		protected data: T[],
 	) {
 		// Creates the initial render data.
 		this.renderData = {
 			listOffset: 0,
 			previousArrow: false,
-			nextArrow: c.dataLength > 0,
+			nextArrow: this.data.length > 0,
 			elements: (() => {
 				const array = [];
 				for (let i = 0; i < c.visibleElements; i++) {
@@ -60,6 +62,7 @@ export abstract class ListBase<
 					array.push({
 						id,
 						dataIndex: i,
+						item: this.data[i],
 						offset: 0,
 						onFocus: this.getOnFocusForElement(id),
 					});
@@ -88,17 +91,26 @@ export abstract class ListBase<
 	 * Returns the current render data
 	 * @returns RenderData data for rendering
 	 */
-	public getRenderData(): RenderData {
+	public getRenderData(): RenderData<T> {
 		return this.renderData;
 	}
 
 	/**
-	 * Update the data by adding/removing new data to start/end.
-	 * @param change - the change data defining what is changed
+	 * Update the data that are rendered.
+	 * @param data - the new data to be rendered
 	 * @returns RenderData - updated render data
 	 */
-	public updateDataLength(_dataChange: DataChange): RenderData {
-		throw new Error('Not implemented');
+	public updateData(newData: T[]) {
+		const indexInNewData = newData.findIndex(this.compareData);
+		this.data = newData;
+		if (indexInNewData === -1) {
+			this.moveTo(0);
+		} else if (indexInNewData !== this.dataIndex) {
+			this.moveTo(indexInNewData);
+		} else {
+			this.renderData = this.move(this.dataIndex);
+			this.events.triggerEvent('renderData', this.renderData);
+		}
 	}
 
 	/**
@@ -124,7 +136,7 @@ export abstract class ListBase<
 	 * @returns true if the move was successful, false otherwise
 	 */
 	public moveTo(index: number) {
-		const newIndex = clamp(0, index, this.c.dataLength - 1);
+		const newIndex = clamp(0, index, this.data.length - 1);
 		if (newIndex !== this.dataIndex) {
 			this.renderData = this.move(newIndex);
 			this.events.triggerEvent('renderData', this.renderData);
@@ -141,7 +153,7 @@ export abstract class ListBase<
 	 * @param newIndex - the new data index that should be focused
 	 * @returns RenderData - the updated render data
 	 */
-	protected abstract move(newIndex: number): RenderData;
+	protected abstract move(newIndex: number): RenderData<T>;
 
 	/**
 	 * Util to return whether the list should animate the scroll.
@@ -186,5 +198,15 @@ export abstract class ListBase<
 		if (element) {
 			this.focus.focusChild(element.id, { preventScroll: true });
 		}
+	}
+
+	private compareData = (newItem: T) => {
+		const currentItem = this.data[this.dataIndex];
+		const compare = this.c.dataComparisonFunction ?? this.equality;
+		return compare(currentItem, newItem);
+	};
+
+	private equality(a: T, b: T) {
+		return a === b;
 	}
 }
