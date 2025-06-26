@@ -40,7 +40,7 @@ export const AssetsRow = ({
 				fetchNextPage();
 			}
 		},
-		[setFocusedIndex, data],
+		[setFocusedIndex, data, fetchNextPage, paginate],
 	);
 
 	const listConfiguration = useMemo(
