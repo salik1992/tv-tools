@@ -31,11 +31,12 @@ const isLastGroup = (
 /**
  * Grid component.
  */
-export const Grid = <Configuration extends Record<string, unknown>>({
+export const Grid = <T, Configuration extends Record<string, unknown>>({
 	id,
 	Implementation,
 	configuration,
 	renderGroup,
+	data,
 	orientation = 'vertical',
 	focusOnMount = false,
 	throttleMs = 300,
@@ -47,11 +48,13 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 	/* The optional ID to use for focus and the grid. */
 	id?: string;
 	/* The behavior of the grid. */
-	Implementation: GridImplementation<GridSetup<Configuration>>;
+	Implementation: GridImplementation<T, GridSetup<T, Configuration>>;
 	/* The configuration of the grid. */
-	configuration: Omit<GridSetup<Configuration>, 'id'>;
+	configuration: Omit<GridSetup<T, Configuration>, 'id'>;
 	/* The function that renders each element. */
-	renderGroup: (element: RenderDataGroup) => ReactNode;
+	renderGroup: (element: RenderDataGroup<T>) => ReactNode;
+	/* The data to render in the list. */
+	data: T[];
 	/* Orientation of the grid that will change control keys. Default: vertical */
 	orientation?: 'vertical' | 'horizontal';
 	/* Whether the horizontal grid should render ltr even in rtl. */
@@ -81,10 +84,14 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 	// Grid instance
 	const grid = useMemo(
 		() =>
-			new Implementation(container, {
-				id: container.id,
-				...configuration,
-			}),
+			new Implementation(
+				container,
+				{
+					id: container.id,
+					...configuration,
+				},
+				data,
+			),
 		[Implementation, container],
 	);
 
@@ -98,8 +105,13 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 		}
 	}, [focusOnMount]);
 
+	// Update data when they change
+	useEffect(() => {
+		grid.updateData(data);
+	}, [data, grid]);
+
 	const onRenderData = useCallback(
-		(newRenderData: RenderData) => {
+		(newRenderData: RenderData<T>) => {
 			setRenderData(newRenderData);
 		},
 		[setRenderData],
@@ -154,7 +166,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 			return !isLastGroup(
 				dataIndex,
 				configuration.elementsPerGroup,
-				configuration.dataLength,
+				data.length,
 			)
 				? grid.moveBy(
 						configuration.elementsPerGroup,
@@ -263,7 +275,7 @@ export const Grid = <Configuration extends Record<string, unknown>>({
 					!isLastGroup(
 						dataIndex,
 						configuration.elementsPerGroup,
-						configuration.dataLength,
+						data.length,
 					) && (
 						<div
 							className="mouse-arrow next"
