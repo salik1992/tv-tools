@@ -48,6 +48,9 @@ export abstract class ListBase<
 		 * Configuration of the list.
 		 */
 		protected c: ListSetup<T, ListConfiguration>,
+		/**
+		 * The data that should be rendered.
+		 */
 		protected data: T[],
 	) {
 		// Creates the initial render data.
@@ -98,7 +101,6 @@ export abstract class ListBase<
 	/**
 	 * Update the data that are rendered.
 	 * @param data - the new data to be rendered
-	 * @returns RenderData - updated render data
 	 */
 	public updateData(newData: T[]) {
 		const indexInNewData = newData.findIndex(this.compareData);
@@ -200,12 +202,24 @@ export abstract class ListBase<
 		}
 	}
 
+	/**
+	 * Compares the current data item with the new item to determine if they are equal.
+	 * @param newItem - The new item to compare with the current item.
+	 * @return boolean - Returns true if the items are equal, false otherwise.
+	 */
 	private compareData = (newItem: T) => {
 		const currentItem = this.data[this.dataIndex];
 		const compare = this.c.dataComparisonFunction ?? this.equality;
 		return compare(currentItem, newItem);
 	};
 
+	/**
+	 * Default equality function that checks if two items are strictly equal.
+	 * This can be overridden by providing a custom dataComparisonFunction in the configuration.
+	 * @param a - first item to compare
+	 * @param b - second item to compare
+	 * @returns boolean - true if items are equal, false otherwise
+	 */
 	private equality(a: T, b: T) {
 		return a === b;
 	}
