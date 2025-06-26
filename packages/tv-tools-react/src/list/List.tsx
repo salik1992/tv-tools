@@ -20,11 +20,12 @@ import { useThrottledCallback } from '../utils/useThrottledCallback';
 /**
  * List component.
  */
-export const List = <Configuration extends Record<string, unknown>>({
+export const List = <T, Configuration extends Record<string, unknown>>({
 	id,
 	Implementation,
 	configuration,
 	renderItem,
+	data,
 	orientation = 'horizontal',
 	focusOnMount = false,
 	throttleMs = 300,
@@ -34,11 +35,13 @@ export const List = <Configuration extends Record<string, unknown>>({
 	/* The optional ID to use for focus and the list. */
 	id?: string;
 	/* The behavior of the list. */
-	Implementation: ListImplementation<ListSetup<Configuration>>;
+	Implementation: ListImplementation<T, ListSetup<T, Configuration>>;
 	/* The configuration of the list. */
-	configuration: Omit<ListSetup<Configuration>, 'id'>;
+	configuration: Omit<ListSetup<T, Configuration>, 'id'>;
 	/* The function that renders each element. */
-	renderItem: (element: RenderDataElement) => ReactNode;
+	renderItem: (element: RenderDataElement<T>) => ReactNode;
+	/* The data to render in the list. */
+	data: T[];
 	/* Orientation of the list that will change control keys. Default: horizontal */
 	orientation?: 'vertical' | 'horizontal';
 	/* Whether the horizontal list should render ltr even in rtl. */
@@ -62,10 +65,14 @@ export const List = <Configuration extends Record<string, unknown>>({
 	// List instance
 	const list = useMemo(
 		() =>
-			new Implementation(container, {
-				id: container.id,
-				...configuration,
-			}),
+			new Implementation(
+				container,
+				{
+					id: container.id,
+					...configuration,
+				},
+				data,
+			),
 		[Implementation, container],
 	);
 
@@ -79,8 +86,13 @@ export const List = <Configuration extends Record<string, unknown>>({
 		}
 	}, [focusOnMount]);
 
+	// Update data when they update
+	useEffect(() => {
+		list.updateData(data);
+	}, [data, list]);
+
 	const onRenderData = useCallback(
-		(newRenderData: RenderData) => {
+		(newRenderData: RenderData<T>) => {
 			setRenderData(newRenderData);
 		},
 		[setRenderData],
