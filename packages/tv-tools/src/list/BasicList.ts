@@ -128,7 +128,7 @@ export class BasicList<T> extends ListBase<
 			dataOffset: Math.min(
 				...this.renderData.elements.map(({ dataIndex }) => dataIndex),
 			),
-			listOffset: this.renderData.listOffset,
+			listOffset: this.renderData.baseOffset,
 			firstScroll: this.c.config.scrolling.first,
 			scroll: this.c.config.scrolling.other,
 			navigatableCount: this.c.config.navigatableElements,
@@ -161,7 +161,7 @@ export class BasicList<T> extends ListBase<
 					onFocus: this.getOnFocusForElement(element.id),
 				};
 			}),
-			listOffset: moveResult.listOffset,
+			baseOffset: moveResult.listOffset,
 			previousArrow: newIndex > 0,
 			nextArrow: newIndex < this.data.length - 1,
 		};

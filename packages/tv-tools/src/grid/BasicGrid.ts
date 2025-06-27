@@ -141,7 +141,7 @@ export class BasicGrid<T> extends GridBase<
 			dataOffset: Math.min(
 				...this.getAllElements().map(({ dataIndex }) => dataIndex),
 			),
-			gridOffset: this.renderData.gridOffset,
+			gridOffset: this.renderData.baseOffset,
 			firstScroll: this.c.config.scrolling.first,
 			scroll: this.c.config.scrolling.other,
 			navigatableCount: this.c.config.navigatableGroups,
@@ -185,7 +185,7 @@ export class BasicGrid<T> extends GridBase<
 						: 0,
 				};
 			}),
-			gridOffset: moveResult.gridOffset,
+			baseOffset: moveResult.gridOffset,
 			previousArrow: newIndex > 0,
 			nextArrow: newIndex < this.data.length - 1,
 		};
