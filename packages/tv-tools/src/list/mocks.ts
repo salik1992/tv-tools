@@ -2,11 +2,11 @@ import { toKeys } from '../utils/toKeys';
 import type { RenderData } from './types';
 
 export const assertRenderData = (
-	renderData: RenderData,
+	renderData: RenderData<string>,
 	focusSpy: jest.SpyInstance,
 	assertion: Partial<{
 		focus: string;
-		listOffset: number;
+		baseOffset: number;
 		nextArrow: boolean;
 		previousArrow: boolean;
 		ids: string[];
@@ -23,11 +23,11 @@ export const assertRenderData = (
 					});
 				}
 				break;
-			case 'listOffset':
-				if (assertion.listOffset !== renderData.listOffset) {
+			case 'baseOffset':
+				if (assertion.baseOffset !== renderData.baseOffset) {
 					console.log('throwing');
 					throw new Error(
-						`Expected listOffset to be ${assertion.listOffset} but got ${renderData.listOffset}`,
+						`Expected baseOffset to be ${assertion.baseOffset} but got ${renderData.baseOffset}`,
 					);
 				}
 				break;

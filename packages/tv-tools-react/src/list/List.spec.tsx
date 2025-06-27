@@ -35,7 +35,6 @@ describe('List', () => {
 				throttleMs={throttleMs}
 				configuration={{
 					performance: Performance.BASIC,
-					dataLength: 5,
 					visibleElements: 5,
 					config: {
 						navigatableElements: 3,
@@ -45,6 +44,7 @@ describe('List', () => {
 						},
 					},
 				}}
+				data={Array.from({ length: 5 }, (_, i) => i.toString())}
 				renderItem={({ id, dataIndex, onFocus, offset }) => (
 					<Interactable
 						id={id}
@@ -80,7 +80,6 @@ describe('List', () => {
 				throttleMs={throttleMs}
 				configuration={{
 					performance: Performance.BASIC,
-					dataLength: 10,
 					visibleElements: 7,
 					config: {
 						navigatableElements: 5,
@@ -90,6 +89,7 @@ describe('List', () => {
 						},
 					},
 				}}
+				data={Array.from({ length: 5 }, (_, i) => i.toString())}
 				renderItem={({ id, dataIndex, onFocus, offset }) => (
 					<Interactable
 						id={id}

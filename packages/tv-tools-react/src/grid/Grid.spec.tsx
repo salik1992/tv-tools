@@ -33,7 +33,6 @@ describe('Grid', () => {
 				throttleMs={throttleMs}
 				configuration={{
 					performance: Performance.BASIC,
-					dataLength: 25,
 					visibleGroups: 5,
 					elementsPerGroup: 5,
 					config: {
@@ -44,6 +43,7 @@ describe('Grid', () => {
 						},
 					},
 				}}
+				data={Array.from({ length: 25 }, (_, i) => i.toString())}
 				renderGroup={({ id, offset, elements }) => (
 					<div
 						className="group"
@@ -80,7 +80,6 @@ describe('Grid', () => {
 				throttleMs={throttleMs}
 				configuration={{
 					performance: Performance.BASIC,
-					dataLength: 25,
 					visibleGroups: 5,
 					elementsPerGroup: 5,
 					config: {
@@ -91,6 +90,7 @@ describe('Grid', () => {
 						},
 					},
 				}}
+				data={Array.from({ length: 25 }, (_, i) => i.toString())}
 				renderGroup={({ id, offset, elements }) => (
 					<div
 						className="group"

@@ -11,24 +11,27 @@ describe('BasicGrid', () => {
 		.mockImplementation(() => {});
 
 	describe('Performance.BASIC', () => {
-		const grid = new BasicGrid(container, {
-			id: 'grid',
-			performance: Performance.BASIC,
-			dataLength: 35,
-			elementsPerGroup: 5,
-			visibleGroups: 5,
-			config: {
-				navigatableGroups: 3,
-				scrolling: {
-					first: 100,
-					other: 200,
+		const grid = new BasicGrid(
+			container,
+			{
+				id: 'grid',
+				performance: Performance.BASIC,
+				elementsPerGroup: 5,
+				visibleGroups: 5,
+				config: {
+					navigatableGroups: 3,
+					scrolling: {
+						first: 100,
+						other: 200,
+					},
 				},
 			},
-		});
+			Array.from({ length: 35 }, (_, i) => i.toString()),
+		);
 
 		it('should render grid at index 0', () => {
 			assertRenderData(grid.getRenderData(), focusSpy, {
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				ids: [
@@ -98,7 +101,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(1)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e1',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -113,7 +116,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e1',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -128,7 +131,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e1',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -143,7 +146,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e1',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -158,7 +161,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e1',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -173,7 +176,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e1',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -188,7 +191,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e1',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -203,7 +206,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e4',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [
@@ -223,7 +226,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(-1)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -238,7 +241,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -253,7 +256,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -268,7 +271,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -283,7 +286,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -298,7 +301,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -313,7 +316,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e3',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -328,7 +331,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(-5)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e0',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [
@@ -347,7 +350,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(3);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e3',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -362,7 +365,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(20);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e0',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -377,7 +380,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(32);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e2',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -392,7 +395,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(17);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e2',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -407,7 +410,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e0',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -422,7 +425,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(0);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e0',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [
@@ -438,24 +441,27 @@ describe('BasicGrid', () => {
 	});
 
 	describe('Performance.ANIMATED', () => {
-		const grid = new BasicGrid(container, {
-			id: 'grid',
-			performance: Performance.ANIMATED,
-			dataLength: 35,
-			elementsPerGroup: 5,
-			visibleGroups: 5,
-			config: {
-				navigatableGroups: 3,
-				scrolling: {
-					first: 100,
-					other: 200,
+		const grid = new BasicGrid(
+			container,
+			{
+				id: 'grid',
+				performance: Performance.ANIMATED,
+				elementsPerGroup: 5,
+				visibleGroups: 5,
+				config: {
+					navigatableGroups: 3,
+					scrolling: {
+						first: 100,
+						other: 200,
+					},
 				},
 			},
-		});
+			Array.from({ length: 35 }, (_, i) => i.toString()),
+		);
 
 		it('should render grid at index 0', () => {
 			assertRenderData(grid.getRenderData(), focusSpy, {
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				ids: [
@@ -525,7 +531,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(1)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e1',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -540,7 +546,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e1',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -555,7 +561,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e1',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -570,7 +576,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g3-e1',
-				gridOffset: 300,
+				baseOffset: 300,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -585,7 +591,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g4-e1',
-				gridOffset: 500,
+				baseOffset: 500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -600,7 +606,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e1',
-				gridOffset: 700,
+				baseOffset: 700,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -615,7 +621,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e1',
-				gridOffset: 900,
+				baseOffset: 900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -630,7 +636,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(5)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e4',
-				gridOffset: 900,
+				baseOffset: 900,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [
@@ -649,7 +655,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(-1)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 900,
+				baseOffset: 900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -664,7 +670,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e3',
-				gridOffset: 900,
+				baseOffset: 900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -679,7 +685,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g4-e3',
-				gridOffset: 700,
+				baseOffset: 700,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -694,7 +700,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g3-e3',
-				gridOffset: 500,
+				baseOffset: 500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -709,7 +715,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g2-e3',
-				gridOffset: 300,
+				baseOffset: 300,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -724,7 +730,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -739,7 +745,7 @@ describe('BasicGrid', () => {
 			grid.moveBy(-5);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e3',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -754,7 +760,7 @@ describe('BasicGrid', () => {
 			expect(grid.moveBy(-5)).toBe(true);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e0',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [
@@ -773,7 +779,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(3);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e3',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -788,7 +794,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(20);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g4-e0',
-				gridOffset: 500,
+				baseOffset: 500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -803,7 +809,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(32);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e2',
-				gridOffset: 900,
+				baseOffset: 900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -818,7 +824,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(17);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g3-e2',
-				gridOffset: 500,
+				baseOffset: 500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -833,7 +839,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(8);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g1-e3',
-				gridOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [
@@ -848,7 +854,7 @@ describe('BasicGrid', () => {
 			grid.moveTo(0);
 			assertRenderData(grid.getRenderData(), focusSpy, {
 				focus: 'grid-g0-e0',
-				gridOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [

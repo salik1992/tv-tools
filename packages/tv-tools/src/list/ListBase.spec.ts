@@ -5,13 +5,14 @@ import { ListBase } from './ListBase';
 jest.useFakeTimers(); // Because events run async
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-class List extends ListBase<{}> {
+class List extends ListBase<string, {}> {
 	protected move = jest.fn(() => this.renderData);
 }
 
 const element = (id: string, dataIndex: number, offset: number) => ({
 	dataIndex,
 	id,
+	item: dataIndex.toString(),
 	offset,
 	onFocus: expect.any(Function),
 });
@@ -19,13 +20,16 @@ const element = (id: string, dataIndex: number, offset: number) => ({
 describe('ListBase', () => {
 	const focus = new FocusManager();
 	const container = new FocusContainer(focus);
-	const list = new List(container, {
-		id: 'list',
-		performance: Performance.BASIC,
-		dataLength: 5,
-		visibleElements: 5,
-		config: {},
-	});
+	const list = new List(
+		container,
+		{
+			id: 'list',
+			performance: Performance.BASIC,
+			visibleElements: 5,
+			config: {},
+		},
+		Array.from({ length: 5 }, (_, i) => i.toString()),
+	);
 
 	const focusSpy = jest
 		.spyOn(container, 'focusChild')
@@ -39,7 +43,7 @@ describe('ListBase', () => {
 			element('list-3', 3, 0),
 			element('list-4', 4, 0),
 		],
-		listOffset: 0,
+		baseOffset: 0,
 		nextArrow: true,
 		previousArrow: false,
 	};
