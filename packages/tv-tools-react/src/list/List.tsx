@@ -86,7 +86,7 @@ export const List = <T, Configuration extends Record<string, unknown>>({
 		}
 	}, [focusOnMount]);
 
-	// Update data when they update
+	// Update data when they change
 	useEffect(() => {
 		list.updateData(data);
 	}, [data, list]);
@@ -179,7 +179,7 @@ export const List = <T, Configuration extends Record<string, unknown>>({
 				<div
 					className="list-inner-wrap"
 					style={{
-						transform: `translate${orientation === 'horizontal' ? 'X' : 'Y'}(-${renderData.listOffset}px)`,
+						transform: `translate${orientation === 'horizontal' ? 'X' : 'Y'}(-${renderData.baseOffset}px)`,
 					}}
 				>
 					{renderData.elements.map(renderItem)}

@@ -256,7 +256,7 @@ export const Grid = <T, Configuration extends Record<string, unknown>>({
 				<div
 					className="grid-inner-wrap"
 					style={{
-						transform: `translate${orientation === 'horizontal' ? 'X' : 'Y'}(-${renderData.gridOffset}px)`,
+						transform: `translate${orientation === 'horizontal' ? 'X' : 'Y'}(-${renderData.baseOffset}px)`,
 					}}
 				>
 					{renderData.groups.map(renderGroup)}
