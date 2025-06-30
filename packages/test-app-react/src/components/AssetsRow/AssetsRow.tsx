@@ -20,6 +20,7 @@ export const AssetsRow = ({
 	focusOnMount = false,
 	onFocus,
 	paginate = false,
+	showAll = false,
 }: {
 	id?: string;
 	listData: ListDataConfiguration;
@@ -27,11 +28,14 @@ export const AssetsRow = ({
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
 	paginate?: boolean;
+	showAll?: boolean;
 }) => {
 	const [focusedIndex, setFocusedIndex] = useState(0);
 
-	const { data, pages, loading, error, fetchNextPage } =
-		usePagedData(listData);
+	const { data, pages, loading, error, fetchNextPage } = usePagedData(
+		listData,
+		{ appendShowAll: showAll },
+	);
 
 	const onDataIndex = useCallback(
 		(index: number) => {

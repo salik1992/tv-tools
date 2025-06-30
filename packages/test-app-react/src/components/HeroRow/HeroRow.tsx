@@ -14,14 +14,18 @@ export const HeroRow = ({
 	id,
 	listData,
 	focusOnMount = false,
+	showAll = false,
 	onFocus,
 }: {
 	id?: string;
 	listData: ListDataConfiguration;
+	showAll?: boolean;
 	focusOnMount?: boolean;
 	onFocus?: (event: FocusEvent) => void;
 }) => {
-	const { data, pages, loading, error } = usePagedData(listData);
+	const { data, pages, loading, error } = usePagedData(listData, {
+		appendShowAll: showAll,
+	});
 
 	const listConfiguration = useMemo(
 		() => ({

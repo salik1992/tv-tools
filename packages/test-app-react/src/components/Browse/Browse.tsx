@@ -108,6 +108,7 @@ export const Browse = () => {
 												listData={listData}
 												onFocus={onFocuses[i]}
 												focusOnMount={i === 0}
+												showAll
 											/>
 										);
 									case ListType.NORMAL:
@@ -118,6 +119,7 @@ export const Browse = () => {
 												listData={listData}
 												showDetail={index === i}
 												onFocus={onFocuses[i]}
+												showAll
 											/>
 										);
 									default:

@@ -5,7 +5,14 @@ import { type ListDataConfiguration, useDataProvider } from '../data';
 
 const logger = ns('[usePagedData]');
 
-export const usePagedData = (listData: ListDataConfiguration) => {
+export const usePagedData = (
+	listData: ListDataConfiguration,
+	{
+		appendShowAll = false,
+	}: {
+		appendShowAll?: boolean;
+	} = {},
+) => {
 	const mounted = useRef(true);
 	const dataProvider = useDataProvider();
 	const [pagedData, setPagedData] = useState<
@@ -28,20 +35,39 @@ export const usePagedData = (listData: ListDataConfiguration) => {
 	const fetchNextPage = useCallback(async () => {
 		if (
 			requestedPages.current !== fetchedPages.current ||
-			(pagedData.pages > 0 && fetchedPages.current >= pagedData.pages)
+			(pagedData.pages > 0 &&
+				(fetchedPages.current >= pagedData.pages || appendShowAll))
 		) {
 			return;
 		}
 		requestedPages.current += 1;
 		try {
+			const pageIndex = requestedPages.current - 1;
 			const fetchedData = await dataProvider.getPagedAssets(
 				listData,
-				requestedPages.current - 1,
+				pageIndex,
 			);
+			const dataToAppend =
+				!appendShowAll || fetchedData.pages < 2
+					? fetchedData
+					: {
+							...fetchedData,
+							[pageIndex]: [
+								...(fetchedData[pageIndex] || []),
+								{
+									id: 'show-all',
+									type: 'show-all',
+									title: 'Show All >>>',
+									description:
+										'Show all items in this category',
+									data: JSON.stringify(listData),
+								},
+							],
+						};
 			if (mounted.current) {
 				setPagedData((currentData) => ({
 					...currentData,
-					...fetchedData,
+					...dataToAppend,
 				}));
 				fetchedPages.current = requestedPages.current;
 			}

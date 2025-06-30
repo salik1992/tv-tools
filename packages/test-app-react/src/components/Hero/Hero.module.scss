@@ -5,12 +5,24 @@
 @use '../Typography/utils' as utils;
 @use './variables' as vars;
 
-.image {
+.image, .colorbox {
 	background-size: cover;
 	background-position: center center;
 	width: vars.$image-width;
 	height: vars.$image-height;
 	margin-bottom: sizes.$row;
+}
+
+.colorbox {
+	background-color: colors.$bg-action;
+	color: colors.$bg-primary;
+	box-sizing: border-box;
+	padding-top: 8 * sizes.$row;
+	text-align: center;
+
+	p {
+		@include utils.one-line-ellipsis;
+	}
 }
 
 .text {
