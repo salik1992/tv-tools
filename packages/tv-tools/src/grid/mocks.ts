@@ -2,11 +2,11 @@ import { toKeys } from '../utils/toKeys';
 import type { RenderData } from './types';
 
 export const assertRenderData = (
-	renderData: RenderData,
+	renderData: RenderData<string>,
 	focusSpy: jest.SpyInstance,
 	assertion: Partial<{
 		focus: string;
-		gridOffset: number;
+		baseOffset: number;
 		nextArrow: boolean;
 		previousArrow: boolean;
 		ids: [string, string[]][];
@@ -23,10 +23,10 @@ export const assertRenderData = (
 					});
 				}
 				break;
-			case 'gridOffset':
-				if (assertion.gridOffset !== renderData.gridOffset) {
+			case 'baseOffset':
+				if (assertion.baseOffset !== renderData.baseOffset) {
 					throw new Error(
-						`Expected gridOffset to be ${assertion.gridOffset} but got ${renderData.gridOffset}`,
+						`Expected baseOffset to be ${assertion.baseOffset} but got ${renderData.baseOffset}`,
 					);
 				}
 				break;

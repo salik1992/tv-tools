@@ -134,7 +134,7 @@ export const FocusTable = ({
 	id,
 	children,
 	// @ts-expect-error: Circular type definition
-	TableComponent = ChildrenOnlyComponent,
+	TableComponent = Fragment,
 	TrComponent = Fragment,
 	TdComponent = Fragment,
 	...tableProps

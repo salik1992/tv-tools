@@ -1,8 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import type { RenderDataGroup } from '@salik1992/tv-tools/grid';
 import { BasicGrid } from '@salik1992/tv-tools/grid/BasicGrid';
 import { Grid } from '@salik1992/tv-tools-react/grid';
+import type { Asset } from '@salik1992/test-app-data/types';
 import type { ListDataConfiguration } from '../../data';
 import { useAssertedParams } from '../../hooks/useAssertedParams';
 import { usePagedData } from '../../hooks/usePagedData';
@@ -14,6 +15,8 @@ import { H1 } from '../Typography';
 import * as css from './Discover.module.scss';
 
 const COLUMNS = 6;
+const PAGINATION_OFFSET = 2 * COLUMNS;
+const INITIAL_VISIBLE_DATA = 6 * COLUMNS;
 
 const validateFilter = (value: unknown): ListDataConfiguration => {
 	try {
@@ -26,12 +29,26 @@ const validateFilter = (value: unknown): ListDataConfiguration => {
 };
 
 export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
-	const { data, loading, error } = usePagedData(filter);
+	const { data, pages, loading, error, fetchNextPage } = usePagedData(filter);
+
+	const onDataIndex = useCallback(
+		(index: number) => {
+			if (index + PAGINATION_OFFSET >= data.length) {
+				fetchNextPage();
+			}
+		},
+		[data, fetchNextPage],
+	);
+
+	useEffect(() => {
+		if (data.length < INITIAL_VISIBLE_DATA) {
+			fetchNextPage();
+		}
+	}, [data, fetchNextPage]);
 
 	const gridConfiguration = useMemo(
 		() => ({
 			performance: Performance,
-			dataLength: data[0]?.length,
 			visibleGroups: 7,
 			elementsPerGroup: COLUMNS,
 			config: {
@@ -42,23 +59,18 @@ export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
 				},
 			},
 		}),
-		[data[0]],
+		[],
 	);
 
 	const renderGroup = useCallback(
-		({ id, elements, offset }: RenderDataGroup) => (
+		({ id, elements, offset }: RenderDataGroup<Asset>) => (
 			<div key={id} style={{ transform: `translateY(${offset}px)` }}>
-				{elements.map(({ id, dataIndex, onFocus }) => (
-					<Tile
-						id={id}
-						key={id}
-						asset={data[0][dataIndex]}
-						onFocus={onFocus}
-					/>
+				{elements.map(({ id, item, onFocus }) => (
+					<Tile id={id} key={id} asset={item} onFocus={onFocus} />
 				))}
 			</div>
 		),
-		[data[0]],
+		[],
 	);
 
 	return (
@@ -74,16 +86,18 @@ export const DiscoverInner = ({ filter }: ListDataConfiguration) => {
 					<H1>There was an error loading the data.</H1>
 				</ScreenCentered>
 			)}
-			{!loading && !error && (!data || data.pages === 0) && (
+			{!loading && !error && pages === 0 && (
 				<ScreenCentered>
 					<H1>No data available.</H1>
 				</ScreenCentered>
 			)}
-			{data && data[0] && (
+			{data && data.length && (
 				<Grid
 					Implementation={BasicGrid}
 					configuration={gridConfiguration}
 					renderGroup={renderGroup}
+					data={data}
+					onDataIndex={onDataIndex}
 					scrollToTopWithBack
 					focusOnMount
 				/>

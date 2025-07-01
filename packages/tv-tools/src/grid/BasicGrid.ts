@@ -109,27 +109,30 @@ function animate(baseMove: (move: MoveParams) => MoveResult) {
 const animateForward = animate(baseForward);
 const animateBackward = animate(baseBackward);
 
-export class BasicGrid extends GridBase<{
-	/**
-	 * The number of elements which are focusable. The rule of thumb is usually
-	 * navigatableElements + 2 === visibleElements
-	 */
-	navigatableGroups: number;
-	scrolling: {
+export class BasicGrid<T> extends GridBase<
+	T,
+	{
 		/**
-		 * The number of pixels by which to scroll from the 0.
+		 * The number of elements which are focusable. The rule of thumb is usually
+		 * navigatableElements + 2 === visibleElements
 		 */
-		first: number;
-		/**
-		 * The number of pixels bu which to scroll in all other scroll movements.
-		 */
-		other: number;
-	};
-}> {
+		navigatableGroups: number;
+		scrolling: {
+			/**
+			 * The number of pixels by which to scroll from the 0.
+			 */
+			first: number;
+			/**
+			 * The number of pixels bu which to scroll in all other scroll movements.
+			 */
+			other: number;
+		};
+	}
+> {
 	/**
 	 * Calculates the new render data for the new data index.
 	 */
-	public override move(newIndex: number): RenderData {
+	public override move(newIndex: number): RenderData<T> {
 		// Get the function that should do the calculation
 		const moveFunction = this.getMoveFunction(newIndex);
 		// Calculate data offset and grid scroll
@@ -138,7 +141,7 @@ export class BasicGrid extends GridBase<{
 			dataOffset: Math.min(
 				...this.getAllElements().map(({ dataIndex }) => dataIndex),
 			),
-			gridOffset: this.renderData.gridOffset,
+			gridOffset: this.renderData.baseOffset,
 			firstScroll: this.c.config.scrolling.first,
 			scroll: this.c.config.scrolling.other,
 			navigatableCount: this.c.config.navigatableGroups,
@@ -165,13 +168,13 @@ export class BasicGrid extends GridBase<{
 					elements: group.elements.map((element, j) => {
 						const elementDataOffset =
 							i * this.c.elementsPerGroup + j;
-						const dataIndex =
-							elementDataOffset + moveResult.dataOffset;
+						const dataIndex = isAnimated
+							? page * length + elementDataOffset
+							: elementDataOffset + moveResult.dataOffset;
 						return {
 							id: element.id,
-							dataIndex: isAnimated
-								? page * length + elementDataOffset
-								: dataIndex,
+							dataIndex,
+							item: this.data[dataIndex],
 							onFocus: this.getOnFocusForElement(element.id),
 						};
 					}),
@@ -182,9 +185,9 @@ export class BasicGrid extends GridBase<{
 						: 0,
 				};
 			}),
-			gridOffset: moveResult.gridOffset,
+			baseOffset: moveResult.gridOffset,
 			previousArrow: newIndex > 0,
-			nextArrow: newIndex < this.c.dataLength - 1,
+			nextArrow: newIndex < this.data.length - 1,
 		};
 	}
 

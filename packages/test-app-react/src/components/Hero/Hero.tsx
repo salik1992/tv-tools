@@ -1,7 +1,12 @@
 import { type ComponentProps, type FocusEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
-import type { Asset, AssetDescription } from '@salik1992/test-app-data/types';
+import type {
+	Asset,
+	AssetDescription,
+	MovieAsset,
+	ShowAllAsset,
+} from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../../data';
 import { Image } from '../Image';
 import { COLUMN, H1, NBSP, P, ROW } from '../Typography';
@@ -26,7 +31,15 @@ export const Hero = ({
 	const navigate = useNavigate();
 
 	const onPress = useCallback(() => {
-		navigate(`detail/${asset?.type}/${asset?.id}`);
+		switch (asset?.type) {
+			case 'show-all':
+				navigate(
+					`/discover/${btoa((asset as unknown as ShowAllAsset).data)}`,
+				);
+				break;
+			default:
+				navigate(`detail/${asset?.type}/${asset?.id}`);
+		}
 		return true;
 	}, [navigate, asset]);
 
@@ -38,18 +51,24 @@ export const Hero = ({
 			onPress={onPress}
 			onFocus={onFocus}
 		>
-			<Image
-				className={css.image}
-				src={
-					asset
-						? dataProvider.getImageUrl(
-								asset,
-								['backdrop', 'still'],
-								{ width: WIDTH },
-							)
-						: ''
-				}
-			/>
+			{asset && (asset as MovieAsset).images ? (
+				<Image
+					className={css.image}
+					src={
+						asset
+							? dataProvider.getImageUrl(
+									asset,
+									['backdrop', 'still'],
+									{ width: WIDTH },
+								)
+							: ''
+					}
+				/>
+			) : (
+				<div className={css.colorbox}>
+					<P>{asset?.title.toLowerCase() ?? '-'}</P>
+				</div>
+			)}
 			<H1 className={css.text}>{asset?.title ?? NBSP}</H1>
 			<P className={css.text}>{asset?.description ?? NBSP}</P>
 		</Interactable>

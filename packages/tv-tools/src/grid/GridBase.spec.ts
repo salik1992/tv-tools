@@ -5,13 +5,14 @@ import { GridBase } from './GridBase';
 jest.useFakeTimers(); // Because events run async
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-class Grid extends GridBase<{}> {
+class Grid extends GridBase<string, {}> {
 	protected move = jest.fn(() => this.renderData);
 }
 
 const element = (id: string, dataIndex: number, offset: number) => ({
 	dataIndex,
 	id,
+	item: dataIndex.toString(),
 	offset,
 	onFocus: expect.any(Function),
 });
@@ -29,14 +30,17 @@ const group = (
 describe('GridBase', () => {
 	const focus = new FocusManager();
 	const container = new FocusContainer(focus);
-	const grid = new Grid(container, {
-		id: 'grid',
-		performance: Performance.BASIC,
-		dataLength: 25,
-		elementsPerGroup: 5,
-		visibleGroups: 5,
-		config: {},
-	});
+	const grid = new Grid(
+		container,
+		{
+			id: 'grid',
+			performance: Performance.BASIC,
+			elementsPerGroup: 5,
+			visibleGroups: 5,
+			config: {},
+		},
+		Array.from({ length: 25 }, (_, i) => i.toString()),
+	);
 
 	const focusSpy = jest
 		.spyOn(container, 'focusChild')
@@ -80,7 +84,7 @@ describe('GridBase', () => {
 				element('grid-g4-e4', 24, 0),
 			]),
 		],
-		gridOffset: 0,
+		baseOffset: 0,
 		nextArrow: true,
 		previousArrow: false,
 	};

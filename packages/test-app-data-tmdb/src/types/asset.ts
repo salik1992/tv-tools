@@ -103,6 +103,7 @@ export type TmdbAssetMapping = {
 	person: TmdbPeopleAsset;
 	episode: TmdbAsset;
 	genre: TmdbGenre;
+	'show-all': TmdbAsset;
 };
 
 export type TrendingTypes = 'movie' | 'series'; // TODO: | 'people';

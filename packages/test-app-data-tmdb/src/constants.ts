@@ -13,6 +13,7 @@ export const GENERIC_TYPE_TO_TMDB_TYPE = {
 	episode: 'episode',
 	person: 'person',
 	genre: 'genre',
+	'show-all': 'show-all',
 } as const;
 
 export const MENU: MenuItem[] = [

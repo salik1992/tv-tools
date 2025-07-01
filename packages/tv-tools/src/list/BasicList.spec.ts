@@ -11,23 +11,26 @@ describe('BasicList', () => {
 		.mockImplementation(() => {});
 
 	describe('Performance.BASIC', () => {
-		const list = new BasicList(container, {
-			id: 'list',
-			performance: Performance.BASIC,
-			dataLength: 15,
-			visibleElements: 7,
-			config: {
-				navigatableElements: 5,
-				scrolling: {
-					first: 100,
-					other: 200,
+		const list = new BasicList(
+			container,
+			{
+				id: 'list',
+				performance: Performance.BASIC,
+				visibleElements: 7,
+				config: {
+					navigatableElements: 5,
+					scrolling: {
+						first: 100,
+						other: 200,
+					},
 				},
 			},
-		});
+			Array.from({ length: 15 }, (_, i) => i.toString()),
+		);
 
 		it('should render list at index 0', () => {
 			assertRenderData(list.getRenderData(), focusSpy, {
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				ids: [
@@ -48,7 +51,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -57,7 +60,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-2',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -66,7 +69,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -75,7 +78,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -84,7 +87,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [1, 2, 3, 4, 5, 6, 7],
@@ -93,7 +96,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [2, 3, 4, 5, 6, 7, 8],
@@ -102,7 +105,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [3, 4, 5, 6, 7, 8, 9],
@@ -111,7 +114,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [4, 5, 6, 7, 8, 9, 10],
@@ -120,7 +123,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [5, 6, 7, 8, 9, 10, 11],
@@ -129,7 +132,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [6, 7, 8, 9, 10, 11, 12],
@@ -138,7 +141,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 12, 13],
@@ -147,7 +150,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [8, 9, 10, 11, 12, 13, 14],
@@ -156,7 +159,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [9, 10, 11, 12, 13, 14, 15],
@@ -165,7 +168,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -173,7 +176,7 @@ describe('BasicList', () => {
 			});
 			expect(list.moveBy(1)).toBe(false);
 			assertRenderData(list.getRenderData(), focusSpy, {
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -185,7 +188,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(-1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -194,7 +197,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-2',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -203,7 +206,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -212,7 +215,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [9, 10, 11, 12, 13, 14, 15],
@@ -221,7 +224,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [8, 9, 10, 11, 12, 13, 14],
@@ -230,7 +233,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 12, 13],
@@ -239,7 +242,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [6, 7, 8, 9, 10, 11, 12],
@@ -248,7 +251,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [5, 6, 7, 8, 9, 10, 11],
@@ -257,7 +260,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [4, 5, 6, 7, 8, 9, 10],
@@ -266,7 +269,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [3, 4, 5, 6, 7, 8, 9],
@@ -275,7 +278,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [2, 3, 4, 5, 6, 7, 8],
@@ -284,7 +287,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [1, 2, 3, 4, 5, 6, 7],
@@ -293,7 +296,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -302,7 +305,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(-1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -315,7 +318,7 @@ describe('BasicList', () => {
 			list.moveTo(3);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -324,7 +327,7 @@ describe('BasicList', () => {
 			list.moveTo(14);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -333,7 +336,7 @@ describe('BasicList', () => {
 			list.moveTo(11);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [10, 11, 12, 13, 14, 15, 16],
@@ -342,7 +345,7 @@ describe('BasicList', () => {
 			list.moveTo(0);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -352,23 +355,26 @@ describe('BasicList', () => {
 	});
 
 	describe('Performance.ANIMATED', () => {
-		const list = new BasicList(container, {
-			id: 'list',
-			performance: Performance.ANIMATED,
-			dataLength: 15,
-			visibleElements: 7,
-			config: {
-				navigatableElements: 5,
-				scrolling: {
-					first: 100,
-					other: 200,
+		const list = new BasicList(
+			container,
+			{
+				id: 'list',
+				performance: Performance.ANIMATED,
+				visibleElements: 7,
+				config: {
+					navigatableElements: 5,
+					scrolling: {
+						first: 100,
+						other: 200,
+					},
 				},
 			},
-		});
+			Array.from({ length: 15 }, (_, i) => i.toString()),
+		);
 
 		it('should render list at index 0', () => {
 			assertRenderData(list.getRenderData(), focusSpy, {
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				ids: [
@@ -389,7 +395,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -398,7 +404,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-2',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -407,7 +413,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -416,7 +422,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -425,7 +431,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-5',
-				listOffset: 300,
+				baseOffset: 300,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 1, 2, 3, 4, 5, 6],
@@ -434,7 +440,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-6',
-				listOffset: 500,
+				baseOffset: 500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 2, 3, 4, 5, 6],
@@ -443,7 +449,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 700,
+				baseOffset: 700,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 3, 4, 5, 6],
@@ -452,7 +458,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 900,
+				baseOffset: 900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 4, 5, 6],
@@ -461,7 +467,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-2',
-				listOffset: 1100,
+				baseOffset: 1100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 5, 6],
@@ -470,7 +476,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 1300,
+				baseOffset: 1300,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 12, 6],
@@ -479,7 +485,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 1500,
+				baseOffset: 1500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 12, 13],
@@ -488,7 +494,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-5',
-				listOffset: 1700,
+				baseOffset: 1700,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 8, 9, 10, 11, 12, 13],
@@ -497,7 +503,7 @@ describe('BasicList', () => {
 			list.moveBy(1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-6',
-				listOffset: 1900,
+				baseOffset: 1900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 15, 9, 10, 11, 12, 13],
@@ -506,7 +512,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -514,7 +520,7 @@ describe('BasicList', () => {
 			});
 			expect(list.moveBy(1)).toBe(false);
 			assertRenderData(list.getRenderData(), focusSpy, {
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -526,7 +532,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(-1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-6',
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -535,7 +541,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-5',
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -544,7 +550,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -553,7 +559,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 1900,
+				baseOffset: 1900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 15, 9, 10, 11, 12, 13],
@@ -562,7 +568,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-2',
-				listOffset: 1700,
+				baseOffset: 1700,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 8, 9, 10, 11, 12, 13],
@@ -571,7 +577,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 1500,
+				baseOffset: 1500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 12, 13],
@@ -580,7 +586,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 1300,
+				baseOffset: 1300,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 12, 6],
@@ -589,7 +595,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-6',
-				listOffset: 1100,
+				baseOffset: 1100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 11, 5, 6],
@@ -598,7 +604,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-5',
-				listOffset: 900,
+				baseOffset: 900,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 10, 4, 5, 6],
@@ -607,7 +613,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 700,
+				baseOffset: 700,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 9, 3, 4, 5, 6],
@@ -616,7 +622,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 500,
+				baseOffset: 500,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 8, 2, 3, 4, 5, 6],
@@ -625,7 +631,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-2',
-				listOffset: 300,
+				baseOffset: 300,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [7, 1, 2, 3, 4, 5, 6],
@@ -634,7 +640,7 @@ describe('BasicList', () => {
 			list.moveBy(-1);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-1',
-				listOffset: 100,
+				baseOffset: 100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -643,7 +649,7 @@ describe('BasicList', () => {
 			expect(list.moveBy(-1)).toBe(true);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -651,7 +657,7 @@ describe('BasicList', () => {
 			});
 			expect(list.moveBy(-1)).toBe(false);
 			assertRenderData(list.getRenderData(), focusSpy, {
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -663,7 +669,7 @@ describe('BasicList', () => {
 			list.moveTo(3);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-3',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],
@@ -672,7 +678,7 @@ describe('BasicList', () => {
 			list.moveTo(14);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: false,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -681,7 +687,7 @@ describe('BasicList', () => {
 			list.moveTo(11);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-4',
-				listOffset: 2100,
+				baseOffset: 2100,
 				nextArrow: true,
 				previousArrow: true,
 				dataIndices: [14, 15, 16, 10, 11, 12, 13],
@@ -690,7 +696,7 @@ describe('BasicList', () => {
 			list.moveTo(0);
 			assertRenderData(list.getRenderData(), focusSpy, {
 				focus: 'list-0',
-				listOffset: 0,
+				baseOffset: 0,
 				nextArrow: true,
 				previousArrow: false,
 				dataIndices: [0, 1, 2, 3, 4, 5, 6],

@@ -1,8 +1,12 @@
 import { type ComponentProps, type FocusEvent, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Interactable } from '@salik1992/tv-tools-react/focus';
-import { isGenre, isPerson } from '@salik1992/test-app-data/guards';
-import type { Asset, PersonAsset } from '@salik1992/test-app-data/types';
+import { isGenre, isPerson, isShowAll } from '@salik1992/test-app-data/guards';
+import type {
+	Asset,
+	PersonAsset,
+	ShowAllAsset,
+} from '@salik1992/test-app-data/types';
 import { useDataProvider } from '../../data';
 import { Image } from '../Image';
 import { COLUMN, P, ROW } from '../Typography';
@@ -70,7 +74,7 @@ const TileWithoutImage = ({ asset }: { asset?: Asset }) => {
 };
 
 const getTile = (asset?: Asset) => {
-	if (asset && isGenre(asset)) {
+	if (asset && (isGenre(asset) || isShowAll(asset))) {
 		return TileWithoutImage;
 	} else if (asset && isPerson(asset)) {
 		return PersonTile;
@@ -109,6 +113,9 @@ export const Tile = ({
 						}),
 					)}`,
 				);
+				break;
+			case 'show-all':
+				navigate(`/discover/${btoa((asset as ShowAllAsset).data)}`);
 				break;
 			default:
 				navigate(

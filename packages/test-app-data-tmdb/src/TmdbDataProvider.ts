@@ -180,7 +180,10 @@ export class TmdbDataProvider extends DataProvider<TmdbConfiguration> {
 		const pagedResponse = await this.fetch<
 			TmdbPagedResults<TmdbAssetMapping[typeof type]>
 		>(`trending/${GENERIC_TYPE_TO_TMDB_TYPE[type]}/${timeWindow}`);
-		return mapPageByAssetType(0, type)(pagedResponse);
+		return {
+			...mapPageByAssetType(0, type)(pagedResponse),
+			pages: 1,
+		};
 	}
 
 	private async getGenres(

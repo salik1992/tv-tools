@@ -55,6 +55,7 @@ export const DetailMovie = ({
 				}}
 				showDetail={false}
 				onFocus={scroll(7 * ROW)}
+				paginate
 			/>
 			<AssetsRow
 				key={`related-${asset.id}`}
@@ -66,6 +67,7 @@ export const DetailMovie = ({
 				}}
 				showDetail={false}
 				onFocus={scroll(14 * ROW)}
+				paginate
 			/>
 		</>
 	);

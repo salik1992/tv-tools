@@ -8,7 +8,8 @@ export type AssetType =
 	| 'season'
 	| 'episode'
 	| 'person'
-	| 'genre';
+	| 'genre'
+	| 'show-all';
 
 export type Country = {
 	iso_3166_1: string;
@@ -124,6 +125,11 @@ export type GenreAsset = Asset & {
 	type: 'genre';
 };
 
+export type ShowAllAsset = Asset & {
+	type: 'show-all';
+	data: string;
+};
+
 export type AssetMapping = {
 	movie: MovieAsset;
 	series: SeriesAsset;
@@ -131,6 +137,7 @@ export type AssetMapping = {
 	episode: EpisodeAsset;
 	person: PersonAsset;
 	genre: GenreAsset;
+	'show-all': ShowAllAsset;
 };
 
 export type Paged<T> = {
