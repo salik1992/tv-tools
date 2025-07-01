@@ -7,7 +7,7 @@ import type {
 } from '../data-container';
 
 /**
- * Abstract information about eleement that should be rendered by the UI.
+ * Abstract information about element that should be rendered by the UI.
  * The grids use render window and they reuse elements for more data.
  */
 export type RenderDataElement<T> = RenderDataElementBase<T>;
