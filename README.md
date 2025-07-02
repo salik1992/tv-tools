@@ -69,7 +69,6 @@ where supported.
   when the list/grid scrolls
 - Looping for List
 - Automated movement for List
-- Dynamically changing number of data elements in List/Grid
 - EPG - electronic program guide
 
 ## Test App
